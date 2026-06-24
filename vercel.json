@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "prisma migrate deploy && next build",
+  "regions": ["fra1"],
+  "crons": [
+    {
+      "path": "/api/cron/auto-block",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}

@@ -1,0 +1,451 @@
+{
+  "Meta": {
+    "title": "MeetHub — Find and join meetups near you",
+    "description": "Discover local meetups, join events hosted by trusted organizations, and connect with people who share your interests."
+  },
+  "Nav": {
+    "events": "Events",
+    "organizations": "Organizations",
+    "about": "About",
+    "signIn": "Sign in",
+    "getStarted": "Get started",
+    "openMenu": "Open menu",
+    "menu": "Menu",
+    "toggleTheme": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "language": "Language",
+    "admin": "Admin",
+    "dashboard": "Dashboard",
+    "leaderboard": "Leaderboard",
+    "ticket": "Ticket"
+  },
+  "Home": {
+    "badge": "Now in early development",
+    "heroTitle": "Find your people. Join meetups that actually happen.",
+    "heroSubtitle": "MeetHub connects you with local events hosted by trusted organizations — with real-time chat, photo sharing, and a community you can rely on.",
+    "exploreEvents": "Explore events",
+    "createAccount": "Create an account",
+    "goToDashboard": "Go to dashboard",
+    "ctaTitle": "Ready to bring people together?",
+    "ctaSubtitle": "Become a verified organizer and host your first event on MeetHub.",
+    "ctaButton": "Become an organizer",
+    "features": {
+      "meetups": {
+        "title": "Real meetups",
+        "description": "Browse events from verified organizations and reserve your spot in a tap."
+      },
+      "chat": {
+        "title": "Per-event chat",
+        "description": "Coordinate with attendees in a private chat that opens once you join."
+      },
+      "community": {
+        "title": "Trusted community",
+        "description": "A reputation system keeps no-shows in check so events stay reliable."
+      }
+    }
+  },
+  "Welcome": {
+    "greeting": "Welcome back, {name}! 👋"
+  },
+  "Leaderboard": {
+    "title": "Leaderboard",
+    "subtitle": "Top members and organizers on MeetHub.",
+    "membersTitle": "Top members",
+    "membersSubtitle": "Ranked by XP earned from attending events.",
+    "organizersTitle": "Top organizers",
+    "organizersSubtitle": "Ranked by participants gathered across their events.",
+    "empty": "No data yet.",
+    "xp": "{xp} XP",
+    "attended": "{count} attended",
+    "events": "{count} events",
+    "participants": "{count} participants"
+  },
+  "Landing": {
+    "heroTitlePrefix": "Find Amazing ",
+    "heroTitleHighlight": "Events",
+    "heroTitleSuffix": " Near You",
+    "heroLocation": "Uzbekistan — IT Park, Tashkent",
+    "featuredTitle": "Featured Events",
+    "featuredSubtitle": "Upcoming meetups you can join today",
+    "categoriesTitle": "Explore by Category",
+    "categoriesSubtitle": "Find events that match your interests",
+    "testimonialsTitle": "What People Say",
+    "testimonialsSubtitle": "Join thousands of members already on MeetHub",
+    "faqTitle": "Common Questions",
+    "faqSubtitle": "Everything you need to know about MeetHub.",
+    "faq": [
+      {
+        "q": "What is MeetHub?",
+        "a": "MeetHub is a platform for discovering and joining local events hosted by verified organizations — from tech meetups to hiking clubs. Every event has a real-time chat and a community built around it."
+      },
+      {
+        "q": "How do I join an event?",
+        "a": "Create a free account, browse events on the Events page, and hit the Join button. You'll get instant access to the event chat and your digital ticket."
+      },
+      {
+        "q": "How do I become an organizer?",
+        "a": "Apply via Organizations → Become an organizer. Fill out your organization's details; an admin reviews and verifies applications usually within 24 hours."
+      },
+      {
+        "q": "Is MeetHub free?",
+        "a": "Yes — joining events and attending meetups is completely free. Organizer verification is also free. Premium features may be introduced in the future."
+      },
+      {
+        "q": "What is the reputation & XP system?",
+        "a": "Every event you attend earns XP points. Your reputation score reflects reliability — consistent attendees get higher scores and appear on the Leaderboard."
+      },
+      {
+        "q": "Can I cancel my attendance?",
+        "a": "Yes. Open the event and click Leave. Please cancel at least a few hours before the event so the organizer can plan accordingly."
+      }
+    ],
+    "ticket": {
+      "event": "Event",
+      "date": "Date",
+      "location": "Location",
+      "participant": "Participant",
+      "organizer": "Organizer",
+      "ticketId": "Ticket ID",
+      "status": "Status",
+      "confirmed": "Confirmed",
+      "admitOne": "Admit One",
+      "verified": "Verified Ticket",
+      "scanHint": "Scan at the entrance",
+      "pageNote": "This is a preview of the ticket you receive after joining an event. Each ticket carries a unique QR code for check-in."
+    },
+    "tiersTitle": "Ticket Types",
+    "tiersSubtitle": "Organizers can offer different ticket tiers — each unlocks more perks at the event.",
+    "tiers": {
+      "bronze": {
+        "name": "Bronze",
+        "tagline": "Standard entry",
+        "features": [
+          "Standard event entry",
+          "Access to the event chat",
+          "Digital QR ticket"
+        ]
+      },
+      "silver": {
+        "name": "Silver",
+        "tagline": "A little extra",
+        "features": [
+          "Everything in Bronze",
+          "Early registration",
+          "Reserved seating"
+        ]
+      },
+      "gold": {
+        "name": "Gold",
+        "tagline": "Premium experience",
+        "features": [
+          "Everything in Silver",
+          "Front-row access",
+          "Networking session",
+          "Exclusive Gold badge"
+        ]
+      },
+      "vip": {
+        "name": "VIP",
+        "tagline": "The full treatment",
+        "features": [
+          "Everything in Gold",
+          "Backstage access",
+          "Meet the organizer",
+          "Gift pack & priority support"
+        ]
+      }
+    },
+    "whyTitle": "Why Choose MeetHub?",
+    "whySubtitle": "More than events — a community built on trust, growth, and real connections.",
+    "feature": {
+      "networking": {
+        "title": "Networking",
+        "desc": "Connect with like-minded people at curated local events — from tech meetups to creative workshops."
+      },
+      "career": {
+        "title": "Career Growth",
+        "desc": "Level up your skills and career by attending talks, hackathons, and industry-specific gatherings."
+      },
+      "learning": {
+        "title": "Learning Opportunities",
+        "desc": "Discover workshops, speaking clubs, and masterclasses tailored to your interests."
+      },
+      "community": {
+        "title": "Trusted Community",
+        "desc": "Our reputation system keeps attendance reliable — real events with real people."
+      },
+      "access": {
+        "title": "Exclusive Access",
+        "desc": "Get early access to premium events and special meetups for verified members."
+      }
+    },
+    "ticketTitle": "Your Digital Ticket",
+    "ticketSubtitle": "Premium event tickets with QR verification, delivered instantly after joining."
+  },
+  "Stats": {
+    "events": "Events",
+    "members": "Members",
+    "organizers": "Organizers",
+    "countries": "Countries"
+  },
+  "Showcase": {
+    "title": "From football to hackathons — there's a meetup for everyone",
+    "football": "Football",
+    "speakingClub": "Speaking club",
+    "hackathon": "Hackathon",
+    "hiking": "Hiking",
+    "music": "Music",
+    "workshop": "Workshop",
+    "networking": "Networking",
+    "gaming": "Gaming"
+  },
+  "Footer": {
+    "rights": "© {year} {app}. All rights reserved.",
+    "builtWith": "Built with Next.js, Tailwind & shadcn/ui."
+  },
+  "Org": {
+    "title": "Organizations",
+    "subtitle": "Trusted organizations hosting meetups.",
+    "empty": "No verified organizations yet.",
+    "becomeOrganizer": "Become an organizer",
+    "apply": {
+      "title": "Apply to host events",
+      "subtitle": "Tell us about your organization. An admin will review your application.",
+      "nameLabel": "Organization name",
+      "namePlaceholder": "e.g. Tashkent JS Community",
+      "nameError": "Please enter a name (2–80 characters).",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "What does your organization do, and what kind of events will you host?",
+      "descriptionError": "Please add a description (at least 20 characters).",
+      "submit": "Submit application",
+      "submitting": "Submitting…"
+    },
+    "status": {
+      "pendingTitle": "Application under review",
+      "pendingBody": "Your organization “{name}” is pending admin approval.",
+      "verifiedTitle": "You’re verified",
+      "verifiedBody": "“{name}” is verified — you can now create events.",
+      "rejectedTitle": "Application not approved",
+      "rejectedBody": "“{name}” was not approved. Contact support if you think this is a mistake.",
+      "createEvent": "Create an event"
+    }
+  },
+  "Admin": {
+    "title": "Admin",
+    "subtitle": "Platform administration.",
+    "orgsTitle": "Organizations",
+    "orgsSubtitle": "Review and verify organization applications.",
+    "manageOrgs": "Manage",
+    "pendingCount": "{count} pending",
+    "owner": "Owner",
+    "approve": "Approve",
+    "reject": "Reject",
+    "noPending": "No organizations yet.",
+    "pending": "Pending",
+    "verified": "Verified",
+    "rejected": "Rejected",
+    "usersTitle": "Users",
+    "usersSubtitle": "Manage members, reputation, and blocks.",
+    "manageUsers": "Manage"
+  },
+  "Event": {
+    "listTitle": "Events",
+    "listSubtitle": "Upcoming meetups you can join.",
+    "empty": "No upcoming events yet.",
+    "searchPlaceholder": "Search events…",
+    "allCategories": "All",
+    "noResults": "No events match your search.",
+    "backToEvents": "Back to events",
+    "createTitle": "Create an event",
+    "editTitle": "Edit event",
+    "by": "by {org}",
+    "spotsLeft": "{count} spots left",
+    "full": "Full",
+    "participants": "{count} joined",
+    "when": "When",
+    "where": "Where",
+    "categoryLabel": "Category",
+    "capacityLabel": "Capacity",
+    "join": "Join",
+    "leave": "Leave",
+    "joined": "You’re going to this event.",
+    "signInToJoin": "Sign in to join",
+    "openChat": "Open chat",
+    "edit": "Edit",
+    "attendance": "Attendance",
+    "publish": "Publish",
+    "cancelEvent": "Cancel event",
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "cancelled": "Cancelled",
+      "finished": "Finished"
+    },
+    "joinError": {
+      "full": "This event is full.",
+      "blocked": "Your account is blocked, so you can’t join events.",
+      "unavailable": "This event isn’t open for joining.",
+      "owner": "You’re the host of this event.",
+      "rateLimited": "You’re doing that too fast. Please wait a moment."
+    },
+    "form": {
+      "title": "Title",
+      "titlePlaceholder": "e.g. Friday JS Meetup",
+      "titleError": "Title must be 3–120 characters.",
+      "description": "Description",
+      "descriptionPlaceholder": "What’s the event about?",
+      "descriptionError": "Description must be at least 10 characters.",
+      "location": "Location",
+      "locationPlaceholder": "Venue or address",
+      "locationError": "Please add a location.",
+      "category": "Category",
+      "categoryPlaceholder": "e.g. Technology",
+      "categoryError": "Please add a category.",
+      "startsAt": "Starts at",
+      "startsAtError": "Please choose a start time.",
+      "endsAt": "Ends at",
+      "endsAtError": "End time must be after the start time.",
+      "capacity": "Capacity",
+      "capacityError": "Capacity must be at least 1.",
+      "coverUrl": "Cover image (optional)",
+      "coverUrlPlaceholder": "https://…",
+      "coverUrlError": "Enter a valid URL or leave it blank.",
+      "uploadCover": "Upload cover",
+      "removeCover": "Remove",
+      "publishNow": "Publish now (visible to everyone)",
+      "submit": "Create event",
+      "submitting": "Creating…",
+      "save": "Save changes",
+      "saving": "Saving…"
+    }
+  },
+  "Dashboard": {
+    "yourEventsTitle": "Your events",
+    "yourEventsSubtitle": "Events your organization is hosting.",
+    "becomeOrganizer": "Become an organizer to host your own events.",
+    "createEvent": "Create event",
+    "noEvents": "You haven’t created any events yet.",
+    "joinedTitle": "Events you’ve joined",
+    "noJoined": "You haven’t joined any events yet.",
+    "reputation": "Reputation",
+    "attendedLabel": "Events attended",
+    "xp": "XP"
+  },
+  "Attendance": {
+    "title": "Attendance",
+    "backToEvent": "Back to event",
+    "noParticipants": "No one has joined yet.",
+    "attended": "Attended",
+    "noShow": "No-show",
+    "status": {
+      "joined": "Joined",
+      "attended": "Attended",
+      "noShow": "No-show"
+    }
+  },
+  "AdminUsers": {
+    "title": "Users",
+    "subtitle": "Manage members, reputation, and blocks.",
+    "reputation": "Reputation",
+    "blocked": "Blocked",
+    "block": "Block",
+    "unblock": "Unblock"
+  },
+  "Blocked": {
+    "title": "Your account is blocked.",
+    "body": "You can’t join events or post in chats while your account is blocked."
+  },
+  "Chat": {
+    "title": "Event chat",
+    "backToEvent": "Back to event",
+    "empty": "No messages yet. Say hello!",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "readOnly": "You can read this chat but can’t post right now.",
+    "error": {
+      "forbidden": "You don’t have access to this chat.",
+      "blocked": "You can’t post while your account is blocked.",
+      "empty": "Message can’t be empty.",
+      "tooLong": "Message is too long.",
+      "rateLimited": "You’re sending messages too fast. Slow down a moment."
+    }
+  },
+  "Reviews": {
+    "title": "Ratings & reviews",
+    "count": "{count} reviews",
+    "empty": "No reviews yet. Be the first to share your experience.",
+    "writeTitle": "Write a review",
+    "updateTitle": "Edit your review",
+    "yourRating": "Your rating",
+    "commentPlaceholder": "Share your experience…",
+    "submit": "Submit review",
+    "update": "Update review",
+    "submitting": "Submitting…",
+    "thanks": "Thanks for your review!",
+    "ratingRequired": "Please select a rating.",
+    "error": {
+      "notAllowed": "Only participants can review this event.",
+      "notFinished": "You can review this event after it ends.",
+      "invalid": "Please select a rating from 1 to 5.",
+      "blocked": "You can't review while your account is blocked.",
+      "rateLimited": "You're doing that too fast. Please wait a moment."
+    }
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet.",
+    "types": {
+      "ATTENDANCE_MARKED": "Your attendance for “{event}” was recorded.",
+      "ORG_APPROVED": "Your organization “{org}” was approved — you can now create events.",
+      "ORG_REJECTED": "Your organization “{org}” was not approved.",
+      "BLOCKED": "Your account has been blocked. {reason}"
+    }
+  },
+  "Media": {
+    "changePhoto": "Change photo",
+    "galleryTitle": "Gallery",
+    "galleryEmpty": "No photos or videos yet.",
+    "addMedia": "Add photo / video",
+    "attachMedia": "Photo / video",
+    "error": {
+      "notConfigured": "Uploads aren’t set up yet.",
+      "invalid": "That upload looks invalid.",
+      "invalidType": "Unsupported file type.",
+      "tooLarge": "That file is too large.",
+      "forbidden": "You can’t upload here.",
+      "blocked": "Your account is blocked.",
+      "rateLimited": "Too many uploads. Please slow down."
+    }
+  },
+  "Common": {
+    "loading": "Loading…",
+    "errorTitle": "Something went wrong",
+    "errorBody": "An unexpected error occurred. Please try again.",
+    "retry": "Try again",
+    "goHome": "Go home",
+    "rateLimited": "You’re doing that too fast. Please wait a moment and try again."
+  },
+  "Auth": {
+    "signInTitle": "Sign in",
+    "signInSubtitle": "Welcome back to MeetHub.",
+    "signUpTitle": "Create your account",
+    "signUpSubtitle": "Join MeetHub in seconds.",
+    "continueWith": "Continue with {provider}",
+    "signUpWith": "Sign up with {provider}",
+    "google": "Google",
+    "github": "GitHub",
+    "apple": "Apple",
+    "noAccount": "Don’t have an account?",
+    "signUpLink": "Sign up",
+    "haveAccount": "Already have an account?",
+    "signInLink": "Sign in",
+    "completing": "Completing sign-in…"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you’re looking for doesn’t exist or has moved.",
+    "backHome": "Back to home"
+  }
+}

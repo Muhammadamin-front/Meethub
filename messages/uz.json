@@ -1,0 +1,451 @@
+{
+  "Meta": {
+    "title": "MeetHub — Yaqiningizdagi uchrashuvlarni toping va qo‘shiling",
+    "description": "Mahalliy uchrashuvlarni kashf eting, ishonchli tashkilotlar o‘tkazadigan tadbirlarga qo‘shiling va qiziqishlaringizni baham ko‘radigan odamlar bilan tanishing."
+  },
+  "Nav": {
+    "events": "Tadbirlar",
+    "organizations": "Tashkilotlar",
+    "about": "Biz haqimizda",
+    "signIn": "Kirish",
+    "getStarted": "Boshlash",
+    "openMenu": "Menyuni ochish",
+    "menu": "Menyu",
+    "toggleTheme": "Mavzuni almashtirish",
+    "light": "Yorug‘",
+    "dark": "Qorong‘i",
+    "system": "Tizim",
+    "language": "Til",
+    "admin": "Administrator",
+    "dashboard": "Boshqaruv paneli",
+    "leaderboard": "Reyting",
+    "ticket": "Chipta"
+  },
+  "Home": {
+    "badge": "Hozir dastlabki ishlab chiqishda",
+    "heroTitle": "O‘z davrangizni toping. Haqiqatan bo‘lib o‘tadigan uchrashuvlarga qo‘shiling.",
+    "heroSubtitle": "MeetHub sizni ishonchli tashkilotlar o‘tkazadigan mahalliy tadbirlar bilan bog‘laydi — real vaqtli chat, surat almashish va ishonsa bo‘ladigan hamjamiyat bilan.",
+    "exploreEvents": "Tadbirlarni ko‘rish",
+    "createAccount": "Hisob yaratish",
+    "goToDashboard": "Boshqaruv paneli",
+    "ctaTitle": "Odamlarni birlashtirishga tayyormisiz?",
+    "ctaSubtitle": "Tasdiqlangan tashkilotchi bo‘ling va MeetHub’da birinchi tadbiringizni o‘tkazing.",
+    "ctaButton": "Tashkilotchi bo‘lish",
+    "features": {
+      "meetups": {
+        "title": "Haqiqiy uchrashuvlar",
+        "description": "Tasdiqlangan tashkilotlarning tadbirlarini ko‘ring va bir bosishda joy band qiling."
+      },
+      "chat": {
+        "title": "Har bir tadbir uchun chat",
+        "description": "Qo‘shilganingizdan so‘ng ochiladigan maxfiy chatda ishtirokchilar bilan muvofiqlashtiring."
+      },
+      "community": {
+        "title": "Ishonchli hamjamiyat",
+        "description": "Reputatsiya tizimi kelmay qoluvchilarni nazoratda saqlaydi, shunda tadbirlar ishonchli bo‘lib qoladi."
+      }
+    }
+  },
+  "Welcome": {
+    "greeting": "Xush kelibsiz, {name}! 👋"
+  },
+  "Leaderboard": {
+    "title": "Reyting",
+    "subtitle": "MeetHub’dagi eng faol foydalanuvchilar va tashkilotchilar.",
+    "membersTitle": "Eng faol foydalanuvchilar",
+    "membersSubtitle": "Tadbirlarga qatnashib to‘plangan XP bo‘yicha.",
+    "organizersTitle": "Eng yaxshi tashkilotchilar",
+    "organizersSubtitle": "Tadbirlariga to‘plangan ishtirokchilar soni bo‘yicha.",
+    "empty": "Hozircha ma’lumot yo‘q.",
+    "xp": "{xp} XP",
+    "attended": "{count} ta qatnashuv",
+    "events": "{count} ta tadbir",
+    "participants": "{count} ishtirokchi"
+  },
+  "Landing": {
+    "heroTitlePrefix": "Yoningizdagi ajoyib ",
+    "heroTitleHighlight": "tadbirlarni",
+    "heroTitleSuffix": " toping",
+    "heroLocation": "O'zbekiston — IT Park, Toshkent",
+    "featuredTitle": "Tanlangan tadbirlar",
+    "featuredSubtitle": "Bugun qo'shilishingiz mumkin bo'lgan yaqin uchrashuvlar",
+    "categoriesTitle": "Turkumlar bo'yicha ko'rish",
+    "categoriesSubtitle": "Qiziqishlaringizga mos tadbirlarni toping",
+    "testimonialsTitle": "Odamlar nima deydi",
+    "testimonialsSubtitle": "MeetHub'dagi minglab a'zolarga qo'shiling",
+    "faqTitle": "Ko'p so'raladigan savollar",
+    "faqSubtitle": "MeetHub haqida bilishingiz kerak bo'lgan hamma narsa.",
+    "faq": [
+      {
+        "q": "MeetHub nima?",
+        "a": "MeetHub — tasdiqlangan tashkilotlar o'tkazadigan mahalliy tadbirlarni kashf etish va ularga qo'shilish platformasi — texnologiya uchrashuvlaridan tortib sayohat klublarigacha. Har bir tadbirda real vaqtli chat va hamjamiyat mavjud."
+      },
+      {
+        "q": "Tadbirga qanday qo'shilaman?",
+        "a": "Bepul hisob yarating, Tadbirlar sahifasidan tadbirlarni ko'ring va Qo'shilish tugmasini bosing. Tadbir chati va raqamli chiptangizga darhol kirish imkoniga ega bo'lasiz."
+      },
+      {
+        "q": "Qanday qilib tashkilotchi bo'laman?",
+        "a": "Tashkilotlar → Tashkilotchi bo'lish orqali ariza topshiring. Tashkilotingiz ma'lumotlarini to'ldiring; administrator odatda 24 soat ichida arizalarni ko'rib chiqadi va tasdiqlaydi."
+      },
+      {
+        "q": "MeetHub bepulmi?",
+        "a": "Ha — tadbirlarga qo'shilish va uchrashuvlarda qatnashish butunlay bepul. Tashkilotchi tasdig'i ham bepul. Kelajakda premium funksiyalar qo'shilishi mumkin."
+      },
+      {
+        "q": "Reputatsiya va XP tizimi nima?",
+        "a": "Qatnashgan har bir tadbir uchun XP ball olasiz. Reputatsiya ballingiz ishonchlilikni aks ettiradi — doimiy qatnashuvchilar yuqori ball oladi va Reytingda ko'rinadi."
+      },
+      {
+        "q": "Qatnashuvni bekor qila olamanmi?",
+        "a": "Ha. Tadbirni oching va Chiqish tugmasini bosing. Iltimos, tashkilotchi rejalashtira olishi uchun tadbirdan kamida bir necha soat oldin bekor qiling."
+      }
+    ],
+    "ticket": {
+      "event": "Tadbir",
+      "date": "Sana",
+      "location": "Manzil",
+      "participant": "Ishtirokchi",
+      "organizer": "Tashkilotchi",
+      "ticketId": "Chipta ID",
+      "status": "Holati",
+      "confirmed": "Tasdiqlangan",
+      "admitOne": "Bir kishilik",
+      "verified": "Tasdiqlangan chipta",
+      "scanHint": "Kirishda skanerlang",
+      "pageNote": "Bu tadbirga qo'shilganingizdan so'ng oladigan chiptangizning ko'rinishi. Har bir chiptada check-in uchun noyob QR kod mavjud."
+    },
+    "tiersTitle": "Chipta turlari",
+    "tiersSubtitle": "Tashkilotchilar turli chipta darajalarini taklif qilishlari mumkin — har biri tadbirda ko'proq imkoniyat ochadi.",
+    "tiers": {
+      "bronze": {
+        "name": "Bronze",
+        "tagline": "Standart kirish",
+        "features": [
+          "Standart tadbirga kirish",
+          "Tadbir chatiga kirish",
+          "Raqamli QR chipta"
+        ]
+      },
+      "silver": {
+        "name": "Silver",
+        "tagline": "Biroz qo'shimcha",
+        "features": [
+          "Bronze imkoniyatlari",
+          "Oldindan ro'yxatdan o'tish",
+          "Belgilangan o'rindiq"
+        ]
+      },
+      "gold": {
+        "name": "Gold",
+        "tagline": "Premium tajriba",
+        "features": [
+          "Silver imkoniyatlari",
+          "Old qatordan joy",
+          "Networking sessiyasi",
+          "Maxsus Gold belgi"
+        ]
+      },
+      "vip": {
+        "name": "VIP",
+        "tagline": "To'liq xizmat",
+        "features": [
+          "Gold imkoniyatlari",
+          "Backstage kirish",
+          "Tashkilotchi bilan uchrashuv",
+          "Sovg'a to'plami va prioritet qo'llab-quvvatlash"
+        ]
+      }
+    },
+    "whyTitle": "Nima uchun MeetHub?",
+    "whySubtitle": "Shunchaki tadbirlar emas — ishonch, o'sish va haqiqiy aloqalarga qurilgan jamiyat.",
+    "feature": {
+      "networking": {
+        "title": "Networking",
+        "desc": "Texnologiya uchrashuvlaridan ijodiy seminarlarigacha — o'xshash fikrli odamlar bilan tanishing."
+      },
+      "career": {
+        "title": "Karyera o'sishi",
+        "desc": "Suhbatlar, hakatonlar va soha tadbirlarida ishtirok etib ko'nikmalaringizni rivojlantiring."
+      },
+      "learning": {
+        "title": "O'rganish imkoniyatlari",
+        "desc": "Qiziqishlaringizga moslashtirilgan seminarlar, speaking club va master-klasslarni kashf eting."
+      },
+      "community": {
+        "title": "Ishonchli hamjamiyat",
+        "desc": "Reputatsiya tizimimiz davomatni ishonchli qiladi — haqiqiy tadbirlar, haqiqiy odamlar."
+      },
+      "access": {
+        "title": "Eksklyuziv kirish",
+        "desc": "Premium tadbirlar va tasdiqlangan a'zolar uchun maxsus uchrashuvlarga erta kirish imkoni."
+      }
+    },
+    "ticketTitle": "Raqamli chiptangiz",
+    "ticketSubtitle": "QR tekshiruvli premium tadbir chiptalari — qo'shilganingizdan so'ng darhol taqdim etiladi."
+  },
+  "Stats": {
+    "events": "Tadbirlar",
+    "members": "Foydalanuvchilar",
+    "organizers": "Tashkilotchilar",
+    "countries": "Davlatlar"
+  },
+  "Showcase": {
+    "title": "Futboldan hakatongacha — har kim uchun uchrashuv bor",
+    "football": "Futbol",
+    "speakingClub": "Speaking club",
+    "hackathon": "Hakaton",
+    "hiking": "Sayohat",
+    "music": "Musiqa",
+    "workshop": "Mahorat darsi",
+    "networking": "Networking",
+    "gaming": "Geyming"
+  },
+  "Footer": {
+    "rights": "© {year} {app}. Barcha huquqlar himoyalangan.",
+    "builtWith": "Next.js, Tailwind va shadcn/ui yordamida qurilgan."
+  },
+  "Org": {
+    "title": "Tashkilotlar",
+    "subtitle": "Uchrashuvlar o‘tkazadigan ishonchli tashkilotlar.",
+    "empty": "Hozircha tasdiqlangan tashkilotlar yo‘q.",
+    "becomeOrganizer": "Tashkilotchi bo‘lish",
+    "apply": {
+      "title": "Tadbir o‘tkazish uchun ariza",
+      "subtitle": "Tashkilotingiz haqida ma’lumot bering. Administrator arizangizni ko‘rib chiqadi.",
+      "nameLabel": "Tashkilot nomi",
+      "namePlaceholder": "masalan, Tashkent JS Community",
+      "nameError": "Iltimos, nom kiriting (2–80 ta belgi).",
+      "descriptionLabel": "Tavsif",
+      "descriptionPlaceholder": "Tashkilotingiz nima bilan shug‘ullanadi va qanday tadbirlar o‘tkazasiz?",
+      "descriptionError": "Iltimos, tavsif qo‘shing (kamida 20 ta belgi).",
+      "submit": "Arizani yuborish",
+      "submitting": "Yuborilmoqda…"
+    },
+    "status": {
+      "pendingTitle": "Ariza ko‘rib chiqilmoqda",
+      "pendingBody": "“{name}” tashkilotingiz administrator tasdig‘ini kutmoqda.",
+      "verifiedTitle": "Siz tasdiqlandingiz",
+      "verifiedBody": "“{name}” tasdiqlandi — endi tadbir yaratishingiz mumkin.",
+      "rejectedTitle": "Ariza tasdiqlanmadi",
+      "rejectedBody": "“{name}” tasdiqlanmadi. Bu xato deb hisoblasangiz, qo‘llab-quvvatlash xizmatiga murojaat qiling.",
+      "createEvent": "Tadbir yaratish"
+    }
+  },
+  "Admin": {
+    "title": "Administrator",
+    "subtitle": "Platforma boshqaruvi.",
+    "orgsTitle": "Tashkilotlar",
+    "orgsSubtitle": "Tashkilot arizalarini ko‘rib chiqing va tasdiqlang.",
+    "manageOrgs": "Boshqarish",
+    "pendingCount": "{count} ta kutilmoqda",
+    "owner": "Egasi",
+    "approve": "Tasdiqlash",
+    "reject": "Rad etish",
+    "noPending": "Hozircha tashkilotlar yo‘q.",
+    "pending": "Kutilmoqda",
+    "verified": "Tasdiqlangan",
+    "rejected": "Rad etilgan",
+    "usersTitle": "Foydalanuvchilar",
+    "usersSubtitle": "A’zolar, obro‘ va bloklarni boshqaring.",
+    "manageUsers": "Boshqarish"
+  },
+  "Event": {
+    "listTitle": "Tadbirlar",
+    "listSubtitle": "Siz qo‘shilishingiz mumkin bo‘lgan yaqin tadbirlar.",
+    "empty": "Hozircha yaqin tadbirlar yo‘q.",
+    "searchPlaceholder": "Tadbirlarni qidirish…",
+    "allCategories": "Barchasi",
+    "noResults": "Qidiruvingizga mos tadbir topilmadi.",
+    "backToEvents": "Tadbirlarga qaytish",
+    "createTitle": "Tadbir yaratish",
+    "editTitle": "Tadbirni tahrirlash",
+    "by": "{org} tomonidan",
+    "spotsLeft": "{count} ta joy qoldi",
+    "full": "Joy qolmadi",
+    "participants": "{count} kishi qo‘shilgan",
+    "when": "Qachon",
+    "where": "Qayerda",
+    "categoryLabel": "Turkum",
+    "capacityLabel": "Sig‘imi",
+    "join": "Qo‘shilish",
+    "leave": "Chiqish",
+    "joined": "Siz bu tadbirga qo‘shilgansiz.",
+    "signInToJoin": "Qo‘shilish uchun kiring",
+    "openChat": "Chatni ochish",
+    "edit": "Tahrirlash",
+    "attendance": "Davomat",
+    "publish": "E’lon qilish",
+    "cancelEvent": "Tadbirni bekor qilish",
+    "status": {
+      "draft": "Qoralama",
+      "published": "E’lon qilingan",
+      "cancelled": "Bekor qilingan",
+      "finished": "Tugagan"
+    },
+    "joinError": {
+      "full": "Bu tadbirda joy qolmadi.",
+      "blocked": "Hisobingiz bloklangan, shuning uchun tadbirlarga qo‘shila olmaysiz.",
+      "unavailable": "Bu tadbir qo‘shilish uchun ochiq emas.",
+      "owner": "Siz bu tadbirning tashkilotchisisiz.",
+      "rateLimited": "Juda tez harakat qilyapsiz. Biroz kuting."
+    },
+    "form": {
+      "title": "Sarlavha",
+      "titlePlaceholder": "masalan, Juma JS uchrashuvi",
+      "titleError": "Sarlavha 3–120 ta belgidan iborat bo‘lishi kerak.",
+      "description": "Tavsif",
+      "descriptionPlaceholder": "Tadbir nima haqida?",
+      "descriptionError": "Tavsif kamida 10 ta belgidan iborat bo‘lishi kerak.",
+      "location": "Manzil",
+      "locationPlaceholder": "Joy yoki manzil",
+      "locationError": "Iltimos, manzil kiriting.",
+      "category": "Turkum",
+      "categoryPlaceholder": "masalan, Texnologiya",
+      "categoryError": "Iltimos, turkum kiriting.",
+      "startsAt": "Boshlanishi",
+      "startsAtError": "Iltimos, boshlanish vaqtini tanlang.",
+      "endsAt": "Tugashi",
+      "endsAtError": "Tugash vaqti boshlanishdan keyin bo‘lishi kerak.",
+      "capacity": "Sig‘imi",
+      "capacityError": "Sig‘imi kamida 1 bo‘lishi kerak.",
+      "coverUrl": "Muqova rasmi (ixtiyoriy)",
+      "coverUrlPlaceholder": "https://…",
+      "coverUrlError": "To‘g‘ri havola kiriting yoki bo‘sh qoldiring.",
+      "uploadCover": "Muqova yuklash",
+      "removeCover": "Olib tashlash",
+      "publishNow": "Hozir e'lon qilish (hammaga ko'rinadi)",
+      "submit": "Tadbir yaratish",
+      "submitting": "Yaratilmoqda…",
+      "save": "O‘zgarishlarni saqlash",
+      "saving": "Saqlanmoqda…"
+    }
+  },
+  "Dashboard": {
+    "yourEventsTitle": "Sizning tadbirlaringiz",
+    "yourEventsSubtitle": "Tashkilotingiz o‘tkazayotgan tadbirlar.",
+    "becomeOrganizer": "O‘z tadbirlaringizni o‘tkazish uchun tashkilotchi bo‘ling.",
+    "createEvent": "Tadbir yaratish",
+    "noEvents": "Siz hali tadbir yaratmagansiz.",
+    "joinedTitle": "Siz qo‘shilgan tadbirlar",
+    "noJoined": "Siz hali birorta tadbirga qo‘shilmagansiz.",
+    "reputation": "Obro‘",
+    "attendedLabel": "Qatnashilgan tadbirlar",
+    "xp": "XP"
+  },
+  "Attendance": {
+    "title": "Davomat",
+    "backToEvent": "Tadbirga qaytish",
+    "noParticipants": "Hozircha hech kim qo‘shilmagan.",
+    "attended": "Qatnashdi",
+    "noShow": "Kelmadi",
+    "status": {
+      "joined": "Qo‘shilgan",
+      "attended": "Qatnashgan",
+      "noShow": "Kelmagan"
+    }
+  },
+  "AdminUsers": {
+    "title": "Foydalanuvchilar",
+    "subtitle": "A’zolar, obro‘ va bloklarni boshqaring.",
+    "reputation": "Obro‘",
+    "blocked": "Bloklangan",
+    "block": "Bloklash",
+    "unblock": "Blokdan chiqarish"
+  },
+  "Blocked": {
+    "title": "Hisobingiz bloklangan.",
+    "body": "Hisobingiz bloklangan ekan, tadbirlarga qo‘shila olmaysiz va chatlarda yozolmaysiz."
+  },
+  "Chat": {
+    "title": "Tadbir chati",
+    "backToEvent": "Tadbirga qaytish",
+    "empty": "Hozircha xabarlar yo‘q. Salom yozing!",
+    "placeholder": "Xabar yozing…",
+    "send": "Yuborish",
+    "readOnly": "Bu chatni o‘qiy olasiz, lekin hozir yoza olmaysiz.",
+    "error": {
+      "forbidden": "Sizda bu chatga ruxsat yo‘q.",
+      "blocked": "Hisobingiz bloklangan ekan, yoza olmaysiz.",
+      "empty": "Xabar bo‘sh bo‘lishi mumkin emas.",
+      "tooLong": "Xabar juda uzun.",
+      "rateLimited": "Xabarlarni juda tez yuboryapsiz. Biroz sekinlashtiring."
+    }
+  },
+  "Reviews": {
+    "title": "Baholar va sharhlar",
+    "count": "{count} ta sharh",
+    "empty": "Hozircha sharhlar yo'q. Birinchi bo'lib taassurotingizni ulashing.",
+    "writeTitle": "Sharh yozish",
+    "updateTitle": "Sharhingizni tahrirlash",
+    "yourRating": "Sizning bahoyingiz",
+    "commentPlaceholder": "Taassurotingizni ulashing…",
+    "submit": "Sharh yuborish",
+    "update": "Sharhni yangilash",
+    "submitting": "Yuborilmoqda…",
+    "thanks": "Sharhingiz uchun rahmat!",
+    "ratingRequired": "Iltimos, baho tanlang.",
+    "error": {
+      "notAllowed": "Faqat ishtirokchilar bu tadbirga sharh yoza oladi.",
+      "notFinished": "Bu tadbirga u tugagandan so'ng sharh yoza olasiz.",
+      "invalid": "Iltimos, 1 dan 5 gacha baho tanlang.",
+      "blocked": "Hisobingiz bloklangan ekan, sharh yoza olmaysiz.",
+      "rateLimited": "Juda tez harakat qilyapsiz. Biroz kuting."
+    }
+  },
+  "Notifications": {
+    "title": "Bildirishnomalar",
+    "empty": "Hozircha bildirishnomalar yo‘q.",
+    "types": {
+      "ATTENDANCE_MARKED": "“{event}” tadbiridagi davomatingiz qayd etildi.",
+      "ORG_APPROVED": "“{org}” tashkilotingiz tasdiqlandi — endi tadbir yaratishingiz mumkin.",
+      "ORG_REJECTED": "“{org}” tashkilotingiz tasdiqlanmadi.",
+      "BLOCKED": "Hisobingiz bloklandi. {reason}"
+    }
+  },
+  "Media": {
+    "changePhoto": "Rasmni o‘zgartirish",
+    "galleryTitle": "Galereya",
+    "galleryEmpty": "Hozircha surat yoki video yo‘q.",
+    "addMedia": "Surat / video qo‘shish",
+    "attachMedia": "Surat / video",
+    "error": {
+      "notConfigured": "Yuklashlar hali sozlanmagan.",
+      "invalid": "Yuklash noto‘g‘ri ko‘rinmoqda.",
+      "invalidType": "Qo‘llab-quvvatlanmaydigan fayl turi.",
+      "tooLarge": "Fayl juda katta.",
+      "forbidden": "Bu yerga yuklay olmaysiz.",
+      "blocked": "Hisobingiz bloklangan.",
+      "rateLimited": "Juda ko‘p yuklash. Sekinlashtiring."
+    }
+  },
+  "Common": {
+    "loading": "Yuklanmoqda…",
+    "errorTitle": "Nimadir xato ketdi",
+    "errorBody": "Kutilmagan xatolik yuz berdi. Iltimos, qayta urinib ko‘ring.",
+    "retry": "Qayta urinish",
+    "goHome": "Bosh sahifaga",
+    "rateLimited": "Juda tez harakat qilyapsiz. Biroz kutib, qayta urinib ko‘ring."
+  },
+  "Auth": {
+    "signInTitle": "Kirish",
+    "signInSubtitle": "MeetHub’ga xush kelibsiz.",
+    "signUpTitle": "Hisob yaratish",
+    "signUpSubtitle": "MeetHub’ga bir necha soniyada qo‘shiling.",
+    "continueWith": "{provider} bilan davom etish",
+    "signUpWith": "{provider} bilan ro‘yxatdan o‘tish",
+    "google": "Google",
+    "github": "GitHub",
+    "apple": "Apple",
+    "noAccount": "Hisobingiz yo‘qmi?",
+    "signUpLink": "Ro‘yxatdan o‘tish",
+    "haveAccount": "Hisobingiz bormi?",
+    "signInLink": "Kirish",
+    "completing": "Kirish yakunlanmoqda…"
+  },
+  "NotFound": {
+    "title": "Sahifa topilmadi",
+    "description": "Siz izlayotgan sahifa mavjud emas yoki ko‘chirilgan.",
+    "backHome": "Bosh sahifaga qaytish"
+  }
+}

@@ -1,0 +1,208 @@
+// MeetUp data model. See README for the domain overview.
+// Prisma 7 "prisma-client" generator -> client is generated into
+// src/generated/prisma (git-ignored; created by `npm run db:generate`).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// Prisma 7: no connection URLs here. Migrate URL is set in prisma.config.ts;
+// the runtime client connects via a driver adapter (see src/server/db.ts).
+datasource db {
+  provider = "postgresql"
+}
+
+// ----------------------------------------------------------------------------
+// Enums
+// ----------------------------------------------------------------------------
+
+enum UserRole {
+  USER
+  ORGANIZATION
+  ADMIN
+}
+
+enum OrgStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  FINISHED
+}
+
+enum RegistrationStatus {
+  JOINED
+  ATTENDED
+  NO_SHOW
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum NotificationType {
+  EVENT_REMINDER
+  NEW_MESSAGE
+  ATTENDANCE_MARKED
+  REPUTATION_CHANGE
+  BLOCKED
+  ORG_APPROVED
+  ORG_REJECTED
+  EVENT_JOINED
+}
+
+// ----------------------------------------------------------------------------
+// Models
+// ----------------------------------------------------------------------------
+
+model User {
+  id           String    @id @default(cuid())
+  clerkId      String    @unique
+  name         String
+  email        String?   @unique
+  phone        String?   @unique
+  imageUrl     String?
+  role         UserRole  @default(USER)
+  reputation   Int       @default(100)
+  isBlocked    Boolean   @default(false)
+  blockedUntil DateTime?
+  blockReason  String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // A user may own at most one organization.
+  organization  Organization?
+  registrations Registration[]
+  messages      Message[]
+  media         EventMedia[]
+  notifications Notification[]
+  reviews       Review[]
+
+  @@index([role])
+}
+
+model Organization {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  logoUrl     String?
+  status      OrgStatus @default(PENDING)
+  ownerUserId String    @unique
+  owner       User      @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
+  events      Event[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status])
+}
+
+model Event {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title          String
+  description    String
+  coverUrl       String?
+  location       String
+  startsAt       DateTime
+  endsAt         DateTime
+  capacity       Int
+  category       String
+  status         EventStatus  @default(DRAFT)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  registrations Registration[]
+  messages      Message[]
+  media         EventMedia[]
+  reviews       Review[]
+
+  @@index([status, startsAt])
+  @@index([organizationId])
+}
+
+model Registration {
+  id       String             @id @default(cuid())
+  eventId  String
+  event    Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status   RegistrationStatus @default(JOINED)
+  joinedAt DateTime           @default(now())
+  markedAt DateTime?
+
+  @@unique([eventId, userId])
+  // Drives the trailing-30-day no-show query (Phase 4 auto-block cron).
+  @@index([userId, status, joinedAt])
+  @@index([eventId, status])
+}
+
+model Message {
+  id        String      @id @default(cuid())
+  eventId   String
+  event     Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String?
+  mediaUrl  String?
+  mediaType MessageType @default(TEXT)
+  createdAt DateTime    @default(now())
+
+  @@index([eventId, createdAt])
+}
+
+model EventMedia {
+  id        String    @id @default(cuid())
+  eventId   String
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url       String
+  type      MediaType
+  createdAt DateTime  @default(now())
+
+  @@index([eventId, createdAt])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating    Int // 1..5
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // One review per user per event (editable via upsert).
+  @@unique([eventId, userId])
+  @@index([eventId, createdAt])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  body      String
+  data      Json?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@index([userId, isRead, createdAt])
+}

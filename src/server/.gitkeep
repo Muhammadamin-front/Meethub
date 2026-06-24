@@ -1,0 +1,2 @@
+# Server-only modules (DB access, auth/permission helpers, services).
+# Added in Phase 1+. Never import these from client components.
