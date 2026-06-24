@@ -2,6 +2,7 @@ import { Show } from "@clerk/nextjs";
 import { ArrowRight, CalendarCheck, MapPin, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { LiveClock } from "@/components/live-clock";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -125,10 +126,13 @@ export async function HeroSection() {
           </Show>
         </div>
 
-        {/* Floating location pill */}
-        <div className="glass animate-fade-in-up inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm [animation-delay:.45s]">
-          <MapPin className="text-primary size-4" />
-          <span className="text-muted-foreground">{tl("heroLocation")}</span>
+        {/* Floating location + live local-time pills */}
+        <div className="animate-fade-in-up flex flex-wrap items-center justify-center gap-2 [animation-delay:.45s]">
+          <div className="glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm">
+            <MapPin className="text-primary size-4" />
+            <span className="text-muted-foreground">{tl("heroLocation")}</span>
+          </div>
+          <LiveClock className="glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm" />
         </div>
       </div>
     </section>

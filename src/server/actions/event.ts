@@ -40,7 +40,19 @@ function parse(formData: FormData) {
     endsAt: formData.get("endsAt"),
     capacity: formData.get("capacity"),
     coverUrl: formData.get("coverUrl") ?? "",
+    latitude: formData.get("latitude") ?? "",
+    longitude: formData.get("longitude") ?? "",
   });
+}
+
+/** Normalize the optional ""-or-number coordinate fields to number | null. */
+function coords(d: { latitude?: number | ""; longitude?: number | "" }) {
+  const latitude = typeof d.latitude === "number" ? d.latitude : null;
+  const longitude = typeof d.longitude === "number" ? d.longitude : null;
+  // Only keep coordinates when BOTH are present.
+  return latitude !== null && longitude !== null
+    ? { latitude, longitude }
+    : { latitude: null, longitude: null };
 }
 
 // ---- Org: create / edit / publish / cancel --------------------------------
@@ -77,6 +89,7 @@ export async function createEvent(
       endsAt: d.endsAt,
       capacity: d.capacity,
       coverUrl: d.coverUrl || null,
+      ...coords(d),
       status: publish ? EventStatus.PUBLISHED : EventStatus.DRAFT,
     },
   });
@@ -110,6 +123,7 @@ export async function updateEvent(
       endsAt: d.endsAt,
       capacity: d.capacity,
       coverUrl: d.coverUrl || null,
+      ...coords(d),
     },
   });
 

@@ -1,6 +1,7 @@
 import { Building2, CalendarDays, MapPin, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { EventCountdown } from "@/components/event-countdown";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
@@ -102,6 +103,13 @@ export async function FeaturedEvents({ events }: { events: EventCard[] }) {
                     <Badge className="absolute top-3 right-3 border-0 bg-zinc-900/80 text-white">
                       {t("status.finished")}
                     </Badge>
+                  )}
+                  {!finished && (
+                    <EventCountdown
+                      startsAt={event.startsAt}
+                      endsAt={event.endsAt}
+                      className="absolute bottom-3 left-3"
+                    />
                   )}
                 </div>
 

@@ -26,6 +26,7 @@
     "@prisma/client": "^7.8.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "leaflet": "^1.9.4",
     "lucide-react": "^1.21.0",
     "next": "16.2.9",
     "next-cloudinary": "^6.17.5",
@@ -36,6 +37,7 @@
     "pusher-js": "^8.5.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-leaflet": "^5.0.0",
     "resend": "^6.14.0",
     "server-only": "^0.0.1",
     "shadcn": "^4.11.0",
@@ -45,6 +47,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^20",
     "@types/pg": "^8.20.0",
     "@types/react": "^19",

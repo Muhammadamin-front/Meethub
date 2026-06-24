@@ -70,9 +70,10 @@ export default async function AdminOrganizationsPage({
                 <p className="text-muted-foreground text-sm">
                   {org.description}
                 </p>
-                {org.status === OrgStatus.PENDING && (
-                  <AdminOrgActions organizationId={org.id} />
-                )}
+                <AdminOrgActions
+                  organizationId={org.id}
+                  status={org.status}
+                />
               </CardContent>
             </Card>
           ))}

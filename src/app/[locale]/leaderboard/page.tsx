@@ -9,8 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { OrgStatus, RegistrationStatus } from "@/generated/prisma/client";
-import { XP_PER_ATTENDED } from "@/lib/constants";
 import { displayName } from "@/lib/utils";
+import { computeXp } from "@/lib/xp";
 import { prisma } from "@/server/db";
 
 const ACTIVE = [RegistrationStatus.JOINED, RegistrationStatus.ATTENDED];
@@ -23,28 +23,53 @@ function rankLabel(i: number) {
 // so cache it for 60s instead of recomputing on every request.
 const getLeaderboardData = unstable_cache(
   async () => {
-    // Members ranked by XP earned from attended events.
+    // Members ranked by XP (per-event XP + streak bonus). Take a generous set
+    // of top attenders as candidates, then re-rank by total XP since the streak
+    // bonus can reshuffle the very top.
     const attended = await prisma.registration.groupBy({
       by: ["userId"],
       where: { status: RegistrationStatus.ATTENDED },
       _count: true,
     });
-    const topAttended = [...attended]
+    const candidates = [...attended]
       .sort((a, b) => b._count - a._count)
-      .slice(0, 10);
-    const memberUsers = topAttended.length
-      ? await prisma.user.findMany({
-          where: { id: { in: topAttended.map((r) => r.userId) } },
-          select: { id: true, name: true, imageUrl: true },
-        })
-      : [];
+      .slice(0, 30);
+    const candidateIds = candidates.map((r) => r.userId);
+
+    const [memberUsers, attendedRegs] = candidateIds.length
+      ? await Promise.all([
+          prisma.user.findMany({
+            where: { id: { in: candidateIds } },
+            select: { id: true, name: true, imageUrl: true },
+          }),
+          prisma.registration.findMany({
+            where: {
+              status: RegistrationStatus.ATTENDED,
+              userId: { in: candidateIds },
+            },
+            select: { userId: true, event: { select: { startsAt: true } } },
+          }),
+        ])
+      : [[], []];
+
+    const datesByUser = new Map<string, Date[]>();
+    for (const r of attendedRegs) {
+      const arr = datesByUser.get(r.userId) ?? [];
+      arr.push(r.event.startsAt);
+      datesByUser.set(r.userId, arr);
+    }
     const userById = new Map(memberUsers.map((u) => [u.id, u]));
-    const members = topAttended.flatMap((row) => {
-      const u = userById.get(row.userId);
-      return u
-        ? [{ ...u, attended: row._count, xp: row._count * XP_PER_ATTENDED }]
-        : [];
-    });
+    const members = candidates
+      .flatMap((row) => {
+        const u = userById.get(row.userId);
+        if (!u) return [];
+        const xp = computeXp(datesByUser.get(row.userId) ?? []);
+        return [
+          { ...u, attended: xp.attended, xp: xp.total, streak: xp.longestStreak },
+        ];
+      })
+      .sort((a, b) => b.xp - a.xp || b.attended - a.attended)
+      .slice(0, 10);
 
     // Organizers ranked by participants gathered across their events.
     const [events, orgs, regCounts] = await Promise.all([
@@ -132,6 +157,14 @@ export default async function LeaderboardPage({
                     <span className="flex-1 truncate font-medium">
                       {displayName(m.name)}
                     </span>
+                    {m.streak > 1 && (
+                      <span
+                        className="text-xs"
+                        title={t("streakBest", { count: m.streak })}
+                      >
+                        🔥 {m.streak}
+                      </span>
+                    )}
                     <span className="text-muted-foreground text-xs">
                       {t("attended", { count: m.attended })}
                     </span>

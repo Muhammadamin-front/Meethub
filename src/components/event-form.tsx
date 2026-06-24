@@ -3,12 +3,13 @@
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
+import { LocationPicker } from "@/components/location-picker";
 import { MediaUpload } from "@/components/media-upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { LOCATION_SUGGESTIONS } from "@/lib/constants";
+import { EVENT_CATEGORIES } from "@/lib/constants";
 import type { EventFormState } from "@/server/actions/event";
 
 type Action = (
@@ -20,6 +21,8 @@ type Defaults = {
   title?: string;
   description?: string;
   location?: string;
+  latitude?: number | null;
+  longitude?: number | null;
   category?: string;
   startsAt?: string;
   endsAt?: string;
@@ -65,36 +68,40 @@ export function EventForm({
         />
       </Field>
 
+      <LocationPicker
+        defaultLocation={defaults?.location}
+        defaultLat={defaults?.latitude}
+        defaultLng={defaults?.longitude}
+        error={err?.location && t("locationError")}
+      />
+
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field
-          label={t("location")}
-          error={err?.location && t("locationError")}
-        >
-          <>
-            <Input
-              list="location-suggestions"
-              name="location"
-              required
-              defaultValue={defaults?.location}
-              placeholder={t("locationPlaceholder")}
-            />
-            <datalist id="location-suggestions">
-              {LOCATION_SUGGESTIONS.map((l) => (
-                <option key={l} value={l} />
-              ))}
-            </datalist>
-          </>
-        </Field>
         <Field
           label={t("category")}
           error={err?.category && t("categoryError")}
         >
-          <Input
+          <select
             name="category"
             required
-            defaultValue={defaults?.category}
-            placeholder={t("categoryPlaceholder")}
-          />
+            defaultValue={defaults?.category ?? ""}
+            className="border-input bg-background ring-offset-background focus-visible:ring-ring h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <option value="" disabled>
+              {t("categoryPlaceholder")}
+            </option>
+            {/* Preserve a legacy/custom category that isn't in the preset list. */}
+            {defaults?.category &&
+              !EVENT_CATEGORIES.includes(
+                defaults.category as (typeof EVENT_CATEGORIES)[number],
+              ) && (
+                <option value={defaults.category}>{defaults.category}</option>
+              )}
+            {EVENT_CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
         </Field>
       </div>
 

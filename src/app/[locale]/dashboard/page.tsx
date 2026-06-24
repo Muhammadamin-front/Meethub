@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { AvatarUploader } from "@/components/avatar-uploader";
+import { NameEditor } from "@/components/name-editor";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
@@ -10,8 +11,8 @@ import {
   RegistrationStatus,
 } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
-import { XP_PER_ATTENDED } from "@/lib/constants";
 import { displayName, formatEventRange } from "@/lib/utils";
+import { computeXp } from "@/lib/xp";
 import { getOwnedOrganization, requireUser } from "@/server/auth";
 import { prisma } from "@/server/db";
 
@@ -50,9 +51,13 @@ export default async function DashboardPage({
     orderBy: { joinedAt: "desc" },
   });
 
-  const attendedCount = await prisma.registration.count({
+  // XP is derived from the user's attended events (+ a streak bonus), so we
+  // load the event dates and compute it the same way the leaderboard does.
+  const attendedRegs = await prisma.registration.findMany({
     where: { userId: user.id, status: RegistrationStatus.ATTENDED },
+    select: { event: { select: { startsAt: true } } },
   });
+  const xp = computeXp(attendedRegs.map((r) => r.event.startsAt));
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-12 px-4 py-12 sm:px-6">
@@ -67,17 +72,40 @@ export default async function DashboardPage({
           <p className="text-muted-foreground text-sm">
             {t("Dashboard.attendedLabel")}
           </p>
-          <p className="text-2xl font-semibold">{attendedCount}</p>
+          <p className="text-2xl font-semibold">{xp.attended}</p>
         </div>
         <div>
           <p className="text-muted-foreground text-sm">{t("Dashboard.xp")}</p>
-          <p className="text-primary text-2xl font-semibold">
-            {attendedCount * XP_PER_ATTENDED}
+          <p className="text-primary text-2xl font-semibold">{xp.total}</p>
+          {xp.streakBonus > 0 && (
+            <p className="text-muted-foreground text-xs">
+              {t("Dashboard.xpBreakdown", {
+                base: xp.base,
+                bonus: xp.streakBonus,
+              })}
+            </p>
+          )}
+        </div>
+        <div>
+          <p className="text-muted-foreground text-sm">
+            {t("Dashboard.streak")}
           </p>
+          <p className="text-2xl font-semibold">
+            🔥 {t("Dashboard.streakDays", { count: xp.currentStreak })}
+          </p>
+          {xp.longestStreak > 1 && (
+            <p className="text-muted-foreground text-xs">
+              {t("Dashboard.streakBest", { count: xp.longestStreak })}
+            </p>
+          )}
         </div>
         <div className="ml-auto flex items-center gap-4">
           <div className="text-right">
-            <p className="font-medium">{displayName(user.name)}</p>
+            <NameEditor
+              currentName={user.name}
+              display={displayName(user.name)}
+              isEmailName={!!user.email && user.name === user.email}
+            />
             {user.email && (
               <p className="text-muted-foreground text-sm">{user.email}</p>
             )}

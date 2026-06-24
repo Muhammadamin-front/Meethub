@@ -2,6 +2,7 @@ import { Building2, CalendarDays, MapPin, Users } from "lucide-react";
 import { unstable_cache } from "next/cache";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { EventCountdown } from "@/components/event-countdown";
 import { EventsFilter } from "@/components/events-filter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,6 +39,7 @@ export default async function EventsPage({
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q : "";
   const category = typeof sp.category === "string" ? sp.category : "";
+  const near = typeof sp.near === "string" ? sp.near : "";
   setRequestLocale(locale);
   const t = await getTranslations("Event");
 
@@ -54,6 +56,9 @@ export default async function EventsPage({
       where: {
         ...baseWhere,
         ...(category ? { category } : {}),
+        ...(near
+          ? { location: { contains: near, mode: "insensitive" as const } }
+          : {}),
         ...(q
           ? {
               OR: [
@@ -94,7 +99,7 @@ export default async function EventsPage({
     : [];
   const taken = new Map(counts.map((c) => [c.eventId, c._count]));
 
-  const filtering = Boolean(q || category);
+  const filtering = Boolean(q || category || near);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
@@ -103,7 +108,12 @@ export default async function EventsPage({
       </h1>
       <p className="text-muted-foreground mt-1">{t("listSubtitle")}</p>
 
-      <EventsFilter categories={categories} q={q} category={category} />
+      <EventsFilter
+        categories={categories}
+        q={q}
+        category={category}
+        near={near}
+      />
 
       {events.length === 0 ? (
         <p className="text-muted-foreground mt-12">
@@ -150,6 +160,14 @@ export default async function EventsPage({
                     <Badge className="absolute top-3 right-3 border-transparent bg-zinc-900/80 text-white shadow-sm">
                       {t("status.finished")}
                     </Badge>
+                  )}
+                  {/* Live countdown until the event starts */}
+                  {!finished && (
+                    <EventCountdown
+                      startsAt={event.startsAt}
+                      endsAt={event.endsAt}
+                      className="absolute bottom-3 left-3 shadow-sm"
+                    />
                   )}
                 </div>
                 <CardHeader>

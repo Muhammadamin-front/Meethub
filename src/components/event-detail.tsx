@@ -2,10 +2,12 @@ import { Building2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { EventCountdown } from "@/components/event-countdown";
 import { EventGallery } from "@/components/event-gallery";
 import { EventJoinButton } from "@/components/event-join-button";
 import { EventManageActions } from "@/components/event-manage-actions";
 import { EventReviews } from "@/components/event-reviews";
+import { LocationView } from "@/components/location-view";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -109,6 +111,14 @@ export async function EventDetail({
       <dl className="mt-6 grid gap-4 sm:grid-cols-2">
         <Info label={t("when")}>
           {formatEventRange(event.startsAt, event.endsAt, locale)}
+          {event.status === EventStatus.PUBLISHED && (
+            <EventCountdown
+              startsAt={event.startsAt}
+              endsAt={event.endsAt}
+              showLabel
+              className="mt-1.5 flex w-fit"
+            />
+          )}
         </Info>
         <Info label={t("where")}>{event.location}</Info>
         <Info label={t("categoryLabel")}>
@@ -123,6 +133,12 @@ export async function EventDetail({
       <div className="mt-8 text-sm leading-7 whitespace-pre-wrap">
         {event.description}
       </div>
+
+      {event.latitude != null && event.longitude != null && (
+        <div className="mt-8">
+          <LocationView lat={event.latitude} lng={event.longitude} />
+        </div>
+      )}
 
       <div className="mt-8">
         {canManage ? (

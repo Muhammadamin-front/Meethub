@@ -117,3 +117,30 @@ export async function rejectOrganization(organizationId: string) {
 
   revalidatePath("/admin/organizations");
 }
+
+/**
+ * Admin: permanently delete an organization. Its events (and their
+ * registrations, messages, media, reviews) cascade away via the schema. The
+ * owner keeps their account but is demoted back to a regular USER so they can
+ * re-apply later.
+ */
+export async function deleteOrganization(organizationId: string) {
+  await requireAdmin();
+
+  const org = await prisma.organization.findUnique({
+    where: { id: organizationId },
+    select: { ownerUserId: true },
+  });
+  if (!org) return;
+
+  await prisma.$transaction([
+    prisma.organization.delete({ where: { id: organizationId } }),
+    // Only demote if they were an organizer (never touch an admin's role).
+    prisma.user.updateMany({
+      where: { id: org.ownerUserId, role: UserRole.ORGANIZATION },
+      data: { role: UserRole.USER },
+    }),
+  ]);
+
+  revalidatePath("/admin/organizations");
+}

@@ -60,7 +60,8 @@
     "xp": "{xp} XP",
     "attended": "{count} посещений",
     "events": "{count} мероприятий",
-    "participants": "{count} участников"
+    "participants": "{count} участников",
+    "streakBest": "Лучшая серия: {count} дн."
   },
   "Landing": {
     "heroTitlePrefix": "Найдите потрясающие ",
@@ -252,7 +253,9 @@
     "rejected": "Отклонена",
     "usersTitle": "Пользователи",
     "usersSubtitle": "Управление участниками, репутацией и блокировками.",
-    "manageUsers": "Управление"
+    "manageUsers": "Управление",
+    "delete": "Удалить",
+    "deleteConfirm": "Удалить эту организацию и все её мероприятия? Это действие необратимо."
   },
   "Event": {
     "listTitle": "Мероприятия",
@@ -260,6 +263,9 @@
     "empty": "Пока нет предстоящих мероприятий.",
     "searchPlaceholder": "Поиск мероприятий…",
     "allCategories": "Все",
+    "nearMe": "Рядом",
+    "locating": "Определяем…",
+    "allCities": "Все города",
     "noResults": "По вашему запросу ничего не найдено.",
     "backToEvents": "К мероприятиям",
     "createTitle": "Создать мероприятие",
@@ -267,6 +273,8 @@
     "by": "от {org}",
     "spotsLeft": "осталось мест: {count}",
     "full": "Мест нет",
+    "live": "Идёт сейчас",
+    "startsIn": "До начала",
     "participants": "присоединились: {count}",
     "when": "Когда",
     "where": "Где",
@@ -304,6 +312,11 @@
       "location": "Место",
       "locationPlaceholder": "Площадка или адрес",
       "locationError": "Укажите место.",
+      "mapSearchPlaceholder": "Найдите адрес или место",
+      "mapSearch": "Поиск",
+      "searching": "Поиск…",
+      "useMyLocation": "Моё местоположение",
+      "mapHint": "Найдите, кликните по карте или используйте своё местоположение, чтобы задать точное место.",
       "category": "Категория",
       "categoryPlaceholder": "напр. Технологии",
       "categoryError": "Укажите категорию.",
@@ -335,7 +348,19 @@
     "noJoined": "Вы ещё не присоединились ни к одному мероприятию.",
     "reputation": "Репутация",
     "attendedLabel": "Посещено мероприятий",
-    "xp": "XP"
+    "xp": "XP",
+    "xpBreakdown": "{base} + {bonus} за серию",
+    "streak": "Серия дней",
+    "streakDays": "{count, plural, =0 {0 дней} one {# день} few {# дня} other {# дней}}",
+    "streakBest": "Лучшая: {count} дн.",
+    "editName": "Изменить имя",
+    "saveName": "Сохранить",
+    "cancel": "Отмена",
+    "namePlaceholder": "Ваше имя",
+    "nameError": {
+      "invalid": "Имя должно содержать 2–50 символов.",
+      "rateLimited": "Слишком много изменений. Помедленнее."
+    }
   },
   "Attendance": {
     "title": "Посещаемость",
@@ -409,6 +434,7 @@
   },
   "Media": {
     "changePhoto": "Изменить фото",
+    "uploading": "Загрузка…",
     "galleryTitle": "Галерея",
     "galleryEmpty": "Пока нет фото или видео.",
     "addMedia": "Добавить фото / видео",

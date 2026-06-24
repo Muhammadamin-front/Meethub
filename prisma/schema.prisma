@@ -117,6 +117,9 @@ model Event {
   description    String
   coverUrl       String?
   location       String
+  // Optional map coordinates (picked from the Leaflet/OpenStreetMap picker).
+  latitude       Float?
+  longitude      Float?
   startsAt       DateTime
   endsAt         DateTime
   capacity       Int

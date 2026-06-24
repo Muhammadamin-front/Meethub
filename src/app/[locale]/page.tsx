@@ -18,8 +18,9 @@ const getLandingData = unstable_cache(
   async () => {
     const [events, rawCats, totalEvents, totalUsers, totalOrgs] =
       await Promise.all([
+        // Nearest upcoming events first (skip ones that already ended).
         prisma.event.findMany({
-          where: { status: "PUBLISHED" },
+          where: { status: "PUBLISHED", endsAt: { gte: new Date() } },
           take: 6,
           orderBy: { startsAt: "asc" },
           include: { organization: { select: { name: true } } },

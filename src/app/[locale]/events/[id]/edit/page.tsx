@@ -40,6 +40,8 @@ export default async function EditEventPage({
             title: event.title,
             description: event.description,
             location: event.location,
+            latitude: event.latitude,
+            longitude: event.longitude,
             category: event.category,
             startsAt: toDateTimeLocalValue(event.startsAt),
             endsAt: toDateTimeLocalValue(event.endsAt),

@@ -60,7 +60,8 @@
     "xp": "{xp} XP",
     "attended": "{count} ta qatnashuv",
     "events": "{count} ta tadbir",
-    "participants": "{count} ishtirokchi"
+    "participants": "{count} ishtirokchi",
+    "streakBest": "Eng yaxshi streak: {count} kun"
   },
   "Landing": {
     "heroTitlePrefix": "Yoningizdagi ajoyib ",
@@ -252,7 +253,9 @@
     "rejected": "Rad etilgan",
     "usersTitle": "Foydalanuvchilar",
     "usersSubtitle": "A’zolar, obro‘ va bloklarni boshqaring.",
-    "manageUsers": "Boshqarish"
+    "manageUsers": "Boshqarish",
+    "delete": "O'chirish",
+    "deleteConfirm": "Bu tashkilot va uning barcha tadbirlari o'chirilsinmi? Buni ortga qaytarib bo'lmaydi."
   },
   "Event": {
     "listTitle": "Tadbirlar",
@@ -260,6 +263,9 @@
     "empty": "Hozircha yaqin tadbirlar yo‘q.",
     "searchPlaceholder": "Tadbirlarni qidirish…",
     "allCategories": "Barchasi",
+    "nearMe": "Yaqinimda",
+    "locating": "Aniqlanmoqda…",
+    "allCities": "Barcha shaharlar",
     "noResults": "Qidiruvingizga mos tadbir topilmadi.",
     "backToEvents": "Tadbirlarga qaytish",
     "createTitle": "Tadbir yaratish",
@@ -267,6 +273,8 @@
     "by": "{org} tomonidan",
     "spotsLeft": "{count} ta joy qoldi",
     "full": "Joy qolmadi",
+    "live": "Hozir bo‘lmoqda",
+    "startsIn": "Boshlanishigacha",
     "participants": "{count} kishi qo‘shilgan",
     "when": "Qachon",
     "where": "Qayerda",
@@ -304,6 +312,11 @@
       "location": "Manzil",
       "locationPlaceholder": "Joy yoki manzil",
       "locationError": "Iltimos, manzil kiriting.",
+      "mapSearchPlaceholder": "Manzil yoki joyni qidiring",
+      "mapSearch": "Qidirish",
+      "searching": "Qidirilmoqda…",
+      "useMyLocation": "Mening joylashuvim",
+      "mapHint": "Aniq joyni belgilash uchun qidiring, xaritada bosing yoki joylashuvingizdan foydalaning.",
       "category": "Turkum",
       "categoryPlaceholder": "masalan, Texnologiya",
       "categoryError": "Iltimos, turkum kiriting.",
@@ -335,7 +348,19 @@
     "noJoined": "Siz hali birorta tadbirga qo‘shilmagansiz.",
     "reputation": "Obro‘",
     "attendedLabel": "Qatnashilgan tadbirlar",
-    "xp": "XP"
+    "xp": "XP",
+    "xpBreakdown": "{base} + {bonus} streak bonusi",
+    "streak": "Kunlik streak",
+    "streakDays": "{count, plural, =0 {0 kun} other {# kun}}",
+    "streakBest": "Eng yaxshi: {count} kun",
+    "editName": "Ismni tahrirlash",
+    "saveName": "Saqlash",
+    "cancel": "Bekor qilish",
+    "namePlaceholder": "Ismingiz",
+    "nameError": {
+      "invalid": "Ism 2–50 ta belgidan iborat bo‘lishi kerak.",
+      "rateLimited": "Juda ko‘p o‘zgartirish. Biroz sekinlashtiring."
+    }
   },
   "Attendance": {
     "title": "Davomat",
@@ -409,6 +434,7 @@
   },
   "Media": {
     "changePhoto": "Rasmni o‘zgartirish",
+    "uploading": "Yuklanmoqda…",
     "galleryTitle": "Galereya",
     "galleryEmpty": "Hozircha surat yoki video yo‘q.",
     "addMedia": "Surat / video qo‘shish",
