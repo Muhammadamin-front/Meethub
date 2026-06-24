@@ -1,4 +1,11 @@
-import { ShieldCheck, Sparkles, TrendingUp, Users, Zap } from "lucide-react";
+import {
+  MessageCircle,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  Users,
+  Zap,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -51,6 +58,13 @@ export async function FeaturesSection() {
       title: t("feature.access.title"),
       desc: t("feature.access.desc"),
     },
+    {
+      Icon: MessageCircle,
+      color: "text-cyan-500",
+      bg: "bg-cyan-500/10",
+      title: t("feature.chat.title"),
+      desc: t("feature.chat.desc"),
+    },
   ];
 
   return (
@@ -68,8 +82,12 @@ export async function FeaturesSection() {
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {features.map(({ Icon, color, bg, title, desc }, i) => (
-          <Reveal key={title} delay={Math.min(i, 3) as 0 | 1 | 2 | 3}>
-            <div className="glass group rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+          <Reveal
+            key={title}
+            className="h-full"
+            delay={Math.min(i, 3) as 0 | 1 | 2 | 3}
+          >
+            <div className="glass group flex h-full flex-col rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
               <div
                 className={`mb-4 flex size-11 items-center justify-center rounded-xl ${bg}`}
               >

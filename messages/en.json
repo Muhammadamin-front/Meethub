@@ -179,6 +179,10 @@
       "access": {
         "title": "Exclusive Access",
         "desc": "Get early access to premium events and special meetups for verified members."
+      },
+      "chat": {
+        "title": "Real-time Chat",
+        "desc": "Coordinate with attendees in each event's live chat — share updates, photos, and plans instantly."
       }
     },
     "ticketTitle": "Your Digital Ticket",

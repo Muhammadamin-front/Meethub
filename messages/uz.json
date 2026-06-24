@@ -179,6 +179,10 @@
       "access": {
         "title": "Eksklyuziv kirish",
         "desc": "Premium tadbirlar va tasdiqlangan a'zolar uchun maxsus uchrashuvlarga erta kirish imkoni."
+      },
+      "chat": {
+        "title": "Real-vaqt chat",
+        "desc": "Har bir tadbirning jonli chatida ishtirokchilar bilan muvofiqlashing — yangiliklar, suratlar va rejalarni bir zumda ulashing."
       }
     },
     "ticketTitle": "Raqamli chiptangiz",
