@@ -200,7 +200,7 @@ export function LocationPicker({
         />
 
         {open && (loading || suggestions.length > 0) && (
-          <ul className="bg-popover absolute z-20 mt-1 max-h-72 w-full overflow-auto rounded-lg border p-1 shadow-lg">
+          <ul className="bg-popover absolute z-50 mt-1 max-h-72 w-full overflow-auto rounded-lg border p-1 shadow-lg">
             {loading && suggestions.length === 0 ? (
               <li className="text-muted-foreground px-3 py-2 text-sm">
                 {t("searching")}
@@ -253,11 +253,16 @@ export function LocationPicker({
         </Button>
       </div>
 
-      <LocationPickerMap
-        marker={marker}
-        view={view}
-        onPick={(lat, lng) => pick(lat, lng)}
-      />
+      {/* `isolate` confines Leaflet's internal z-indexes (panes/controls go up
+          to ~1000) to this subtree, so the search dropdown above renders on top
+          of the map instead of being covered by it. */}
+      <div className="relative z-0 isolate">
+        <LocationPickerMap
+          marker={marker}
+          view={view}
+          onPick={(lat, lng) => pick(lat, lng)}
+        />
+      </div>
 
       {error && <p className="text-destructive text-sm">{error}</p>}
     </div>
