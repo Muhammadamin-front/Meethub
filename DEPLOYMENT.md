@@ -27,6 +27,45 @@ attach the domain, then flip URLs to the domain.
 
 ---
 
+## 📍 Where you are now (June 2026)
+
+**Domain `meethub.uz`** is bought (ahost.uz) but **pending activation** by
+cctld.uz (UZ registry moderation, Mon–Fri, then up to 24h to bind). DNS records
+won't work until it's active — so **deploy to `*.vercel.app` now** and attach the
+domain later.
+
+### ✅ Done
+- Code is production-ready: `robots.ts`, `sitemap.ts`, PWA, `vercel.json` (cron +
+  `prisma migrate deploy`).
+- **Neon** DB created — pooled (`DATABASE_URL`) + direct (`DIRECT_URL`) in `.env`.
+- **Clerk** production keys in `.env` — `pk_live_…` + `sk_live_…`.
+- **Pusher** configured (and the env var-name bug fixed).
+- **`CRON_SECRET`** generated.
+
+### ⏳ Still needed (values still placeholder in `.env`)
+- `CLERK_WEBHOOK_SIGNING_SECRET` (`whsec_…`) — created when you add the webhook
+  endpoint (after deploy, see Step 3 / Clerk webhook).
+- `CLOUDINARY_*` (cloud name, api key/secret) + unsigned upload preset.
+- `RESEND_API_KEY` + `EMAIL_FROM` (needs a verified domain in Resend).
+
+### 🚧 Remaining steps, in order
+1. **Push to GitHub** (Step 1) — if not already.
+2. **Vercel import + env vars + Deploy** (Step 5) → get a `*.vercel.app` URL.
+   Build verifies + migrations apply to Neon. *(App boots; Clerk sign-in won't
+   work yet — live keys are bound to `clerk.meethub.uz`.)*
+3. **Wait for `meethub.uz` activation** (cctld.uz).
+4. **Connect domain in Vercel + add DNS** at ahost `DNS-хостинг` tab (Step 6).
+5. **Clerk: add domain `meethub.uz`** → add its DNS records at ahost; **add the
+   webhook** `https://meethub.uz/api/webhooks/clerk` → copy `whsec_…` into Vercel
+   (Step 3).
+6. **Set `NEXT_PUBLIC_APP_URL=https://meethub.uz` → Redeploy** (Step 7).
+7. **Seed admin** (Step 8) and run the **verification checklist** (Step 9).
+
+> ⚠️ Security TODO before public launch: the Neon DB password was shared in
+> plaintext — **rotate it** in Neon and update Vercel before going live.
+
+---
+
 ## Step 0 — Pre-flight (already done in this repo ✅)
 
 - `vercel.json` → build runs `prisma migrate deploy && next build`, region `fra1`,
