@@ -31,6 +31,7 @@ export function EventGallery({
             accept="both"
             label={t("addMedia")}
             disabled={pending}
+            onError={(e) => setError(t(`error.${e}`))}
             onUploaded={(info) =>
               startTransition(async () => {
                 setError(null);

@@ -8,7 +8,7 @@ import {
   validateUpload,
   type UploadError,
   type UploadInfo,
-} from "@/lib/cloudinary";
+} from "@/lib/upload";
 import { getEventAccess, requireUser } from "@/server/auth";
 import { prisma } from "@/server/db";
 import { rateLimit } from "@/server/rate-limit";

@@ -170,6 +170,7 @@ export function ChatRoom({
             label={tMedia("attachMedia")}
             icon={<ImagePlus className="size-5" />}
             disabled={pending}
+            onError={(e) => setError(tMedia(`error.${e}`))}
             onUploaded={(info) =>
               startTransition(async () => {
                 setError(null);

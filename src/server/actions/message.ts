@@ -6,7 +6,7 @@ import {
   validateUpload,
   type UploadError,
   type UploadInfo,
-} from "@/lib/cloudinary";
+} from "@/lib/upload";
 import { getEventAccess } from "@/server/auth";
 import { prisma } from "@/server/db";
 import { triggerNewMessage } from "@/server/pusher";

@@ -1,26 +1,31 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import { upload } from "@vercel/blob/client";
+import { Loader2 } from "lucide-react";
+import { useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { isCloudinaryConfigured, type UploadInfo } from "@/lib/cloudinary";
+import {
+  isUploadEnabled,
+  MAX_IMAGE_BYTES,
+  MAX_VIDEO_BYTES,
+  type UploadError,
+  type UploadInfo,
+} from "@/lib/upload";
 
-// Heavy widget (loads Cloudinary's script). Code-split so it's only fetched
-// when an upload control is actually rendered (Cloudinary configured), not in
-// the initial bundle of every page that has a MediaUpload.
-const CldUploadWidget = dynamic(
-  () => import("next-cloudinary").then((m) => m.CldUploadWidget),
-  { ssr: false },
-);
-
-const PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
-
+/**
+ * Uploads a single image/video straight to Vercel Blob from the browser, then
+ * hands the resulting URL back via `onUploaded`. Renders a disabled button
+ * until uploads are enabled (NEXT_PUBLIC_UPLOADS_ENABLED), mirroring the old
+ * graceful-degradation behaviour.
+ */
 export function MediaUpload({
   accept = "image",
   label,
   icon,
   disabled,
   onUploaded,
+  onError,
 }: {
   accept?: "image" | "video" | "both";
   label: string;
@@ -28,53 +33,83 @@ export function MediaUpload({
   icon?: React.ReactNode;
   disabled?: boolean;
   onUploaded: (info: UploadInfo) => void;
+  onError?: (error: UploadError) => void;
 }) {
-  // Icon-only buttons keep `label` as the accessible name + tooltip.
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+
   const buttonProps = icon
     ? ({ size: "icon", "aria-label": label, title: label } as const)
     : ({ size: "sm" } as const);
-  const buttonChildren = icon ?? label;
 
-  // Degrade gracefully until Cloudinary is configured.
-  if (!isCloudinaryConfigured() || !PRESET) {
+  if (!isUploadEnabled()) {
     return (
       <Button type="button" variant="outline" disabled {...buttonProps}>
-        {buttonChildren}
+        {icon ?? label}
       </Button>
     );
   }
 
+  const acceptAttr =
+    accept === "image"
+      ? "image/*"
+      : accept === "video"
+        ? "video/*"
+        : "image/*,video/*";
+
+  async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-picking the same file
+    if (!file) return;
+
+    const isVideo = file.type.startsWith("video/");
+    if (accept !== "both" && (isVideo ? "video" : "image") !== accept) {
+      onError?.("invalidType");
+      return;
+    }
+    const max = isVideo ? MAX_VIDEO_BYTES : MAX_IMAGE_BYTES;
+    if (file.size > max) {
+      onError?.("tooLarge");
+      return;
+    }
+
+    setBusy(true);
+    try {
+      const blob = await upload(file.name, file, {
+        access: "public",
+        handleUploadUrl: "/api/upload",
+      });
+      onUploaded({
+        url: blob.url,
+        resourceType: isVideo ? "video" : "image",
+        bytes: file.size,
+      });
+    } catch (err) {
+      console.error("Upload failed:", err);
+      onError?.("invalid");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
-    <CldUploadWidget
-      uploadPreset={PRESET}
-      options={{
-        multiple: false,
-        maxFiles: 1,
-        resourceType: accept === "both" ? "auto" : accept,
-        sources: ["local", "url", "camera"],
-      }}
-      onSuccess={(result) => {
-        const info = result.info;
-        if (info && typeof info !== "string") {
-          onUploaded({
-            url: info.secure_url,
-            resourceType: info.resource_type === "video" ? "video" : "image",
-            bytes: info.bytes,
-          });
-        }
-      }}
-    >
-      {({ open }) => (
-        <Button
-          type="button"
-          variant="outline"
-          disabled={disabled}
-          onClick={() => open()}
-          {...buttonProps}
-        >
-          {buttonChildren}
-        </Button>
-      )}
-    </CldUploadWidget>
+    <>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={acceptAttr}
+        hidden
+        onChange={onChange}
+      />
+      <Button
+        type="button"
+        variant="outline"
+        disabled={disabled || busy}
+        onClick={() => inputRef.current?.click()}
+        {...buttonProps}
+      >
+        {busy ? <Loader2 className="size-4 animate-spin" /> : (icon ?? label)}
+      </Button>
+    </>
   );
 }

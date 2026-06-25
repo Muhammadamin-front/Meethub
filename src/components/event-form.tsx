@@ -42,8 +42,10 @@ export function EventForm({
   mode: "create" | "edit";
 }) {
   const t = useTranslations("Event.form");
+  const tMedia = useTranslations("Media");
   const [state, formAction, pending] = useActionState(action, {});
   const [coverUrl, setCoverUrl] = useState(defaults?.coverUrl ?? "");
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const err = state.fieldErrors;
 
   return (
@@ -153,7 +155,7 @@ export function EventForm({
           />
         )}
         <div className="flex items-center gap-2">
-          {/* Paste any image URL (works without Cloudinary) or upload one. */}
+          {/* Paste any image URL, or upload one to Vercel Blob. */}
           <Input
             id="coverUrl"
             type="url"
@@ -165,7 +167,11 @@ export function EventForm({
           <MediaUpload
             accept="image"
             label={t("uploadCover")}
-            onUploaded={(info) => setCoverUrl(info.url)}
+            onError={(e) => setUploadError(tMedia(`error.${e}`))}
+            onUploaded={(info) => {
+              setUploadError(null);
+              setCoverUrl(info.url);
+            }}
           />
           {coverUrl && (
             <Button
@@ -178,8 +184,10 @@ export function EventForm({
             </Button>
           )}
         </div>
-        {err?.coverUrl && (
-          <p className="text-destructive text-sm">{t("coverUrlError")}</p>
+        {(uploadError || err?.coverUrl) && (
+          <p className="text-destructive text-sm">
+            {uploadError ?? t("coverUrlError")}
+          </p>
         )}
       </div>
 
