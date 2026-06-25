@@ -16,9 +16,19 @@ export async function generateMetadata({
   const { id } = await params;
   const event = await prisma.event.findUnique({
     where: { id },
-    select: { title: true },
+    select: { title: true, description: true },
   });
-  return { title: event?.title };
+  if (!event) return {};
+
+  // Short, clean description for link previews (Telegram/social).
+  const description = event.description.replace(/\s+/g, " ").trim().slice(0, 160);
+  return {
+    title: event.title,
+    description,
+    // The opengraph-image.tsx in this segment is attached automatically.
+    openGraph: { type: "article", title: event.title, description },
+    twitter: { card: "summary_large_image", title: event.title, description },
+  };
 }
 
 export default async function EventDetailPage({

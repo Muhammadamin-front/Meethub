@@ -5,6 +5,10 @@
 
 export const APP_NAME = "MeetHub";
 
+/** Public base URL of the app (absolute links, OG images, share URLs). */
+export const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
 export const APP_DESCRIPTION =
   "Discover local meetups, join events hosted by trusted organizations, and connect with people who share your interests.";
 

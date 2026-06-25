@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { AvatarUploader } from "@/components/avatar-uploader";
+import { BadgesSection } from "@/components/badges-section";
 import { NameEditor } from "@/components/name-editor";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -59,6 +60,8 @@ export default async function DashboardPage({
   });
   const xp = computeXp(attendedRegs.map((r) => r.event.startsAt));
 
+  const reviewCount = await prisma.review.count({ where: { userId: user.id } });
+
   return (
     <div className="mx-auto w-full max-w-4xl space-y-12 px-4 py-12 sm:px-6">
       <section className="flex flex-wrap items-center gap-8 rounded-xl border p-6">
@@ -113,6 +116,15 @@ export default async function DashboardPage({
           <AvatarUploader currentUrl={user.imageUrl} name={user.name} />
         </div>
       </section>
+
+      <BadgesSection
+        attended={xp.attended}
+        longestStreak={xp.longestStreak}
+        reviews={reviewCount}
+        organized={ownedEvents.length}
+        reputation={user.reputation}
+        verifiedOrg={org?.status === OrgStatus.VERIFIED}
+      />
 
       <section>
         <div className="flex items-center justify-between gap-4">

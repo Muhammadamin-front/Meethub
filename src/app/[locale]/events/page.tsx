@@ -2,16 +2,16 @@ import { Building2, CalendarDays, MapPin, Users } from "lucide-react";
 import { unstable_cache } from "next/cache";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { AttendeeAvatars } from "@/components/attendee-avatars";
 import { EventCountdown } from "@/components/event-countdown";
 import { EventsFilter } from "@/components/events-filter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EventStatus, RegistrationStatus } from "@/generated/prisma/client";
+import { EventStatus } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
 import { cn, formatEventRange } from "@/lib/utils";
+import { getAttendeeSamples } from "@/server/attendees";
 import { prisma } from "@/server/db";
-
-const ACTIVE = [RegistrationStatus.JOINED, RegistrationStatus.ATTENDED];
 
 // Distinct categories are global and rarely change — cache for 60s.
 const getCategories = unstable_cache(
@@ -87,17 +87,10 @@ export default async function EventsPage({
       : a.startsAt.getTime() - b.startsAt.getTime();
   });
 
-  const counts = events.length
-    ? await prisma.registration.groupBy({
-        by: ["eventId"],
-        where: {
-          eventId: { in: events.map((e) => e.id) },
-          status: { in: ACTIVE },
-        },
-        _count: true,
-      })
-    : [];
-  const taken = new Map(counts.map((c) => [c.eventId, c._count]));
+  // Active counts + a small avatar sample per event for "who's going".
+  const { byEvent: attendees, totals: taken } = await getAttendeeSamples(
+    events.map((e) => e.id),
+  );
 
   const filtering = Boolean(q || category || near);
 
@@ -122,10 +115,9 @@ export default async function EventsPage({
       ) : (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {events.map((event) => {
-            const left = Math.max(
-              0,
-              event.capacity - (taken.get(event.id) ?? 0),
-            );
+            const total = taken.get(event.id) ?? 0;
+            const left = Math.max(0, event.capacity - total);
+            const going = attendees.get(event.id) ?? [];
             const finished = isFinished(event);
             const card = (
               <Card
@@ -204,6 +196,11 @@ export default async function EventsPage({
                         ? t("spotsLeft", { count: left })
                         : t("full")}
                   </p>
+                  {total > 0 && (
+                    <div className="pt-1">
+                      <AttendeeAvatars people={going} total={total} />
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             );

@@ -275,6 +275,11 @@
     "full": "Full",
     "live": "Live now",
     "startsIn": "Starts in",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "copied": "Copied!",
+    "shareMore": "More",
+    "whosGoing": "{count} going",
     "participants": "{count} joined",
     "when": "When",
     "where": "Where",
@@ -361,6 +366,20 @@
       "invalid": "Name must be 2–50 characters.",
       "rateLimited": "Too many changes. Please slow down."
     }
+  },
+  "Badges": {
+    "title": "Achievements",
+    "progress": "{earned}/{total} unlocked",
+    "newcomer": { "title": "Newcomer", "desc": "Attend your first event" },
+    "regular": { "title": "Regular", "desc": "Attend 5 events" },
+    "veteran": { "title": "Veteran", "desc": "Attend 15 events" },
+    "streak3": { "title": "On Fire", "desc": "Reach a 3-day streak" },
+    "streak7": { "title": "Unstoppable", "desc": "Reach a 7-day streak" },
+    "reviewer": { "title": "Reviewer", "desc": "Write your first review" },
+    "host": { "title": "Host", "desc": "Create your first event" },
+    "superhost": { "title": "Super Host", "desc": "Create 5 events" },
+    "verified": { "title": "Verified", "desc": "Run a verified organization" },
+    "trusted": { "title": "Trusted", "desc": "Keep a reputation of 100" }
   },
   "Attendance": {
     "title": "Attendance",

@@ -12,6 +12,7 @@ import { Reveal } from "@/components/landing/reveal";
 import { StatsSection } from "@/components/landing/stats-section";
 import { TestimonialsSection } from "@/components/landing/testimonials-section";
 import { Link } from "@/i18n/navigation";
+import { getAttendeeSamples } from "@/server/attendees";
 import { prisma } from "@/server/db";
 
 const getLandingData = unstable_cache(
@@ -35,8 +36,16 @@ const getLandingData = unstable_cache(
         prisma.organization.count(),
       ]);
 
+    // Attach a small attendee sample + total to each event for social proof.
+    const { byEvent, totals } = await getAttendeeSamples(events.map((e) => e.id));
+    const eventsWithAttendees = events.map((e) => ({
+      ...e,
+      attendees: byEvent.get(e.id) ?? [],
+      attendeeTotal: totals.get(e.id) ?? 0,
+    }));
+
     return {
-      events,
+      events: eventsWithAttendees,
       categories: rawCats.map((c) => c.category).filter(Boolean),
       stats: { events: totalEvents, users: totalUsers, organizers: totalOrgs },
     };

@@ -1,11 +1,13 @@
 import { Building2, CalendarDays, MapPin, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { AttendeeAvatars } from "@/components/attendee-avatars";
 import { EventCountdown } from "@/components/event-countdown";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import type { AttendeePreview } from "@/server/attendees";
 
 import { Reveal } from "./reveal";
 
@@ -20,7 +22,8 @@ type EventCard = {
   capacity: number;
   coverUrl: string | null;
   organization: { name: string };
-  _count?: { registrations: number };
+  attendees?: AttendeePreview[];
+  attendeeTotal?: number;
 };
 
 function formatShortDate(d: Date | string) {
@@ -63,10 +66,8 @@ export async function FeaturedEvents({ events }: { events: EventCard[] }) {
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {events.map((event, i) => {
-            const spots =
-              event._count !== undefined
-                ? event.capacity - event._count.registrations
-                : event.capacity;
+            const total = event.attendeeTotal ?? 0;
+            const spots = event.capacity - total;
             const finished =
               event.status === "FINISHED" ||
               new Date(event.endsAt) < new Date();
@@ -143,11 +144,17 @@ export async function FeaturedEvents({ events }: { events: EventCard[] }) {
                           ? t("spotsLeft", { count: spots })
                           : t("full")}
                     </span>
-                    {!finished && (
+                    {total > 0 ? (
+                      <AttendeeAvatars
+                        people={event.attendees ?? []}
+                        total={total}
+                        size="size-6"
+                      />
+                    ) : !finished ? (
                       <span className="text-primary text-xs font-medium">
                         {t("join")} →
                       </span>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </div>

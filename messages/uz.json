@@ -275,6 +275,11 @@
     "full": "Joy qolmadi",
     "live": "Hozir bo‘lmoqda",
     "startsIn": "Boshlanishigacha",
+    "share": "Ulashish",
+    "copyLink": "Havolani nusxalash",
+    "copied": "Nusxalandi!",
+    "shareMore": "Yana",
+    "whosGoing": "{count} kishi boryapti",
     "participants": "{count} kishi qo‘shilgan",
     "when": "Qachon",
     "where": "Qayerda",
@@ -361,6 +366,20 @@
       "invalid": "Ism 2–50 ta belgidan iborat bo‘lishi kerak.",
       "rateLimited": "Juda ko‘p o‘zgartirish. Biroz sekinlashtiring."
     }
+  },
+  "Badges": {
+    "title": "Yutuqlar",
+    "progress": "{earned}/{total} ochildi",
+    "newcomer": { "title": "Yangi a'zo", "desc": "Birinchi tadbiringizga qatnashing" },
+    "regular": { "title": "Doimiy", "desc": "5 ta tadbirga qatnashing" },
+    "veteran": { "title": "Faxriy", "desc": "15 ta tadbirga qatnashing" },
+    "streak3": { "title": "Olovli", "desc": "3 kunlik streakka yeting" },
+    "streak7": { "title": "To‘xtovsiz", "desc": "7 kunlik streakka yeting" },
+    "reviewer": { "title": "Sharhchi", "desc": "Birinchi sharhingizni yozing" },
+    "host": { "title": "Tashkilotchi", "desc": "Birinchi tadbiringizni yarating" },
+    "superhost": { "title": "Super tashkilotchi", "desc": "5 ta tadbir yarating" },
+    "verified": { "title": "Tasdiqlangan", "desc": "Tasdiqlangan tashkilotni boshqaring" },
+    "trusted": { "title": "Ishonchli", "desc": "100 obro‘ni saqlang" }
   },
   "Attendance": {
     "title": "Davomat",

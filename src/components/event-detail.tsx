@@ -2,12 +2,14 @@ import { Building2 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
+import { AttendeeAvatars } from "@/components/attendee-avatars";
 import { EventCountdown } from "@/components/event-countdown";
 import { EventGallery } from "@/components/event-gallery";
 import { EventJoinButton } from "@/components/event-join-button";
 import { EventManageActions } from "@/components/event-manage-actions";
 import { EventReviews } from "@/components/event-reviews";
 import { LocationView } from "@/components/location-view";
+import { ShareButtons } from "@/components/share-buttons";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -55,9 +57,17 @@ export async function EventDetail({
   if (!event) notFound();
 
   const user = await getCurrentUser();
-  const used = await prisma.registration.count({
-    where: { eventId: id, status: { in: ACTIVE } },
-  });
+  const [used, attendeeSample] = await Promise.all([
+    prisma.registration.count({
+      where: { eventId: id, status: { in: ACTIVE } },
+    }),
+    prisma.registration.findMany({
+      where: { eventId: id, status: { in: ACTIVE } },
+      select: { user: { select: { name: true, imageUrl: true } } },
+      orderBy: { joinedAt: "asc" },
+      take: 8,
+    }),
+  ]);
   const left = Math.max(0, event.capacity - used);
 
   const canManage =
@@ -171,6 +181,21 @@ export async function EventDetail({
           </Link>
         </div>
       )}
+
+      {used > 0 && (
+        <div className="mt-6">
+          <p className="text-sm font-medium">{t("whosGoing", { count: used })}</p>
+          <div className="mt-2">
+            <AttendeeAvatars
+              people={attendeeSample.map((r) => r.user)}
+              total={used}
+              size="size-9"
+            />
+          </div>
+        </div>
+      )}
+
+      <ShareButtons title={event.title} />
 
       <EventGallery
         eventId={event.id}

@@ -55,11 +55,11 @@ export async function HeroSection() {
       {/* Ambient glow orbs */}
       <div
         aria-hidden
-        className="animate-glow-pulse pointer-events-none absolute -top-32 left-1/4 h-[480px] w-[480px] rounded-full bg-violet-500/20 blur-[120px]"
+        className="animate-glow-pulse pointer-events-none absolute -top-32 left-1/4 h-120 w-120 rounded-full bg-violet-500/20 blur-[120px]"
       />
       <div
         aria-hidden
-        className="animate-glow-pulse pointer-events-none absolute right-1/4 -bottom-32 h-[360px] w-[360px] rounded-full bg-blue-500/20 blur-[100px] [animation-delay:2s]"
+        className="animate-glow-pulse pointer-events-none absolute right-1/4 -bottom-32 h-90 w-90 rounded-full bg-blue-500/20 blur-[100px] [animation-delay:2s]"
       />
 
       {/* Floating decoration cards */}

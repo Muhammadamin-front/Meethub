@@ -15,7 +15,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { routing } from "@/i18n/routing";
-import { APP_NAME } from "@/lib/constants";
+import { APP_NAME, APP_URL } from "@/lib/constants";
 
 import "../globals.css";
 
@@ -37,8 +37,16 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "Meta" });
 
   return {
+    metadataBase: new URL(APP_URL),
     title: { default: t("title"), template: `%s · ${APP_NAME}` },
     description: t("description"),
+    openGraph: {
+      type: "website",
+      siteName: APP_NAME,
+      title: t("title"),
+      description: t("description"),
+    },
+    twitter: { card: "summary_large_image" },
   };
 }
 
