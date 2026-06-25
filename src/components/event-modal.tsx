@@ -1,18 +1,34 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 /**
  * Modal chrome for the intercepted event route. Frosted backdrop + card so it
  * stands out over the page; closes back to where you came from.
+ *
+ * Next.js keeps a parallel-route slot's previous subtree on *soft* navigation,
+ * so when you click e.g. "Open chat" the modal would otherwise stay in front of
+ * the chat page. We watch the pathname and hide the modal whenever the route is
+ * no longer this event's detail page (`/events/<id>`).
  */
-export function EventModal({ children }: { children: React.ReactNode }) {
+export function EventModal({
+  eventId,
+  children,
+}: {
+  eventId: string;
+  children: React.ReactNode;
+}) {
   const router = useRouter();
+  const pathname = usePathname();
+  // next-intl's usePathname is locale-stripped, e.g. "/events/abc123".
+  const visible = pathname === `/events/${eventId}`;
   const close = () => router.back();
 
   useEffect(() => {
+    if (!visible) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") router.back();
     };
@@ -22,7 +38,9 @@ export function EventModal({ children }: { children: React.ReactNode }) {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
-  }, [router]);
+  }, [router, visible]);
+
+  if (!visible) return null;
 
   return (
     <div

@@ -10,7 +10,7 @@ export default async function EventModalPage({
 }) {
   const { locale, id } = await params;
   return (
-    <EventModal>
+    <EventModal eventId={id}>
       <EventDetail locale={locale} id={id} />
     </EventModal>
   );
