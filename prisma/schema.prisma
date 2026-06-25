@@ -71,6 +71,8 @@ enum NotificationType {
   ORG_APPROVED
   ORG_REJECTED
   EVENT_JOINED
+  FRIEND_REQUEST
+  FRIEND_ACCEPTED
 }
 
 enum FriendStatus {

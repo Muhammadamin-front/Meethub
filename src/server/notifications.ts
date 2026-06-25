@@ -7,7 +7,13 @@ import { pusherServer } from "@/server/pusher";
 /** Notification types that have in-app UI rendering (subset of the DB enum). */
 export type NotificationView = {
   id: string;
-  type: "ATTENDANCE_MARKED" | "ORG_APPROVED" | "ORG_REJECTED" | "BLOCKED";
+  type:
+    | "ATTENDANCE_MARKED"
+    | "ORG_APPROVED"
+    | "ORG_REJECTED"
+    | "BLOCKED"
+    | "FRIEND_REQUEST"
+    | "FRIEND_ACCEPTED";
   data: Record<string, string>;
   isRead: boolean;
   createdAt: string;

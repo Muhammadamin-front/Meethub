@@ -3,9 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { getLocale } from "next-intl/server";
 
-import { FriendStatus } from "@/generated/prisma/client";
+import { FriendStatus, NotificationType } from "@/generated/prisma/client";
+import { displayName } from "@/lib/utils";
 import { requireUser } from "@/server/auth";
 import { prisma } from "@/server/db";
+import { createNotification } from "@/server/notifications";
 import { rateLimit } from "@/server/rate-limit";
 
 export type PersonResult = {
@@ -61,6 +63,14 @@ export async function sendFriendRequest(
         where: { id: existing.id },
         data: { status: FriendStatus.ACCEPTED },
       });
+      // Tell the original requester their request was accepted.
+      await createNotification({
+        userId: existing.requesterId,
+        type: NotificationType.FRIEND_ACCEPTED,
+        title: "Friend request accepted",
+        body: `${displayName(me.name)} accepted your friend request`,
+        data: { user: displayName(me.name), userId: me.id },
+      });
     }
   } else {
     await prisma.friendship.create({
@@ -69,6 +79,14 @@ export async function sendFriendRequest(
         addresseeId: targetId,
         status: FriendStatus.PENDING,
       },
+    });
+    // Notify the recipient of the incoming request.
+    await createNotification({
+      userId: targetId,
+      type: NotificationType.FRIEND_REQUEST,
+      title: "New friend request",
+      body: `${displayName(me.name)} sent you a friend request`,
+      data: { user: displayName(me.name), userId: me.id },
     });
   }
 
@@ -95,6 +113,14 @@ export async function respondFriendRequest(
     await prisma.friendship.update({
       where: { id: fr.id },
       data: { status: FriendStatus.ACCEPTED },
+    });
+    // Let the requester know their request was accepted.
+    await createNotification({
+      userId: requesterId,
+      type: NotificationType.FRIEND_ACCEPTED,
+      title: "Friend request accepted",
+      body: `${displayName(me.name)} accepted your friend request`,
+      data: { user: displayName(me.name), userId: me.id },
     });
   } else {
     await prisma.friendship.delete({ where: { id: fr.id } });

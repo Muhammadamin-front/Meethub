@@ -486,7 +486,9 @@
       "ATTENDANCE_MARKED": "Your attendance for “{event}” was recorded.",
       "ORG_APPROVED": "Your organization “{org}” was approved — you can now create events.",
       "ORG_REJECTED": "Your organization “{org}” was not approved.",
-      "BLOCKED": "Your account has been blocked. {reason}"
+      "BLOCKED": "Your account has been blocked. {reason}",
+      "FRIEND_REQUEST": "{user} sent you a friend request.",
+      "FRIEND_ACCEPTED": "{user} accepted your friend request."
     }
   },
   "Media": {

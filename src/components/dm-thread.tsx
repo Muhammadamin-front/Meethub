@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { getPusherClient } from "@/lib/pusher-client";
 import type { DMView } from "@/lib/social";
+import { dispatchDmRead } from "@/lib/use-unread-dms";
 import { cn } from "@/lib/utils";
-import { sendDirectMessage } from "@/server/actions/dm";
+import { markConversationRead, sendDirectMessage } from "@/server/actions/dm";
 
 export function DmThread({
   conversationId,
@@ -36,6 +37,12 @@ export function DmThread({
     setMessages((prev) => (prev.some((x) => x.id === m.id) ? prev : [...prev, m]));
   }
 
+  // The page already marked this conversation read on open — clear it from the
+  // Messages badge.
+  useEffect(() => {
+    dispatchDmRead(conversationId);
+  }, [conversationId]);
+
   // Realtime: listen on our own private user channel and keep messages for this
   // conversation. The channel is shared with notifications, so we only unbind
   // our own handler (never unsubscribe the channel).
@@ -45,7 +52,14 @@ export function DmThread({
     const name = `private-user-${currentUserId}`;
     const channel = pusher.subscribe(name);
     const handler = (m: DMView) => {
-      if (m.conversationId === conversationId) add(m);
+      if (m.conversationId !== conversationId) return;
+      add(m);
+      // We're viewing this thread, so an incoming message is already "read":
+      // persist that and keep it off the Messages badge.
+      if (m.senderId !== currentUserId) {
+        markConversationRead(conversationId);
+        dispatchDmRead(conversationId);
+      }
     };
     channel.bind("new-dm", handler);
     return () => {

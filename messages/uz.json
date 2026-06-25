@@ -486,7 +486,9 @@
       "ATTENDANCE_MARKED": "“{event}” tadbiridagi davomatingiz qayd etildi.",
       "ORG_APPROVED": "“{org}” tashkilotingiz tasdiqlandi — endi tadbir yaratishingiz mumkin.",
       "ORG_REJECTED": "“{org}” tashkilotingiz tasdiqlanmadi.",
-      "BLOCKED": "Hisobingiz bloklandi. {reason}"
+      "BLOCKED": "Hisobingiz bloklandi. {reason}",
+      "FRIEND_REQUEST": "{user} sizga do‘stlik so‘rovi yubordi.",
+      "FRIEND_ACCEPTED": "{user} do‘stlik so‘rovingizni qabul qildi."
     }
   },
   "Media": {

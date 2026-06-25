@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { Logo } from "@/components/logo";
+import { MessagesNavLink } from "@/components/messages-nav-link";
 import { MobileNav } from "@/components/mobile-nav";
 import { NotificationBell } from "@/components/notification-bell";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -12,6 +13,7 @@ import { UserRole } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
 import { NAV_LINKS } from "@/lib/constants";
 import { getCurrentUser } from "@/server/auth";
+import { getUnreadDmConversationIds } from "@/server/social";
 
 /**
  * Top navigation bar. Auth state comes from Clerk: signed-in users see a
@@ -25,6 +27,7 @@ export async function SiteHeader() {
   const locale = await getLocale();
   const user = await getCurrentUser();
   const isAdmin = user?.role === UserRole.ADMIN;
+  const unreadDms = user ? await getUnreadDmConversationIds(user.id) : [];
 
   return (
     <header className="bg-background/80 sticky top-0 z-40 w-full border-b backdrop-blur">
@@ -46,20 +49,17 @@ export async function SiteHeader() {
               {t(link.key)}
             </Link>
           ))}
-          <Show when="signed-in">
-            <Link
-              href="/people"
-              className={buttonVariants({ variant: "ghost", size: "sm" })}
-            >
-              {t("people")}
-            </Link>
-            <Link
-              href="/messages"
-              className={buttonVariants({ variant: "ghost", size: "sm" })}
-            >
-              {t("messages")}
-            </Link>
-          </Show>
+          {user && (
+            <>
+              <Link
+                href="/people"
+                className={buttonVariants({ variant: "ghost", size: "sm" })}
+              >
+                {t("people")}
+              </Link>
+              <MessagesNavLink userId={user.id} initialUnreadIds={unreadDms} />
+            </>
+          )}
         </nav>
 
         <div className="flex items-center gap-1">
@@ -92,7 +92,10 @@ export async function SiteHeader() {
             </div>
           </Show>
 
-          <MobileNav />
+          <MobileNav
+            userId={user?.id}
+            initialUnreadIds={unreadDms}
+          />
         </div>
       </div>
     </header>

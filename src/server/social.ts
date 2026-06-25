@@ -34,3 +34,21 @@ export function friendCount(userId: string) {
     },
   });
 }
+
+/**
+ * Conversation ids with at least one unread incoming message for this user.
+ * Drives the "unread DMs" badge on the Messages nav item.
+ */
+export async function getUnreadDmConversationIds(
+  userId: string,
+): Promise<string[]> {
+  const groups = await prisma.directMessage.groupBy({
+    by: ["conversationId"],
+    where: {
+      senderId: { not: userId },
+      readAt: null,
+      conversation: { OR: [{ userAId: userId }, { userBId: userId }] },
+    },
+  });
+  return groups.map((g) => g.conversationId);
+}
