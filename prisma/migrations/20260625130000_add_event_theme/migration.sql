@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "EventTheme" AS ENUM ('LIGHT_MINIMAL', 'DARK_MODERN', 'GRADIENT', 'NEO_BRUTAL', 'GLASS');
+
+-- AlterTable
+ALTER TABLE "Event" ADD COLUMN     "theme" "EventTheme" NOT NULL DEFAULT 'LIGHT_MINIMAL';

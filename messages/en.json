@@ -328,6 +328,7 @@
       "useMyLocation": "My location",
       "mapHint": "Search, click on the map, or use your location to set the exact spot.",
       "category": "Category",
+      "cardTheme": "Card design",
       "categoryPlaceholder": "e.g. Technology",
       "categoryError": "Please add a category.",
       "startsAt": "Starts at",

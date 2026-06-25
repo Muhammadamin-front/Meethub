@@ -36,6 +36,15 @@ enum EventStatus {
   FINISHED
 }
 
+// Visual style for the event card (chosen by the organizer at create time).
+enum EventTheme {
+  LIGHT_MINIMAL
+  DARK_MODERN
+  GRADIENT
+  NEO_BRUTAL
+  GLASS
+}
+
 enum RegistrationStatus {
   JOINED
   ATTENDED
@@ -124,6 +133,7 @@ model Event {
   endsAt         DateTime
   capacity       Int
   category       String
+  theme          EventTheme   @default(LIGHT_MINIMAL)
   status         EventStatus  @default(DRAFT)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt

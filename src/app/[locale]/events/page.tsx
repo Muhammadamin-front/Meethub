@@ -121,8 +121,9 @@ export default async function EventsPage({
             const finished = isFinished(event);
             const card = (
               <Card
+                data-theme={event.theme}
                 className={cn(
-                  "h-full overflow-hidden pt-0 transition-all duration-200",
+                  "event-theme h-full overflow-hidden pt-0 transition-all duration-200",
                   finished
                     ? "opacity-75 grayscale-35"
                     : "hover:shadow-primary/10 hover:-translate-y-1 hover:shadow-xl",

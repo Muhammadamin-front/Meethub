@@ -10,6 +10,9 @@ export const eventSchema = z
     description: z.string().trim().min(10).max(5000),
     location: z.string().trim().min(2).max(200),
     category: z.string().trim().min(2).max(50),
+    theme: z
+      .enum(["LIGHT_MINIMAL", "DARK_MODERN", "GRADIENT", "NEO_BRUTAL", "GLASS"])
+      .default("LIGHT_MINIMAL"),
     startsAt: z.coerce.date(),
     endsAt: z.coerce.date(),
     capacity: z.coerce.number().int().min(1).max(100000),

@@ -105,6 +105,23 @@ export const EVENT_CATEGORIES = [
 export type EventCategory = (typeof EVENT_CATEGORIES)[number];
 
 /**
+ * Selectable visual styles for the event card (organizer picks one when creating
+ * an event). `id` matches the Prisma `EventTheme` enum and the CSS selectors in
+ * globals.css (`.event-theme[data-theme="..."]`).
+ */
+export const EVENT_THEMES = [
+  { id: "LIGHT_MINIMAL", label: "Light Minimal" },
+  { id: "DARK_MODERN", label: "Dark Modern" },
+  { id: "GRADIENT", label: "Gradient" },
+  { id: "NEO_BRUTAL", label: "Neo Brutal" },
+  { id: "GLASS", label: "Glass" },
+] as const;
+
+export type EventThemeId = (typeof EVENT_THEMES)[number]["id"];
+
+export const DEFAULT_EVENT_THEME: EventThemeId = "LIGHT_MINIMAL";
+
+/**
  * Major Uzbek cities with approximate coordinates. Powers the "near me" filter
  * on the events page: the browser's geolocation is matched to the closest city,
  * then events whose `location` contains that city name are shown. Plain data

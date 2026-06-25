@@ -43,6 +43,7 @@ export default async function EditEventPage({
             latitude: event.latitude,
             longitude: event.longitude,
             category: event.category,
+            theme: event.theme,
             startsAt: toDateTimeLocalValue(event.startsAt),
             endsAt: toDateTimeLocalValue(event.endsAt),
             capacity: event.capacity,

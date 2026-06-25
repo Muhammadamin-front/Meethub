@@ -328,6 +328,7 @@
       "useMyLocation": "Mening joylashuvim",
       "mapHint": "Aniq joyni belgilash uchun qidiring, xaritada bosing yoki joylashuvingizdan foydalaning.",
       "category": "Turkum",
+      "cardTheme": "Karta dizayni",
       "categoryPlaceholder": "masalan, Texnologiya",
       "categoryError": "Iltimos, turkum kiriting.",
       "startsAt": "Boshlanishi",

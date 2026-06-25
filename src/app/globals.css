@@ -258,6 +258,43 @@
   border-color: color-mix(in oklch, white 10%, transparent);
 }
 
+/* Event card themes (organizer-selectable in the create form). Each theme
+   overrides the card's CSS tokens so every child retints automatically, plus
+   adds backgrounds/borders for the richer styles. Light Minimal = the default
+   card, so it needs no override. */
+.event-theme[data-theme="DARK_MODERN"] {
+  --card: oklch(0.205 0.02 270);
+  --card-foreground: oklch(0.985 0 0);
+  --muted-foreground: oklch(0.72 0.02 270);
+  --border: oklch(1 0 0 / 12%);
+}
+.event-theme[data-theme="GRADIENT"] {
+  --card-foreground: oklch(0.99 0 0);
+  --muted-foreground: oklch(0.92 0.03 320);
+  --border: oklch(1 0 0 / 20%);
+  background-image: linear-gradient(
+    135deg,
+    oklch(0.5 0.2 290),
+    oklch(0.56 0.17 350)
+  );
+  color: oklch(0.99 0 0);
+}
+.event-theme[data-theme="NEO_BRUTAL"] {
+  --card: oklch(0.93 0.06 150);
+  --card-foreground: oklch(0.28 0.06 160);
+  --muted-foreground: oklch(0.45 0.05 160);
+  border: 2px solid oklch(0.32 0.07 160);
+  box-shadow: 5px 5px 0 0 oklch(0.32 0.07 160 / 0.3);
+}
+.event-theme[data-theme="GLASS"] {
+  --card: oklch(0.55 0.02 270 / 0.16);
+  --card-foreground: oklch(0.99 0 0);
+  --muted-foreground: oklch(0.86 0.02 270);
+  --border: oklch(1 0 0 / 18%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
 /* Ticket stub-and-body notches. Only applied on >=640px, where the tear line is
    vertical (left edge of the stub). On mobile the ticket stacks, so the notch is
    disabled to avoid punching holes through the card body. */

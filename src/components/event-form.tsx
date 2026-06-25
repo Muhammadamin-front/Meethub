@@ -3,13 +3,14 @@
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
+import { EventThemePicker } from "@/components/event-theme-picker";
 import { LocationPicker } from "@/components/location-picker";
 import { MediaUpload } from "@/components/media-upload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { EVENT_CATEGORIES } from "@/lib/constants";
+import { EVENT_CATEGORIES, type EventThemeId } from "@/lib/constants";
 import type { EventFormState } from "@/server/actions/event";
 
 type Action = (
@@ -24,6 +25,7 @@ type Defaults = {
   latitude?: number | null;
   longitude?: number | null;
   category?: string;
+  theme?: EventThemeId;
   startsAt?: string;
   endsAt?: string;
   capacity?: number | string;
@@ -104,6 +106,8 @@ export function EventForm({
           </select>
         </Field>
       </div>
+
+      <EventThemePicker defaultTheme={defaults?.theme} />
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field
