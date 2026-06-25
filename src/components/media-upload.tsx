@@ -18,19 +18,28 @@ const PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 export function MediaUpload({
   accept = "image",
   label,
+  icon,
   disabled,
   onUploaded,
 }: {
   accept?: "image" | "video" | "both";
   label: string;
+  /** When provided, render an icon-only button (label becomes its tooltip). */
+  icon?: React.ReactNode;
   disabled?: boolean;
   onUploaded: (info: UploadInfo) => void;
 }) {
+  // Icon-only buttons keep `label` as the accessible name + tooltip.
+  const buttonProps = icon
+    ? ({ size: "icon", "aria-label": label, title: label } as const)
+    : ({ size: "sm" } as const);
+  const buttonChildren = icon ?? label;
+
   // Degrade gracefully until Cloudinary is configured.
   if (!isCloudinaryConfigured() || !PRESET) {
     return (
-      <Button type="button" variant="outline" size="sm" disabled>
-        {label}
+      <Button type="button" variant="outline" disabled {...buttonProps}>
+        {buttonChildren}
       </Button>
     );
   }
@@ -59,11 +68,11 @@ export function MediaUpload({
         <Button
           type="button"
           variant="outline"
-          size="sm"
           disabled={disabled}
           onClick={() => open()}
+          {...buttonProps}
         >
-          {label}
+          {buttonChildren}
         </Button>
       )}
     </CldUploadWidget>

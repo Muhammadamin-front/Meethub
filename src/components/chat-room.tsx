@@ -1,7 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { ImagePlus, SendHorizontal } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 
 import { MediaUpload } from "@/components/media-upload";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,12 @@ export function ChatRoom({
 }) {
   const t = useTranslations("Chat");
   const tMedia = useTranslations("Media");
+  const locale = useLocale();
+  const timeFmt = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" }),
+    [locale],
+  );
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -111,6 +118,9 @@ export function ChatRoom({
                     <p className="whitespace-pre-wrap">{m.content}</p>
                   )}
                 </div>
+                <span className="text-muted-foreground mt-0.5 px-1 text-[11px]">
+                  {timeFmt.format(new Date(m.createdAt))}
+                </span>
               </div>
             );
           })
@@ -132,6 +142,7 @@ export function ChatRoom({
           <MediaUpload
             accept="both"
             label={tMedia("attachMedia")}
+            icon={<ImagePlus className="size-5" />}
             disabled={pending}
             onUploaded={(info) =>
               startTransition(async () => {
@@ -142,8 +153,14 @@ export function ChatRoom({
               })
             }
           />
-          <Button type="submit" disabled={pending}>
-            {t("send")}
+          <Button
+            type="submit"
+            size="icon"
+            disabled={pending}
+            aria-label={t("send")}
+            title={t("send")}
+          >
+            <SendHorizontal className="size-5" />
           </Button>
         </form>
       ) : (
