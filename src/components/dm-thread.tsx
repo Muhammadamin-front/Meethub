@@ -1,7 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { SendHorizontal } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,6 +21,12 @@ export function DmThread({
   initialMessages: DMView[];
 }) {
   const t = useTranslations("Messages");
+  const locale = useLocale();
+  const timeFmt = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" }),
+    [locale],
+  );
   const [messages, setMessages] = useState<DMView[]>(initialMessages);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -89,6 +96,9 @@ export function DmThread({
                 >
                   <p className="whitespace-pre-wrap">{m.content}</p>
                 </div>
+                <span className="text-muted-foreground mt-0.5 px-1 text-[11px]">
+                  {timeFmt.format(new Date(m.createdAt))}
+                </span>
               </div>
             );
           })
@@ -112,8 +122,14 @@ export function DmThread({
             }
           }}
         />
-        <Button type="submit" disabled={pending}>
-          {t("send")}
+        <Button
+          type="submit"
+          size="icon"
+          disabled={pending}
+          aria-label={t("send")}
+          title={t("send")}
+        >
+          <SendHorizontal className="size-5" />
         </Button>
       </form>
     </div>
