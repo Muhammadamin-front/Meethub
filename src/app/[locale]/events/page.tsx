@@ -1,15 +1,12 @@
-import { Building2, CalendarDays, MapPin, Users } from "lucide-react";
+import { CalendarDays, ChevronRight, Clock, MapPin } from "lucide-react";
 import { unstable_cache } from "next/cache";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { AttendeeAvatars } from "@/components/attendee-avatars";
-import { EventCountdown } from "@/components/event-countdown";
 import { EventsFilter } from "@/components/events-filter";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EventStatus } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
-import { cn, formatEventRange } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { getAttendeeSamples } from "@/server/attendees";
 import { prisma } from "@/server/db";
 
@@ -94,6 +91,16 @@ export default async function EventsPage({
 
   const filtering = Boolean(q || category || near);
 
+  const dateFmt = new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  const timeFmt = new Intl.DateTimeFormat(locale, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-semibold tracking-tight">
@@ -120,90 +127,89 @@ export default async function EventsPage({
             const going = attendees.get(event.id) ?? [];
             const finished = isFinished(event);
             const card = (
-              <Card
-                data-theme={event.theme}
+              <div
                 className={cn(
-                  "event-theme h-full overflow-hidden pt-0 transition-all duration-200",
+                  "relative flex h-full flex-col overflow-hidden rounded-3xl border border-emerald-700/15 bg-emerald-50 p-5 shadow-sm transition-all duration-200",
                   finished
                     ? "opacity-75 grayscale-35"
-                    : "hover:shadow-primary/10 hover:-translate-y-1 hover:shadow-xl",
+                    : "hover:-translate-y-1 hover:shadow-xl",
                 )}
               >
-                <div className="relative">
-                  {event.coverUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={event.coverUrl}
-                      alt=""
-                      className={cn(
-                        "aspect-video w-full object-cover",
-                        finished && "grayscale",
-                      )}
-                    />
-                  ) : (
-                    <div className="from-primary/20 to-primary/5 aspect-video w-full bg-linear-to-br" />
-                  )}
-                  {finished && <div className="absolute inset-0 bg-black/40" />}
-                  {/* Highlighted category */}
-                  <Badge className="bg-primary text-primary-foreground absolute top-3 left-3 border-transparent shadow-sm">
+                {/* Green 3D background with the rocket anchored top-right. */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 -z-10"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/assets/event-bg.png"
+                    alt=""
+                    className="size-full object-cover object-top-right"
+                  />
+                </div>
+
+                {/* Category (+ finished marker) */}
+                <div className="flex items-start justify-between gap-2 pr-20">
+                  <span className="inline-flex rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-emerald-800 backdrop-blur-sm">
                     {event.category}
-                  </Badge>
-                  {/* Finished marker */}
+                  </span>
                   {finished && (
-                    <Badge className="absolute top-3 right-3 border-transparent bg-zinc-900/80 text-white shadow-sm">
+                    <span className="rounded-full bg-emerald-900/80 px-2.5 py-1 text-xs font-medium text-white">
                       {t("status.finished")}
-                    </Badge>
-                  )}
-                  {/* Live countdown until the event starts */}
-                  {!finished && (
-                    <EventCountdown
-                      startsAt={event.startsAt}
-                      endsAt={event.endsAt}
-                      className="absolute bottom-3 left-3 shadow-sm"
-                    />
+                    </span>
                   )}
                 </div>
-                <CardHeader>
-                  <CardTitle
-                    className={cn(
-                      "transition-colors",
-                      !finished && "group-hover:text-primary",
-                    )}
-                  >
-                    {event.title}
-                  </CardTitle>
-                  {/* Highlighted organizer */}
-                  <p className="flex items-center gap-1.5 text-sm">
-                    <Building2 className="text-primary size-3.5" aria-hidden />
-                    <span className="text-foreground font-medium">
-                      {event.organization.name}
+
+                {/* Title + description */}
+                <h3 className="mt-4 line-clamp-2 pr-16 text-xl font-bold text-emerald-950">
+                  {event.title}
+                </h3>
+                <p className="mt-2 line-clamp-2 text-sm text-emerald-900/70">
+                  {event.description}
+                </p>
+
+                {/* Date · time · location */}
+                <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl bg-white/55 px-3.5 py-3 text-xs font-semibold text-emerald-900 backdrop-blur-sm">
+                  <span className="flex items-center gap-1.5">
+                    <CalendarDays
+                      className="size-4 shrink-0 text-emerald-700"
+                      aria-hidden
+                    />
+                    {dateFmt.format(event.startsAt)}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Clock
+                      className="size-4 shrink-0 text-emerald-700"
+                      aria-hidden
+                    />
+                    {timeFmt.format(event.startsAt)}
+                  </span>
+                  <span className="flex min-w-0 items-center gap-1.5">
+                    <MapPin
+                      className="size-4 shrink-0 text-emerald-700"
+                      aria-hidden
+                    />
+                    <span className="truncate">{event.location}</span>
+                  </span>
+                </div>
+
+                {/* Footer: attendees + CTA */}
+                <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+                  {total > 0 ? (
+                    <AttendeeAvatars people={going} total={total} />
+                  ) : (
+                    <span className="text-xs font-medium text-emerald-900/60">
+                      {left > 0 ? t("spotsLeft", { count: left }) : t("full")}
                     </span>
-                  </p>
-                </CardHeader>
-                <CardContent className="text-muted-foreground space-y-1.5 text-sm">
-                  <p className="flex items-center gap-1.5">
-                    <CalendarDays className="size-3.5 shrink-0" aria-hidden />
-                    {formatEventRange(event.startsAt, event.endsAt, locale)}
-                  </p>
-                  <p className="flex items-center gap-1.5">
-                    <MapPin className="size-3.5 shrink-0" aria-hidden />
-                    {event.location}
-                  </p>
-                  <p className="flex items-center gap-1.5">
-                    <Users className="size-3.5 shrink-0" aria-hidden />
-                    {finished
-                      ? t("status.finished")
-                      : left > 0
-                        ? t("spotsLeft", { count: left })
-                        : t("full")}
-                  </p>
-                  {total > 0 && (
-                    <div className="pt-1">
-                      <AttendeeAvatars people={going} total={total} />
-                    </div>
                   )}
-                </CardContent>
-              </Card>
+                  {!finished && (
+                    <span className="inline-flex items-center gap-1 rounded-xl bg-emerald-800 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors group-hover:bg-emerald-900">
+                      {t("join")}
+                      <ChevronRight className="size-4" aria-hidden />
+                    </span>
+                  )}
+                </div>
+              </div>
             );
 
             // Finished events are informational only — not clickable.
