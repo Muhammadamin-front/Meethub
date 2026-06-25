@@ -5,9 +5,11 @@ import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 
 import { MediaUpload } from "@/components/media-upload";
+import { StickerPicker } from "@/components/sticker-picker";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { ChatMessage } from "@/lib/chat";
+import { emojiOnlyCount } from "@/lib/emoji";
 import { getPusherClient } from "@/lib/pusher-client";
 import { cn } from "@/lib/utils";
 import { sendMediaMessage, sendMessage } from "@/server/actions/message";
@@ -59,18 +61,23 @@ export function ChatRoom({
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formEl = e.currentTarget;
-    const content = String(new FormData(formEl).get("content") ?? "");
+  function submitText(content: string) {
     if (!content.trim()) return;
     setError(null);
-    formEl.reset();
     startTransition(async () => {
       const res = await sendMessage(eventId, content);
       if (res.error) setError(t(`error.${res.error}`));
       else if (res.message) addMessage(res.message);
     });
+  }
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formEl = e.currentTarget;
+    const content = String(new FormData(formEl).get("content") ?? "");
+    if (!content.trim()) return;
+    formEl.reset();
+    submitText(content);
   }
 
   return (
@@ -81,43 +88,57 @@ export function ChatRoom({
         ) : (
           messages.map((m) => {
             const mine = m.user.id === currentUserId;
+            // Emoji-only text renders large and bubble-less, like a sticker.
+            const sticker =
+              !m.mediaUrl && m.content ? emojiOnlyCount(m.content) : null;
             return (
               <div
                 key={m.id}
                 className={cn("flex flex-col", mine && "items-end")}
               >
-                <div
-                  className={cn(
-                    "max-w-[80%] rounded-lg px-3 py-2 text-sm",
-                    mine
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-foreground",
-                  )}
-                >
-                  {!mine && (
-                    <p className="text-xs font-medium opacity-70">
-                      {m.user.name}
-                    </p>
-                  )}
-                  {m.mediaUrl ? (
-                    m.mediaType === "VIDEO" ? (
-                      <video
-                        src={m.mediaUrl}
-                        controls
-                        className="mt-1 max-h-64 rounded-md"
-                      />
+                {!mine && (
+                  <p className="text-muted-foreground mb-0.5 px-1 text-xs font-medium">
+                    {m.user.name}
+                  </p>
+                )}
+                {sticker ? (
+                  <span
+                    className={cn(
+                      "px-1 leading-none",
+                      sticker <= 2 ? "text-5xl" : "text-4xl",
+                    )}
+                  >
+                    {m.content}
+                  </span>
+                ) : (
+                  <div
+                    className={cn(
+                      "max-w-[80%] rounded-lg px-3 py-2 text-sm",
+                      mine
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground",
+                    )}
+                  >
+                    {m.mediaUrl ? (
+                      m.mediaType === "VIDEO" ? (
+                        <video
+                          src={m.mediaUrl}
+                          controls
+                          className="max-h-64 rounded-md"
+                        />
+                      ) : (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={m.mediaUrl}
+                          alt=""
+                          className="max-h-64 rounded-md"
+                        />
+                      )
                     ) : (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={m.mediaUrl}
-                        alt=""
-                        className="mt-1 max-h-64 rounded-md"
-                      />
-                    )
-                  ) : (
-                    <p className="whitespace-pre-wrap">{m.content}</p>
-                  )}
-                </div>
+                      <p className="whitespace-pre-wrap">{m.content}</p>
+                    )}
+                  </div>
+                )}
                 <span className="text-muted-foreground mt-0.5 px-1 text-[11px]">
                   {timeFmt.format(new Date(m.createdAt))}
                 </span>
@@ -138,6 +159,11 @@ export function ChatRoom({
             placeholder={t("placeholder")}
             maxLength={2000}
             className="max-h-32 min-h-10 resize-none"
+          />
+          <StickerPicker
+            label={t("stickers")}
+            disabled={pending}
+            onPick={(s) => submitText(s)}
           />
           <MediaUpload
             accept="both"

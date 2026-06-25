@@ -456,7 +456,8 @@
       "empty": "Xabar bo‘sh bo‘lishi mumkin emas.",
       "tooLong": "Xabar juda uzun.",
       "rateLimited": "Xabarlarni juda tez yuboryapsiz. Biroz sekinlashtiring."
-    }
+    },
+    "stickers": "Stikerlar"
   },
   "Reviews": {
     "title": "Baholar va sharhlar",
@@ -568,7 +569,8 @@
       "empty": "Bo‘sh xabar",
       "tooLong": "Xabar juda uzun",
       "rateLimited": "Juda tez. Biroz kuting."
-    }
+    },
+    "stickers": "Stikerlar"
   },
   "Profile": {
     "memberSince": "{date} dan beri a‘zo",

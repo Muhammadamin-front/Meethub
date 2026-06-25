@@ -4,8 +4,10 @@ import { SendHorizontal } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 
+import { StickerPicker } from "@/components/sticker-picker";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { emojiOnlyCount } from "@/lib/emoji";
 import { getPusherClient } from "@/lib/pusher-client";
 import type { DMView } from "@/lib/social";
 import { dispatchDmRead } from "@/lib/use-unread-dms";
@@ -71,18 +73,23 @@ export function DmThread({
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formEl = e.currentTarget;
-    const content = String(new FormData(formEl).get("content") ?? "");
+  function submitText(content: string) {
     if (!content.trim()) return;
     setError(null);
-    formEl.reset();
     startTransition(async () => {
       const res = await sendDirectMessage(conversationId, content);
       if (res.error) setError(t(`error.${res.error}`));
       else if (res.message) add(res.message);
     });
+  }
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formEl = e.currentTarget;
+    const content = String(new FormData(formEl).get("content") ?? "");
+    if (!content.trim()) return;
+    formEl.reset();
+    submitText(content);
   }
 
   return (
@@ -95,21 +102,34 @@ export function DmThread({
         ) : (
           messages.map((m) => {
             const mine = m.senderId === currentUserId;
+            // Emoji-only text renders large and bubble-less, like a sticker.
+            const sticker = emojiOnlyCount(m.content);
             return (
               <div
                 key={m.id}
                 className={cn("flex flex-col", mine && "items-end")}
               >
-                <div
-                  className={cn(
-                    "max-w-[80%] rounded-2xl px-3.5 py-2 text-sm",
-                    mine
-                      ? "bg-primary text-primary-foreground rounded-br-md"
-                      : "bg-muted text-foreground rounded-bl-md",
-                  )}
-                >
-                  <p className="whitespace-pre-wrap">{m.content}</p>
-                </div>
+                {sticker ? (
+                  <span
+                    className={cn(
+                      "px-1 leading-none",
+                      sticker <= 2 ? "text-5xl" : "text-4xl",
+                    )}
+                  >
+                    {m.content}
+                  </span>
+                ) : (
+                  <div
+                    className={cn(
+                      "max-w-[80%] rounded-2xl px-3.5 py-2 text-sm",
+                      mine
+                        ? "bg-primary text-primary-foreground rounded-br-md"
+                        : "bg-muted text-foreground rounded-bl-md",
+                    )}
+                  >
+                    <p className="whitespace-pre-wrap">{m.content}</p>
+                  </div>
+                )}
                 <span className="text-muted-foreground mt-0.5 px-1 text-[11px]">
                   {timeFmt.format(new Date(m.createdAt))}
                 </span>
@@ -135,6 +155,11 @@ export function DmThread({
               e.currentTarget.form?.requestSubmit();
             }
           }}
+        />
+        <StickerPicker
+          label={t("stickers")}
+          disabled={pending}
+          onPick={(s) => submitText(s)}
         />
         <Button
           type="submit"

@@ -456,7 +456,8 @@
       "empty": "Message can’t be empty.",
       "tooLong": "Message is too long.",
       "rateLimited": "You’re sending messages too fast. Slow down a moment."
-    }
+    },
+    "stickers": "Stickers"
   },
   "Reviews": {
     "title": "Ratings & reviews",
@@ -568,7 +569,8 @@
       "empty": "Empty message",
       "tooLong": "Message too long",
       "rateLimited": "Too fast. Please wait."
-    }
+    },
+    "stickers": "Stickers"
   },
   "Profile": {
     "memberSince": "Member since {date}",
