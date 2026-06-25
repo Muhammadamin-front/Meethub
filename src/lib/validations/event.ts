@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+// Only allow http(s) image URLs. `z.string().url()` alone also accepts schemes
+// like `javascript:` / `data:`; restricting the protocol is defense-in-depth
+// against someone storing a hostile URL that later gets reflected somewhere.
+const httpUrl = z
+  .string()
+  .url()
+  .refine((u) => /^https?:\/\//i.test(u), { message: "Must be an http(s) URL" });
+
 /**
  * Event create/edit input. Validated on the server; the form mirrors it and
  * maps field errors to localized messages.
@@ -16,7 +24,7 @@ export const eventSchema = z
     startsAt: z.coerce.date(),
     endsAt: z.coerce.date(),
     capacity: z.coerce.number().int().min(1).max(100000),
-    coverUrl: z.union([z.string().url(), z.literal("")]).optional(),
+    coverUrl: z.union([httpUrl, z.literal("")]).optional(),
     // Optional map coordinates from the location picker. Empty string -> null.
     latitude: z
       .union([z.coerce.number().min(-90).max(90), z.literal("")])
