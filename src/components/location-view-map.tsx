@@ -3,8 +3,9 @@
 import "leaflet/dist/leaflet.css";
 
 import L from "leaflet";
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { useEffect, useRef } from "react";
 
+// Self-contained HTML pin (no external image dependency).
 const pinIcon = L.divIcon({
   className: "",
   html: `<div style="transform:translate(-50%,-100%)">
@@ -17,6 +18,11 @@ const pinIcon = L.divIcon({
   iconAnchor: [0, 0],
 });
 
+/**
+ * Read-only map. Plain Leaflet (not react-leaflet) with an init guard +
+ * cleanup, so a remount / Strict Mode / Fast Refresh can never leave two map
+ * instances stacked in the same container.
+ */
 export default function LocationViewMap({
   lat,
   lng,
@@ -24,18 +30,33 @@ export default function LocationViewMap({
   lat: number;
   lng: number;
 }) {
-  return (
-    <MapContainer
-      center={[lat, lng]}
-      zoom={15}
-      scrollWheelZoom={false}
-      className="h-56 w-full rounded-xl border"
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={[lat, lng]} icon={pinIcon} />
-    </MapContainer>
-  );
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) return;
+    const map = L.map(containerRef.current, { scrollWheelZoom: false }).setView(
+      [lat, lng],
+      15,
+    );
+    mapRef.current = map;
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+    L.marker([lat, lng], { icon: pinIcon }).addTo(map);
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+    // Init once; the effect below keeps the view in sync if coords change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (map) map.setView([lat, lng], map.getZoom());
+  }, [lat, lng]);
+
+  return <div ref={containerRef} className="h-56 w-full rounded-xl border" />;
 }

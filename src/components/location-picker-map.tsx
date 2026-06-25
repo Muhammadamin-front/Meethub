@@ -3,8 +3,7 @@
 import "leaflet/dist/leaflet.css";
 
 import L from "leaflet";
-import { useEffect } from "react";
-import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
+import { useEffect, useRef } from "react";
 
 // Default Leaflet markers load images by URL that bundlers rewrite/break, so we
 // use a self-contained HTML pin instead (no external image dependency).
@@ -23,48 +22,79 @@ const pinIcon = L.divIcon({
 // Default view: Tashkent.
 const FALLBACK: [number, number] = [41.3111, 69.2797];
 
-function ClickHandler({ onPick }: { onPick: (lat: number, lng: number) => void }) {
-  useMapEvents({
-    click(e) {
-      onPick(e.latlng.lat, e.latlng.lng);
-    },
-  });
-  return null;
-}
+type Coords = { lat: number; lng: number } | null;
 
-function Recenter({ view }: { view: { lat: number; lng: number } | null }) {
-  const map = useMap();
-  useEffect(() => {
-    if (view) map.flyTo([view.lat, view.lng], Math.max(map.getZoom(), 14));
-  }, [view, map]);
-  return null;
-}
-
+/**
+ * Interactive picker map. Plain Leaflet (not react-leaflet) with an init guard
+ * + cleanup so a remount / Strict Mode / Fast Refresh never leaves two maps
+ * stacked. Click to drop a pin; `marker`/`view` drive the marker and recenter.
+ */
 export default function LocationPickerMap({
   marker,
   view,
   onPick,
 }: {
-  marker: { lat: number; lng: number } | null;
-  view: { lat: number; lng: number } | null;
+  marker: Coords;
+  view: Coords;
   onPick: (lat: number, lng: number) => void;
 }) {
-  const center = marker ?? (view ? { lat: view.lat, lng: view.lng } : null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const markerRef = useRef<L.Marker | null>(null);
+  // Keep the latest onPick without re-initializing the map.
+  const onPickRef = useRef(onPick);
+  onPickRef.current = onPick;
 
-  return (
-    <MapContainer
-      center={center ? [center.lat, center.lng] : FALLBACK}
-      zoom={center ? 14 : 11}
-      scrollWheelZoom
-      className="h-64 w-full rounded-lg border"
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <ClickHandler onPick={onPick} />
-      <Recenter view={view} />
-      {marker && <Marker position={[marker.lat, marker.lng]} icon={pinIcon} />}
-    </MapContainer>
-  );
+  // Initialize once.
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) return;
+    const start = marker ?? view;
+    const map = L.map(containerRef.current, { scrollWheelZoom: true }).setView(
+      start ? [start.lat, start.lng] : FALLBACK,
+      start ? 14 : 11,
+    );
+    mapRef.current = map;
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+    map.on("click", (e: L.LeafletMouseEvent) => {
+      onPickRef.current(e.latlng.lat, e.latlng.lng);
+    });
+    if (marker) {
+      markerRef.current = L.marker([marker.lat, marker.lng], {
+        icon: pinIcon,
+      }).addTo(map);
+    }
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      markerRef.current = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Sync the marker when it changes.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (marker) {
+      if (markerRef.current) markerRef.current.setLatLng([marker.lat, marker.lng]);
+      else
+        markerRef.current = L.marker([marker.lat, marker.lng], {
+          icon: pinIcon,
+        }).addTo(map);
+    } else if (markerRef.current) {
+      markerRef.current.remove();
+      markerRef.current = null;
+    }
+  }, [marker?.lat, marker?.lng]);
+
+  // Recenter when a search/geolocation sets a new view.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (map && view) map.flyTo([view.lat, view.lng], Math.max(map.getZoom(), 14));
+  }, [view?.lat, view?.lng]);
+
+  return <div ref={containerRef} className="h-64 w-full rounded-lg border" />;
 }
