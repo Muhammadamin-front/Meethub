@@ -1,9 +1,17 @@
-/* MeetHub service worker — minimal, safe caching for PWA installability + offline.
+/* MeetHub service worker — PWA installability + offline support.
  * Bump CACHE_VERSION whenever this file changes to evict old caches. */
-const CACHE_VERSION = "meethub-v1";
+const CACHE_VERSION = "meethub-v2";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
+const IMAGE_CACHE = `${CACHE_VERSION}-images`;
+const OFFLINE_URL = "/offline.html";
 
-self.addEventListener("install", () => {
+// Precached on install so the offline page + app icons are always available.
+const PRECACHE_URLS = [OFFLINE_URL, "/icon-192.png", "/icon-512.png"];
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(STATIC_CACHE).then((c) => c.addAll(PRECACHE_URLS)),
+  );
   // Activate the new SW immediately instead of waiting for old tabs to close.
   self.skipWaiting();
 });
@@ -14,12 +22,24 @@ self.addEventListener("activate", (event) => {
       // Drop caches from previous versions.
       const keys = await caches.keys();
       await Promise.all(
-        keys.filter((k) => !k.startsWith(CACHE_VERSION)).map((k) => caches.delete(k)),
+        keys
+          .filter((k) => !k.startsWith(CACHE_VERSION))
+          .map((k) => caches.delete(k)),
       );
       await self.clients.claim();
     })(),
   );
 });
+
+// Cap a cache's entry count so images don't grow unbounded (rough LRU).
+async function trimCache(cacheName, maxEntries) {
+  const cache = await caches.open(cacheName);
+  const keys = await cache.keys();
+  if (keys.length <= maxEntries) return;
+  await Promise.all(
+    keys.slice(0, keys.length - maxEntries).map((k) => cache.delete(k)),
+  );
+}
 
 self.addEventListener("fetch", (event) => {
   const { request } = event;
@@ -47,8 +67,34 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Images (optimized loader, static assets, icons): cache-first with a capped
+  // cache so previously seen event photos still render offline.
+  const isImage =
+    url.pathname.startsWith("/_next/image") ||
+    url.pathname.startsWith("/assets/") ||
+    /\.(png|jpe?g|webp|avif|gif|svg)$/.test(url.pathname);
+  if (isImage) {
+    event.respondWith(
+      caches.match(request).then(
+        (cached) =>
+          cached ||
+          fetch(request)
+            .then((res) => {
+              const copy = res.clone();
+              caches.open(IMAGE_CACHE).then((c) => {
+                c.put(request, copy);
+                trimCache(IMAGE_CACHE, 60);
+              });
+              return res;
+            })
+            .catch(() => cached),
+      ),
+    );
+    return;
+  }
+
   // Page navigations: network-first so content stays fresh, fall back to the
-  // last cached version (then a bare offline message) when offline.
+  // last cached version of this page, then the branded offline page.
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request)
@@ -59,13 +105,7 @@ self.addEventListener("fetch", (event) => {
         })
         .catch(async () => {
           const cached = await caches.match(request);
-          return (
-            cached ||
-            new Response(
-              "<!doctype html><meta charset=utf-8><title>Offline</title><body style='font-family:sans-serif;padding:2rem'>You are offline. Reconnect to use MeetHub.</body>",
-              { headers: { "Content-Type": "text/html" } },
-            )
-          );
+          return cached || (await caches.match(OFFLINE_URL));
         }),
     );
   }
