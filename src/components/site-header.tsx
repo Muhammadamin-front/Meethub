@@ -1,15 +1,17 @@
-import { Show, UserButton } from "@clerk/nextjs";
-import { useTranslations } from "next-intl";
+import { Show } from "@clerk/nextjs";
+import { getLocale, getTranslations } from "next-intl/server";
 
-import { AdminNavLink } from "@/components/admin-nav-link";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { Logo } from "@/components/logo";
 import { MobileNav } from "@/components/mobile-nav";
 import { NotificationBell } from "@/components/notification-bell";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
+import { UserMenu } from "@/components/user-menu";
+import { UserRole } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
 import { NAV_LINKS } from "@/lib/constants";
+import { getCurrentUser } from "@/server/auth";
 
 /**
  * Top navigation bar. Auth state comes from Clerk: signed-in users see a
@@ -18,8 +20,11 @@ import { NAV_LINKS } from "@/lib/constants";
  * Links use `buttonVariants` (not `<Button render=…>`) so they stay real
  * anchors with proper link semantics while looking like buttons.
  */
-export function SiteHeader() {
-  const t = useTranslations("Nav");
+export async function SiteHeader() {
+  const t = await getTranslations("Nav");
+  const locale = await getLocale();
+  const user = await getCurrentUser();
+  const isAdmin = user?.role === UserRole.ADMIN;
 
   return (
     <header className="bg-background/80 sticky top-0 z-40 w-full border-b backdrop-blur">
@@ -54,14 +59,7 @@ export function SiteHeader() {
             >
               {t("messages")}
             </Link>
-            <Link
-              href="/dashboard"
-              className={buttonVariants({ variant: "ghost", size: "sm" })}
-            >
-              {t("dashboard")}
-            </Link>
           </Show>
-          <AdminNavLink />
         </nav>
 
         <div className="flex items-center gap-1">
@@ -71,7 +69,12 @@ export function SiteHeader() {
           <Show when="signed-in">
             <div className="ml-1 flex items-center gap-1">
               <NotificationBell />
-              <UserButton />
+              <UserMenu
+                dashboardLabel={t("dashboard")}
+                dashboardHref={`/${locale}/dashboard`}
+                adminLabel={t("admin")}
+                adminHref={isAdmin ? `/${locale}/admin` : undefined}
+              />
             </div>
           </Show>
 

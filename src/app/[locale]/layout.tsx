@@ -17,6 +17,7 @@ import { PwaRegister } from "@/components/pwa-register";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
+import { clerkLocalization } from "@/lib/clerk-localization";
 import { routing } from "@/i18n/routing";
 import { APP_NAME, APP_URL } from "@/lib/constants";
 
@@ -91,6 +92,7 @@ export default async function LocaleLayout({
   return (
     // Locale-aware Clerk URLs so auth redirects keep the active language.
     <ClerkProvider
+      localization={clerkLocalization(locale)}
       signInUrl={`/${locale}/sign-in`}
       signUpUrl={`/${locale}/sign-up`}
     >
