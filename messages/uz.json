@@ -19,7 +19,9 @@
     "admin": "Administrator",
     "dashboard": "Boshqaruv paneli",
     "leaderboard": "Reyting",
-    "ticket": "Chipta"
+    "ticket": "Chipta",
+    "people": "Odamlar",
+    "messages": "Xabarlar"
   },
   "Home": {
     "badge": "Hozir dastlabki ishlab chiqishda",
@@ -376,16 +378,46 @@
   "Badges": {
     "title": "Yutuqlar",
     "progress": "{earned}/{total} ochildi",
-    "newcomer": { "title": "Yangi a'zo", "desc": "Birinchi tadbiringizga qatnashing" },
-    "regular": { "title": "Doimiy", "desc": "5 ta tadbirga qatnashing" },
-    "veteran": { "title": "Faxriy", "desc": "15 ta tadbirga qatnashing" },
-    "streak3": { "title": "Olovli", "desc": "3 kunlik streakka yeting" },
-    "streak7": { "title": "To‘xtovsiz", "desc": "7 kunlik streakka yeting" },
-    "reviewer": { "title": "Sharhchi", "desc": "Birinchi sharhingizni yozing" },
-    "host": { "title": "Tashkilotchi", "desc": "Birinchi tadbiringizni yarating" },
-    "superhost": { "title": "Super tashkilotchi", "desc": "5 ta tadbir yarating" },
-    "verified": { "title": "Tasdiqlangan", "desc": "Tasdiqlangan tashkilotni boshqaring" },
-    "trusted": { "title": "Ishonchli", "desc": "100 obro‘ni saqlang" }
+    "newcomer": {
+      "title": "Yangi a'zo",
+      "desc": "Birinchi tadbiringizga qatnashing"
+    },
+    "regular": {
+      "title": "Doimiy",
+      "desc": "5 ta tadbirga qatnashing"
+    },
+    "veteran": {
+      "title": "Faxriy",
+      "desc": "15 ta tadbirga qatnashing"
+    },
+    "streak3": {
+      "title": "Olovli",
+      "desc": "3 kunlik streakka yeting"
+    },
+    "streak7": {
+      "title": "To‘xtovsiz",
+      "desc": "7 kunlik streakka yeting"
+    },
+    "reviewer": {
+      "title": "Sharhchi",
+      "desc": "Birinchi sharhingizni yozing"
+    },
+    "host": {
+      "title": "Tashkilotchi",
+      "desc": "Birinchi tadbiringizni yarating"
+    },
+    "superhost": {
+      "title": "Super tashkilotchi",
+      "desc": "5 ta tadbir yarating"
+    },
+    "verified": {
+      "title": "Tasdiqlangan",
+      "desc": "Tasdiqlangan tashkilotni boshqaring"
+    },
+    "trusted": {
+      "title": "Ishonchli",
+      "desc": "100 obro‘ni saqlang"
+    }
   },
   "Attendance": {
     "title": "Davomat",
@@ -502,5 +534,49 @@
     "title": "Sahifa topilmadi",
     "description": "Siz izlayotgan sahifa mavjud emas yoki ko‘chirilgan.",
     "backHome": "Bosh sahifaga qaytish"
+  },
+  "Social": {
+    "title": "Odamlar",
+    "subtitle": "Ism bo‘yicha qidiring va do‘st orttiring.",
+    "searchPlaceholder": "Ism bo‘yicha qidirish…",
+    "searching": "Qidirilmoqda…",
+    "noResults": "Hech kim topilmadi",
+    "addFriend": "Do‘st qo‘shish",
+    "friends": "Do‘stlar",
+    "requested": "So‘rov yuborildi",
+    "accept": "Qabul qilish",
+    "decline": "Rad etish",
+    "remove": "O‘chirish",
+    "message": "Xabar",
+    "requests": "Do‘stlik so‘rovlari",
+    "friendsList": "Do‘stlar",
+    "noFriends": "Hali do‘stlaringiz yo‘q. Yuqorida qidirib qo‘shing."
+  },
+  "Messages": {
+    "title": "Xabarlar",
+    "inboxEmpty": "Hali suhbatlaringiz yo‘q. Odamlar bo‘limidan kimgadir yozing.",
+    "you": "Siz",
+    "noMessagesYet": "Hali xabar yo‘q",
+    "empty": "Suhbatni boshlang",
+    "placeholder": "Xabar yozing…",
+    "send": "Yuborish",
+    "error": {
+      "forbidden": "Ruxsat yo‘q",
+      "blocked": "Siz bloklangansiz",
+      "empty": "Bo‘sh xabar",
+      "tooLong": "Xabar juda uzun",
+      "rateLimited": "Juda tez. Biroz kuting."
+    }
+  },
+  "Profile": {
+    "memberSince": "{date} dan beri a‘zo",
+    "friendsCount": "{count} do‘st",
+    "signInToConnect": "Bog‘lanish uchun ro‘yxatdan o‘ting",
+    "xp": "XP",
+    "attended": "Tadbirlar",
+    "streak": "Eng uzun seriya",
+    "badges": "Nishonlar",
+    "attendedEvents": "Qatnashgan tadbirlar",
+    "noEvents": "Hali tadbirlarga qatnashmagan"
   }
 }

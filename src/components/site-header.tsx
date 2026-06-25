@@ -43,6 +43,18 @@ export function SiteHeader() {
           ))}
           <Show when="signed-in">
             <Link
+              href="/people"
+              className={buttonVariants({ variant: "ghost", size: "sm" })}
+            >
+              {t("people")}
+            </Link>
+            <Link
+              href="/messages"
+              className={buttonVariants({ variant: "ghost", size: "sm" })}
+            >
+              {t("messages")}
+            </Link>
+            <Link
               href="/dashboard"
               className={buttonVariants({ variant: "ghost", size: "sm" })}
             >

@@ -19,7 +19,9 @@
     "admin": "Admin",
     "dashboard": "Dashboard",
     "leaderboard": "Leaderboard",
-    "ticket": "Ticket"
+    "ticket": "Ticket",
+    "people": "People",
+    "messages": "Messages"
   },
   "Home": {
     "badge": "Now in early development",
@@ -376,16 +378,46 @@
   "Badges": {
     "title": "Achievements",
     "progress": "{earned}/{total} unlocked",
-    "newcomer": { "title": "Newcomer", "desc": "Attend your first event" },
-    "regular": { "title": "Regular", "desc": "Attend 5 events" },
-    "veteran": { "title": "Veteran", "desc": "Attend 15 events" },
-    "streak3": { "title": "On Fire", "desc": "Reach a 3-day streak" },
-    "streak7": { "title": "Unstoppable", "desc": "Reach a 7-day streak" },
-    "reviewer": { "title": "Reviewer", "desc": "Write your first review" },
-    "host": { "title": "Host", "desc": "Create your first event" },
-    "superhost": { "title": "Super Host", "desc": "Create 5 events" },
-    "verified": { "title": "Verified", "desc": "Run a verified organization" },
-    "trusted": { "title": "Trusted", "desc": "Keep a reputation of 100" }
+    "newcomer": {
+      "title": "Newcomer",
+      "desc": "Attend your first event"
+    },
+    "regular": {
+      "title": "Regular",
+      "desc": "Attend 5 events"
+    },
+    "veteran": {
+      "title": "Veteran",
+      "desc": "Attend 15 events"
+    },
+    "streak3": {
+      "title": "On Fire",
+      "desc": "Reach a 3-day streak"
+    },
+    "streak7": {
+      "title": "Unstoppable",
+      "desc": "Reach a 7-day streak"
+    },
+    "reviewer": {
+      "title": "Reviewer",
+      "desc": "Write your first review"
+    },
+    "host": {
+      "title": "Host",
+      "desc": "Create your first event"
+    },
+    "superhost": {
+      "title": "Super Host",
+      "desc": "Create 5 events"
+    },
+    "verified": {
+      "title": "Verified",
+      "desc": "Run a verified organization"
+    },
+    "trusted": {
+      "title": "Trusted",
+      "desc": "Keep a reputation of 100"
+    }
   },
   "Attendance": {
     "title": "Attendance",
@@ -502,5 +534,49 @@
     "title": "Page not found",
     "description": "The page you’re looking for doesn’t exist or has moved.",
     "backHome": "Back to home"
+  },
+  "Social": {
+    "title": "People",
+    "subtitle": "Search by name and add friends.",
+    "searchPlaceholder": "Search by name…",
+    "searching": "Searching…",
+    "noResults": "No one found",
+    "addFriend": "Add friend",
+    "friends": "Friends",
+    "requested": "Requested",
+    "accept": "Accept",
+    "decline": "Decline",
+    "remove": "Remove",
+    "message": "Message",
+    "requests": "Friend requests",
+    "friendsList": "Friends",
+    "noFriends": "No friends yet. Search above to add some."
+  },
+  "Messages": {
+    "title": "Messages",
+    "inboxEmpty": "No conversations yet. Message someone from People.",
+    "you": "You",
+    "noMessagesYet": "No messages yet",
+    "empty": "Start the conversation",
+    "placeholder": "Type a message…",
+    "send": "Send",
+    "error": {
+      "forbidden": "Not allowed",
+      "blocked": "You are blocked",
+      "empty": "Empty message",
+      "tooLong": "Message too long",
+      "rateLimited": "Too fast. Please wait."
+    }
+  },
+  "Profile": {
+    "memberSince": "Member since {date}",
+    "friendsCount": "{count} friends",
+    "signInToConnect": "Sign up to connect",
+    "xp": "XP",
+    "attended": "Events",
+    "streak": "Best streak",
+    "badges": "Badges",
+    "attendedEvents": "Attended events",
+    "noEvents": "No attended events yet"
   }
 }

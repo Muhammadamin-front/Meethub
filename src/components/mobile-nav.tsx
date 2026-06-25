@@ -58,9 +58,17 @@ export function MobileNav() {
           ))}
 
           {isSignedIn && (
-            <Link href="/dashboard" onClick={close} className={itemClass}>
-              {t("dashboard")}
-            </Link>
+            <>
+              <Link href="/people" onClick={close} className={itemClass}>
+                {t("people")}
+              </Link>
+              <Link href="/messages" onClick={close} className={itemClass}>
+                {t("messages")}
+              </Link>
+              <Link href="/dashboard" onClick={close} className={itemClass}>
+                {t("dashboard")}
+              </Link>
+            </>
           )}
 
           {!isSignedIn && (
