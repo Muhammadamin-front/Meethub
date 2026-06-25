@@ -1,9 +1,9 @@
 "use client";
 
-import { LocateFixed, Search } from "lucide-react";
+import { LocateFixed, MapPin } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,44 @@ const LocationPickerMap = dynamic(() => import("./location-picker-map"), {
 });
 
 type Coords = { lat: number; lng: number };
+type Suggestion = { label: string; secondary?: string; lat?: number; lng?: number };
+
+// Bias results toward Tashkent so local places rank first.
+const BIAS = { lat: 41.311, lng: 69.279 };
+
+/**
+ * Photon (komoot, built on OpenStreetMap) — free, no API key, designed for
+ * type-ahead autocomplete (unlike Nominatim, which forbids autocomplete use).
+ */
+async function photonSearch(
+  q: string,
+  signal: AbortSignal,
+): Promise<Suggestion[]> {
+  const url =
+    `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}` +
+    `&limit=6&lat=${BIAS.lat}&lon=${BIAS.lng}`;
+  const res = await fetch(url, { signal });
+  const data = (await res.json()) as {
+    features?: Array<{
+      properties?: Record<string, string>;
+      geometry?: { coordinates?: [number, number] };
+    }>;
+  };
+  return (data.features ?? []).map((f) => {
+    const p = f.properties ?? {};
+    const [lng, lat] = f.geometry?.coordinates ?? [];
+    const primary = p.name || p.street || p.city || p.state || p.country || q;
+    const rest = [p.city, p.state, p.country].filter(
+      (x): x is string => !!x && x !== primary,
+    );
+    return {
+      label: primary,
+      secondary: [...new Set(rest)].join(", "),
+      lat,
+      lng,
+    };
+  });
+}
 
 export function LocationPicker({
   defaultLocation,
@@ -41,8 +79,57 @@ export function LocationPicker({
       : null,
   );
   const [view, setView] = useState<Coords | null>(null);
-  const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
+
+  // Autocomplete dropdown state.
+  const [open, setOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [loading, setLoading] = useState(false);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  // True right after a pick, so we don't immediately re-search the filled text.
+  const justPicked = useRef(false);
+
+  // Debounced search as the user types (Photon for >=2 chars, otherwise the
+  // static quick-picks for Tashkent venues).
+  useEffect(() => {
+    if (!open) return;
+    if (justPicked.current) {
+      justPicked.current = false;
+      return;
+    }
+    const q = address.trim();
+    if (q.length < 2) {
+      setSuggestions(LOCATION_SUGGESTIONS.map((l) => ({ label: l })));
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    const id = setTimeout(async () => {
+      abortRef.current?.abort();
+      const ctrl = new AbortController();
+      abortRef.current = ctrl;
+      try {
+        setSuggestions(await photonSearch(q, ctrl.signal));
+      } catch {
+        // Aborted or offline — leave the previous list.
+      } finally {
+        setLoading(false);
+      }
+    }, 350);
+    return () => clearTimeout(id);
+  }, [address, open]);
+
+  // Close the dropdown on outside click.
+  useEffect(() => {
+    function onDown(e: MouseEvent) {
+      if (boxRef.current && !boxRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, []);
 
   // Address text from coordinates (Nominatim reverse geocoding).
   async function reverse(lat: number, lng: number) {
@@ -64,33 +151,14 @@ export function LocationPicker({
     void reverse(lat, lng);
   }
 
-  // Search an address/place and drop the marker on the best match.
-  async function runSearch() {
-    const q = search.trim();
-    if (!q || busy) return;
-    setBusy(true);
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=${locale}&q=${encodeURIComponent(q)}`,
-      );
-      const data = (await res.json()) as Array<{
-        lat: string;
-        lon: string;
-        display_name: string;
-      }>;
-      const hit = data[0];
-      if (hit) {
-        const lat = Number(hit.lat);
-        const lng = Number(hit.lon);
-        setMarker({ lat, lng });
-        setView({ lat, lng });
-        setAddress(hit.display_name);
-      }
-    } catch {
-      // Ignore — the user can still type the address by hand.
-    } finally {
-      setBusy(false);
+  function selectSuggestion(s: Suggestion) {
+    justPicked.current = true;
+    setAddress(s.secondary ? `${s.label}, ${s.secondary}` : s.label);
+    if (s.lat != null && s.lng != null) {
+      setMarker({ lat: s.lat, lng: s.lng });
+      setView({ lat: s.lat, lng: s.lng });
     }
+    setOpen(false);
   }
 
   function useMyLocation() {
@@ -110,55 +178,69 @@ export function LocationPicker({
     <div className="space-y-2">
       <Label htmlFor="location">{t("location")}</Label>
 
-      {/* Address text — picked from the map, but always editable. */}
-      <Input
-        id="location"
-        list="location-suggestions"
-        name="location"
-        required
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-        placeholder={t("locationPlaceholder")}
-      />
-      <datalist id="location-suggestions">
-        {LOCATION_SUGGESTIONS.map((l) => (
-          <option key={l} value={l} />
-        ))}
-      </datalist>
+      {/* Address input with a live autocomplete dropdown (Luma-style). */}
+      <div ref={boxRef} className="relative">
+        <MapPin
+          className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2"
+          aria-hidden
+        />
+        <Input
+          id="location"
+          name="location"
+          required
+          autoComplete="off"
+          value={address}
+          onChange={(e) => {
+            setAddress(e.target.value);
+            setOpen(true);
+          }}
+          onFocus={() => setOpen(true)}
+          placeholder={t("locationPlaceholder")}
+          className="pl-9"
+        />
+
+        {open && (loading || suggestions.length > 0) && (
+          <ul className="bg-popover absolute z-20 mt-1 max-h-72 w-full overflow-auto rounded-lg border p-1 shadow-lg">
+            {loading && suggestions.length === 0 ? (
+              <li className="text-muted-foreground px-3 py-2 text-sm">
+                {t("searching")}
+              </li>
+            ) : (
+              suggestions.map((s, i) => (
+                <li key={`${s.label}-${i}`}>
+                  <button
+                    type="button"
+                    onClick={() => selectSuggestion(s)}
+                    className="hover:bg-accent flex w-full items-start gap-2 rounded-md px-3 py-2 text-left"
+                  >
+                    <MapPin
+                      className="text-muted-foreground mt-0.5 size-4 shrink-0"
+                      aria-hidden
+                    />
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-medium">
+                        {s.label}
+                      </span>
+                      {s.secondary && (
+                        <span className="text-muted-foreground block truncate text-xs">
+                          {s.secondary}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
+        )}
+      </div>
 
       {/* Coordinates submitted with the form (set by the picker). */}
       <input type="hidden" name="latitude" value={marker?.lat ?? ""} />
       <input type="hidden" name="longitude" value={marker?.lng ?? ""} />
 
-      {/* Map search + my-location. */}
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="relative min-w-0 flex-1">
-          <Search
-            className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2"
-            aria-hidden
-          />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                void runSearch();
-              }
-            }}
-            placeholder={t("mapSearchPlaceholder")}
-            className="pl-9"
-          />
-        </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={busy}
-          onClick={() => void runSearch()}
-        >
-          {busy ? t("searching") : t("mapSearch")}
-        </Button>
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-muted-foreground text-xs">{t("mapHint")}</p>
         <Button
           type="button"
           variant="outline"
@@ -170,8 +252,6 @@ export function LocationPicker({
           {t("useMyLocation")}
         </Button>
       </div>
-
-      <p className="text-muted-foreground text-xs">{t("mapHint")}</p>
 
       <LocationPickerMap
         marker={marker}
