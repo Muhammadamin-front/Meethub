@@ -57,6 +57,26 @@ export function MediaUpload({
         ? "video/*"
         : "image/*,video/*";
 
+  // Strip spaces/odd characters from the filename. Spaces become "+" in the
+  // upload URL and break Vercel Blob's pathname signature check (400). A random
+  // suffix is still added server-side, so collisions aren't a concern.
+  function safePathname(name: string) {
+    const dot = name.lastIndexOf(".");
+    const ext =
+      dot > 0
+        ? name
+            .slice(dot + 1)
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "")
+        : "";
+    const base =
+      (dot > 0 ? name.slice(0, dot) : name)
+        .replace(/[^a-zA-Z0-9._-]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 60) || "file";
+    return ext ? `${base}.${ext}` : base;
+  }
+
   async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     e.target.value = ""; // allow re-picking the same file
@@ -75,7 +95,7 @@ export function MediaUpload({
 
     setBusy(true);
     try {
-      const blob = await upload(file.name, file, {
+      const blob = await upload(safePathname(file.name), file, {
         access: "public",
         handleUploadUrl: "/api/upload",
       });
