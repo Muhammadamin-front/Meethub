@@ -287,6 +287,7 @@
     "participants": "{count} joined",
     "when": "When",
     "where": "Where",
+    "openInMaps": "Open in Maps",
     "categoryLabel": "Category",
     "capacityLabel": "Capacity",
     "join": "Join",

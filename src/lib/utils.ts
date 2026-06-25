@@ -30,6 +30,21 @@ export function toDateTimeLocalValue(date: Date) {
   )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
+/**
+ * A universal maps URL. Tapping it opens the phone's map app (Google Maps /
+ * Apple Maps) on iOS and Android, or the web map on desktop. Prefers exact
+ * coordinates when the event has them, otherwise searches the address text.
+ */
+export function mapsUrl(
+  location: string,
+  lat?: number | null,
+  lng?: number | null,
+) {
+  const query =
+    lat != null && lng != null ? `${lat},${lng}` : location.trim();
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
 /** Localized date+time range, e.g. "Jul 1, 2026, 18:00 – 20:00". */
 export function formatEventRange(start: Date, end: Date, locale: string) {
   const date = new Intl.DateTimeFormat(locale, {

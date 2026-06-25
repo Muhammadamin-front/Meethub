@@ -1,4 +1,4 @@
-import { Building2 } from "lucide-react";
+import { Building2, MapPin } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
@@ -18,7 +18,7 @@ import {
   UserRole,
 } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
-import { formatEventRange } from "@/lib/utils";
+import { formatEventRange, mapsUrl } from "@/lib/utils";
 import { getCurrentUser } from "@/server/auth";
 import { prisma } from "@/server/db";
 
@@ -130,7 +130,18 @@ export async function EventDetail({
             />
           )}
         </Info>
-        <Info label={t("where")}>{event.location}</Info>
+        <Info label={t("where")}>
+          {/* Tapping the location opens the phone's map app (Google/Apple Maps). */}
+          <a
+            href={mapsUrl(event.location, event.latitude, event.longitude)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary inline-flex items-start gap-1.5 hover:underline"
+          >
+            <MapPin className="mt-0.5 size-4 shrink-0" aria-hidden />
+            <span>{event.location}</span>
+          </a>
+        </Info>
         <Info label={t("categoryLabel")}>
           <Badge variant="secondary">{event.category}</Badge>
         </Info>
@@ -145,8 +156,17 @@ export async function EventDetail({
       </div>
 
       {event.latitude != null && event.longitude != null && (
-        <div className="mt-8">
+        <div className="mt-8 space-y-3">
           <LocationView lat={event.latitude} lng={event.longitude} />
+          <a
+            href={mapsUrl(event.location, event.latitude, event.longitude)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            <MapPin className="size-4" aria-hidden />
+            {t("openInMaps")}
+          </a>
         </div>
       )}
 
