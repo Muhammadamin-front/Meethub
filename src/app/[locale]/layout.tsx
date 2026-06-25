@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -11,6 +11,7 @@ import {
 } from "next-intl/server";
 
 import { BlockedBanner } from "@/components/blocked-banner";
+import { PwaRegister } from "@/components/pwa-register";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -47,8 +48,23 @@ export async function generateMetadata({
       description: t("description"),
     },
     twitter: { card: "summary_large_image" },
+    // PWA: tells iOS Safari to launch standalone with our home-screen icon.
+    appleWebApp: {
+      capable: true,
+      title: APP_NAME,
+      statusBarStyle: "default",
+    },
+    icons: {
+      icon: "/icon.svg",
+      apple: "/apple-icon.png",
+    },
   };
 }
+
+// Status-bar / toolbar tint when installed as a PWA.
+export const viewport: Viewport = {
+  themeColor: "#5468ee",
+};
 
 export default async function LocaleLayout({
   children,
@@ -115,6 +131,7 @@ export default async function LocaleLayout({
               <SiteFooter />
               {modal}
             </ThemeProvider>
+            <PwaRegister />
           </NextIntlClientProvider>
         </body>
       </html>
