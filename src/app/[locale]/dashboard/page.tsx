@@ -1,8 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { AvatarUploader } from "@/components/avatar-uploader";
 import { BadgesSection } from "@/components/badges-section";
-import { NameEditor } from "@/components/name-editor";
+import { UserAvatar } from "@/components/user-avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
@@ -104,16 +103,18 @@ export default async function DashboardPage({
         </div>
         <div className="ml-auto flex items-center gap-4">
           <div className="text-right">
-            <NameEditor
-              currentName={user.name}
-              display={displayName(user.name)}
-              isEmailName={!!user.email && user.name === user.email}
-            />
+            <p className="text-lg font-semibold">{displayName(user.name)}</p>
             {user.email && (
               <p className="text-muted-foreground text-sm">{user.email}</p>
             )}
           </div>
-          <AvatarUploader currentUrl={user.imageUrl} name={user.name} />
+          {/* Name & photo are edited in Clerk's "Manage account" (avatar menu),
+              which syncs back via the user.updated webhook. */}
+          <UserAvatar
+            name={displayName(user.name)}
+            imageUrl={user.imageUrl}
+            className="size-12 text-base"
+          />
         </div>
       </section>
 

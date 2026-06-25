@@ -6,6 +6,7 @@ import { DmThread } from "@/components/dm-thread";
 import { UserAvatar } from "@/components/user-avatar";
 import { serializeDM } from "@/lib/social";
 import { Link } from "@/i18n/navigation";
+import { displayName } from "@/lib/utils";
 import { requireUser } from "@/server/auth";
 import { prisma } from "@/server/db";
 
@@ -57,11 +58,11 @@ export default async function ConversationPage({
         </Link>
         <Link href={`/u/${other.id}`} className="flex items-center gap-2">
           <UserAvatar
-            name={other.name}
+            name={displayName(other.name)}
             imageUrl={other.imageUrl}
             className="size-9"
           />
-          <span className="font-semibold">{other.name}</span>
+          <span className="font-semibold">{displayName(other.name)}</span>
         </Link>
       </div>
 

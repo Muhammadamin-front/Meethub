@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { UserAvatar } from "@/components/user-avatar";
 import { Link } from "@/i18n/navigation";
+import { displayName } from "@/lib/utils";
 import { requireUser } from "@/server/auth";
 import { prisma } from "@/server/db";
 
@@ -66,10 +67,15 @@ export default async function MessagesPage({
                   href={`/messages/${c.id}`}
                   className="hover:bg-accent flex items-center gap-3 p-3 transition-colors"
                 >
-                  <UserAvatar name={other.name} imageUrl={other.imageUrl} />
+                  <UserAvatar
+                    name={displayName(other.name)}
+                    imageUrl={other.imageUrl}
+                  />
                   <span className="min-w-0 flex-1">
                     <span className="flex items-center justify-between gap-2">
-                      <span className="truncate font-medium">{other.name}</span>
+                      <span className="truncate font-medium">
+                        {displayName(other.name)}
+                      </span>
                       <span className="text-muted-foreground shrink-0 text-xs">
                         {timeFmt.format(c.lastMessageAt)}
                       </span>

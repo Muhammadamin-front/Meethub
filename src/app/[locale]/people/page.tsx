@@ -6,6 +6,7 @@ import { UserAvatar } from "@/components/user-avatar";
 import { UserSearch } from "@/components/user-search";
 import { FriendStatus } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
+import { displayName } from "@/lib/utils";
 import { requireUser } from "@/server/auth";
 import { prisma } from "@/server/db";
 
@@ -70,8 +71,13 @@ export default async function PeoplePage({
                   href={`/u/${requester.id}`}
                   className="flex min-w-0 items-center gap-3"
                 >
-                  <UserAvatar name={requester.name} imageUrl={requester.imageUrl} />
-                  <span className="truncate font-medium">{requester.name}</span>
+                  <UserAvatar
+                    name={displayName(requester.name)}
+                    imageUrl={requester.imageUrl}
+                  />
+                  <span className="truncate font-medium">
+                    {displayName(requester.name)}
+                  </span>
                 </Link>
                 <FriendButton targetId={requester.id} state="incoming" />
               </li>
@@ -98,8 +104,10 @@ export default async function PeoplePage({
                   href={`/u/${u.id}`}
                   className="flex min-w-0 items-center gap-3"
                 >
-                  <UserAvatar name={u.name} imageUrl={u.imageUrl} />
-                  <span className="truncate font-medium">{u.name}</span>
+                  <UserAvatar name={displayName(u.name)} imageUrl={u.imageUrl} />
+                  <span className="truncate font-medium">
+                    {displayName(u.name)}
+                  </span>
                 </Link>
                 <div className="flex items-center gap-1">
                   <MessageButton targetId={u.id} />

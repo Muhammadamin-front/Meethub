@@ -8,6 +8,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { OrgStatus, RegistrationStatus } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
 import { computeBadges } from "@/lib/badges";
+import { displayName } from "@/lib/utils";
 import { computeXp } from "@/lib/xp";
 import { getCurrentUser } from "@/server/auth";
 import { prisma } from "@/server/db";
@@ -73,12 +74,14 @@ export default async function ProfilePage({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <UserAvatar
-          name={user.name}
+          name={displayName(user.name)}
           imageUrl={user.imageUrl}
           className="size-20 text-2xl"
         />
         <div className="flex-1">
-          <h1 className="text-2xl font-semibold tracking-tight">{user.name}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {displayName(user.name)}
+          </h1>
           <p className="text-muted-foreground mt-1 text-sm">
             {t("memberSince", { date: dateFmt.format(user.createdAt) })} ·{" "}
             {t("friendsCount", { count: friends })}

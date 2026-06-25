@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { UserAvatar } from "@/components/user-avatar";
 import { Input } from "@/components/ui/input";
 import { Link } from "@/i18n/navigation";
+import { displayName } from "@/lib/utils";
 import { searchPeople, type PersonResult } from "@/server/actions/social";
 
 export function UserSearch() {
@@ -65,8 +66,8 @@ export function UserSearch() {
                 href={`/u/${u.id}`}
                 className="hover:bg-accent flex items-center gap-3 p-3 transition-colors"
               >
-                <UserAvatar name={u.name} imageUrl={u.imageUrl} />
-                <span className="font-medium">{u.name}</span>
+                <UserAvatar name={displayName(u.name)} imageUrl={u.imageUrl} />
+                <span className="font-medium">{displayName(u.name)}</span>
               </Link>
             </li>
           ))}
