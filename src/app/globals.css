@@ -257,3 +257,19 @@
   background: color-mix(in oklch, white 6%, transparent);
   border-color: color-mix(in oklch, white 10%, transparent);
 }
+
+/* Ticket stub-and-body notches. Only applied on >=640px, where the tear line is
+   vertical (left edge of the stub). On mobile the ticket stacks, so the notch is
+   disabled to avoid punching holes through the card body. */
+@media (min-width: 640px) {
+  .ticket-notch {
+    -webkit-mask-image:
+      radial-gradient(circle 15px at 68% 0, #0000 0 15px, #000 16px),
+      radial-gradient(circle 15px at 68% 100%, #0000 0 15px, #000 16px);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      radial-gradient(circle 15px at 68% 0, #0000 0 15px, #000 16px),
+      radial-gradient(circle 15px at 68% 100%, #0000 0 15px, #000 16px);
+    mask-composite: intersect;
+  }
+}

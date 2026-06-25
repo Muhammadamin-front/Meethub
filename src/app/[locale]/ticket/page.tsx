@@ -1,29 +1,18 @@
-import { unstable_cache } from "next/cache";
+import { TicketX } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Reveal } from "@/components/landing/reveal";
 import { TicketCard } from "@/components/landing/ticket-card";
-import { TicketTiers } from "@/components/landing/ticket-tiers";
+import { buttonVariants } from "@/components/ui/button";
+import { EventStatus, RegistrationStatus } from "@/generated/prisma/client";
+import { Link } from "@/i18n/navigation";
+import { getCurrentUser } from "@/server/auth";
 import { prisma } from "@/server/db";
 
-// Pull a real published event (if any) to populate the sample ticket.
-const getSampleEvent = unstable_cache(
-  async () => {
-    const event = await prisma.event.findFirst({
-      where: { status: "PUBLISHED" },
-      orderBy: { startsAt: "asc" },
-      select: {
-        title: true,
-        location: true,
-        startsAt: true,
-        organization: { select: { name: true } },
-      },
-    });
-    return event;
-  },
-  ["ticket-sample-event"],
-  { revalidate: 60 },
-);
+// A readable, ticket-looking id derived from the registration.
+function formatTicketId(regId: string, startsAt: Date): string {
+  return `MH-${startsAt.getFullYear()}-${regId.slice(-4).toUpperCase()}`;
+}
 
 export default async function TicketPage({
   params,
@@ -34,16 +23,39 @@ export default async function TicketPage({
   setRequestLocale(locale);
   const t = await getTranslations("Landing");
 
-  const event = await getSampleEvent();
-  const date = event
-    ? new Date(event.startsAt).toLocaleString(locale, {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
+  const user = await getCurrentUser();
+
+  // The signed-in user's upcoming tickets (active registrations to events that
+  // haven't started yet). No user / no tickets => empty state below.
+  const registrations = user
+    ? await prisma.registration.findMany({
+        where: {
+          userId: user.id,
+          status: {
+            in: [RegistrationStatus.JOINED, RegistrationStatus.ATTENDED],
+          },
+          event: {
+            status: EventStatus.PUBLISHED,
+            startsAt: { gte: new Date() },
+          },
+        },
+        orderBy: { event: { startsAt: "asc" } },
+        take: 20,
+        select: {
+          id: true,
+          event: {
+            select: {
+              title: true,
+              location: true,
+              startsAt: true,
+              organization: { select: { name: true } },
+            },
+          },
+        },
       })
-    : undefined;
+    : [];
+
+  const hasTickets = registrations.length > 0;
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
@@ -53,23 +65,46 @@ export default async function TicketPage({
             {t("ticketTitle")}
           </h1>
           <p className="text-muted-foreground mx-auto mt-2 max-w-lg text-pretty">
-            {t("ticketSubtitle")}
+            {hasTickets ? t("ticket.realSubtitle") : t("ticketSubtitle")}
           </p>
         </div>
       </Reveal>
 
-      <TicketCard
-        event={event ? { title: event.title, location: event.location } : null}
-        organizer={event?.organization.name}
-        date={date}
-      />
-
-      <p className="text-muted-foreground mx-auto mt-10 max-w-md text-center text-sm text-pretty">
-        {t("ticket.pageNote")}
-      </p>
-
-      {/* Ticket tier explanation with mini example tickets */}
-      <TicketTiers />
+      {hasTickets ? (
+        <div className="space-y-12">
+          {registrations.map((reg) => (
+            <TicketCard
+              key={reg.id}
+              title={reg.event.title}
+              location={reg.event.location}
+              organizer={reg.event.organization.name}
+              participant={user!.name}
+              ticketId={formatTicketId(reg.id, reg.event.startsAt)}
+              date={new Date(reg.event.startsAt).toLocaleString(locale, {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="border-border/60 bg-card/40 mx-auto max-w-md rounded-2xl border p-10 text-center">
+          <TicketX className="text-muted-foreground mx-auto size-10" />
+          <h2 className="mt-4 text-lg font-semibold">{t("ticket.noneTitle")}</h2>
+          <p className="text-muted-foreground mt-2 text-sm text-pretty">
+            {t("ticket.noneBody")}
+          </p>
+          <Link
+            href="/events"
+            className={buttonVariants({ size: "lg", className: "mt-6" })}
+          >
+            {t("ticket.browse")}
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

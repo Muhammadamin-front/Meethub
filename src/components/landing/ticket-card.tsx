@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 
 import { Logo } from "@/components/logo";
 
-// A decorative QR-code lookalike (not a real scannable code)
+// A decorative QR-code lookalike (not a real scannable code).
 function FakeQR({ className }: { className?: string }) {
   const cells = [
     [1, 1, 1, 0, 1, 0, 1, 1, 1],
@@ -41,27 +41,26 @@ function FakeQR({ className }: { className?: string }) {
   );
 }
 
+/**
+ * A real attendee ticket. All fields are required and come from the user's
+ * registration — there is no placeholder/sample data.
+ */
 export async function TicketCard({
-  event,
-  participant = "Aziz Karimov",
-  organizer = "Tashkent IT Community",
-  ticketId = "TK-2025-0042",
-  date = "Jul 12, 2025 · 14:00",
+  title,
+  location,
+  participant,
+  organizer,
+  ticketId,
+  date,
 }: {
-  event?: { title: string; location: string } | null;
-  participant?: string;
-  organizer?: string;
-  ticketId?: string;
-  date?: string;
+  title: string;
+  location: string;
+  participant: string;
+  organizer: string;
+  ticketId: string;
+  date: string;
 }) {
   const t = await getTranslations("Landing");
-  const title = event?.title ?? "Tashkent Tech Summit 2025";
-  const location = event?.location ?? "IT Park, Tashkent";
-
-  // Divider sits at 68% — punch a notch on the top & bottom edge there so the
-  // ticket reads as a real stub-and-body shape, not a plain rectangle.
-  const notch =
-    "radial-gradient(circle 15px at 68% 0, #0000 0 15px, #000 16px), radial-gradient(circle 15px at 68% 100%, #0000 0 15px, #000 16px)";
 
   return (
     <div className="animate-ticket-in relative mx-auto w-full max-w-2xl">
@@ -71,20 +70,14 @@ export async function TicketCard({
         className="from-primary/40 absolute -inset-3 rounded-[2rem] bg-linear-to-br to-blue-500/40 opacity-70 blur-2xl"
       />
 
-      <div
-        className="glass relative grid grid-cols-[1fr_auto] overflow-hidden rounded-[1.75rem] shadow-2xl"
-        style={{
-          WebkitMaskImage: notch,
-          WebkitMaskComposite: "source-in",
-          maskImage: notch,
-          maskComposite: "intersect",
-        }}
-      >
+      {/* Stacks on mobile (flex-col), splits body/stub on >=640px (grid). The
+          .ticket-notch mask only kicks in on >=640px (see globals.css). */}
+      <div className="ticket-notch glass relative flex flex-col overflow-hidden rounded-[1.75rem] shadow-2xl sm:grid sm:grid-cols-[1fr_auto]">
         {/* Left gradient accent rail */}
         <div className="from-primary absolute inset-y-0 left-0 w-1.5 bg-linear-to-b to-blue-600" />
 
         {/* ---- Main body ---- */}
-        <div className="py-6 pr-5 pl-7">
+        <div className="px-6 py-6 sm:pr-5 sm:pl-7">
           {/* Header */}
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
@@ -144,9 +137,9 @@ export async function TicketCard({
           </div>
         </div>
 
-        {/* ---- Tear-off stub ---- */}
-        <div className="border-border/50 relative flex w-32 flex-col items-center justify-center gap-3 border-l-2 border-dashed px-4 py-6 sm:w-40">
-          <span className="text-muted-foreground text-[10px] font-semibold tracking-[0.2em] uppercase">
+        {/* ---- Tear-off stub: a row on mobile, a column on >=640px ---- */}
+        <div className="border-border/50 relative flex w-full items-center justify-center gap-5 border-t-2 border-dashed px-6 py-5 sm:w-40 sm:flex-col sm:gap-3 sm:border-t-0 sm:border-l-2 sm:px-4 sm:py-6">
+          <span className="text-muted-foreground hidden text-[10px] font-semibold tracking-[0.2em] uppercase sm:block">
             {t("ticket.admitOne")}
           </span>
           <div className="rounded-xl bg-white p-2 shadow-sm">
@@ -160,7 +153,7 @@ export async function TicketCard({
               #{ticketId}
             </p>
           </div>
-          <span className="text-muted-foreground text-center text-[10px]">
+          <span className="text-muted-foreground hidden text-center text-[10px] sm:block">
             {t("ticket.scanHint")}
           </span>
         </div>

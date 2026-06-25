@@ -161,7 +161,7 @@ export async function EventDetail({
               disabled={!joined && left <= 0}
             />
           ) : (
-            <Link href="/sign-in" className={buttonVariants({ size: "lg" })}>
+            <Link href="/sign-up" className={buttonVariants({ size: "lg" })}>
               {t("signInToJoin")}
             </Link>
           )

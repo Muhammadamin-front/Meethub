@@ -114,7 +114,11 @@
       "admitOne": "Admit One",
       "verified": "Verified Ticket",
       "scanHint": "Scan at the entrance",
-      "pageNote": "This is a preview of the ticket you receive after joining an event. Each ticket carries a unique QR code for check-in."
+      "pageNote": "This is a preview of the ticket you receive after joining an event. Each ticket carries a unique QR code for check-in.",
+      "realSubtitle": "Your QR-coded tickets for upcoming events.",
+      "noneTitle": "You don't have any tickets yet",
+      "noneBody": "Once you join an event, your QR-coded ticket will show up here.",
+      "browse": "Browse events"
     },
     "tiersTitle": "Ticket Types",
     "tiersSubtitle": "Organizers can offer different ticket tiers — each unlocks more perks at the event.",

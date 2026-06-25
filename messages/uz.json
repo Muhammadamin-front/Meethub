@@ -114,7 +114,11 @@
       "admitOne": "Bir kishilik",
       "verified": "Tasdiqlangan chipta",
       "scanHint": "Kirishda skanerlang",
-      "pageNote": "Bu tadbirga qo'shilganingizdan so'ng oladigan chiptangizning ko'rinishi. Har bir chiptada check-in uchun noyob QR kod mavjud."
+      "pageNote": "Bu tadbirga qo'shilganingizdan so'ng oladigan chiptangizning ko'rinishi. Har bir chiptada check-in uchun noyob QR kod mavjud.",
+      "realSubtitle": "Yaqinlashayotgan tadbirlaringiz uchun QR kodli chiptalaringiz.",
+      "noneTitle": "Sizda hozircha chipta yo'q",
+      "noneBody": "Tadbirga qo'shilganingizdan so'ng QR kodli chiptangiz shu yerda paydo bo'ladi.",
+      "browse": "Tadbirlarni ko'rish"
     },
     "tiersTitle": "Chipta turlari",
     "tiersSubtitle": "Tashkilotchilar turli chipta darajalarini taklif qilishlari mumkin — har biri tadbirda ko'proq imkoniyat ochadi.",
