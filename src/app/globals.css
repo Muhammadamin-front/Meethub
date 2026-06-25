@@ -310,3 +310,21 @@
     mask-composite: intersect;
   }
 }
+
+/* Locale-switch crossfade. The `locale-content` view transition (keyed by
+   locale in the root layout) fades the old language out and the new one in. */
+::view-transition-old(locale-content),
+::view-transition-new(locale-content) {
+  animation-duration: 320ms;
+  animation-timing-function: ease;
+}
+
+/* Don't animate page movement for users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

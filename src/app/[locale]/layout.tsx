@@ -1,7 +1,9 @@
+/// <reference types="react/canary" />
 import type { Metadata, Viewport } from "next";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
+import { ViewTransition } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import {
@@ -127,7 +129,23 @@ export default async function LocaleLayout({
             >
               <SiteHeader />
               <BlockedBanner />
-              <main className="flex flex-1 flex-col">{children}</main>
+              <main className="flex flex-1 flex-col">
+                {/*
+                  Re-keying by locale makes switching languages crossfade the
+                  page content. `default="none"` keeps ordinary same-locale
+                  navigation instant — only a locale change animates.
+                */}
+                <ViewTransition
+                  key={locale}
+                  name="locale-content"
+                  share="auto"
+                  enter="auto"
+                  exit="auto"
+                  default="none"
+                >
+                  {children}
+                </ViewTransition>
+              </main>
               <SiteFooter />
               {modal}
             </ThemeProvider>
