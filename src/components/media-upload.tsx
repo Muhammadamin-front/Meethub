@@ -1,6 +1,5 @@
 "use client";
 
-import { upload } from "@vercel/blob/client";
 import { Loader2 } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -14,10 +13,10 @@ import {
 } from "@/lib/upload";
 
 /**
- * Uploads a single image/video straight to Vercel Blob from the browser, then
- * hands the resulting URL back via `onUploaded`. Renders a disabled button
- * until uploads are enabled (NEXT_PUBLIC_UPLOADS_ENABLED), mirroring the old
- * graceful-degradation behaviour.
+ * Uploads a single image/video straight from the browser to Cloudinary using a
+ * server-minted signature (/api/cloudinary-sign), then hands the resulting URL
+ * back via `onUploaded`. Renders a disabled button until uploads are enabled
+ * (NEXT_PUBLIC_UPLOADS_ENABLED + a configured cloud).
  */
 export function MediaUpload({
   accept = "image",
@@ -57,26 +56,6 @@ export function MediaUpload({
         ? "video/*"
         : "image/*,video/*";
 
-  // Strip spaces/odd characters from the filename. Spaces become "+" in the
-  // upload URL and break Vercel Blob's pathname signature check (400). A random
-  // suffix is still added server-side, so collisions aren't a concern.
-  function safePathname(name: string) {
-    const dot = name.lastIndexOf(".");
-    const ext =
-      dot > 0
-        ? name
-            .slice(dot + 1)
-            .toLowerCase()
-            .replace(/[^a-z0-9]/g, "")
-        : "";
-    const base =
-      (dot > 0 ? name.slice(0, dot) : name)
-        .replace(/[^a-zA-Z0-9._-]+/g, "-")
-        .replace(/^-+|-+$/g, "")
-        .slice(0, 60) || "file";
-    return ext ? `${base}.${ext}` : base;
-  }
-
   async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     e.target.value = ""; // allow re-picking the same file
@@ -95,14 +74,36 @@ export function MediaUpload({
 
     setBusy(true);
     try {
-      const blob = await upload(safePathname(file.name), file, {
-        access: "public",
-        handleUploadUrl: "/api/upload",
-      });
+      // 1) Get a one-time signature from our server.
+      const sigRes = await fetch("/api/cloudinary-sign", { method: "POST" });
+      if (!sigRes.ok) {
+        onError?.("notConfigured");
+        return;
+      }
+      const { cloudName, apiKey, timestamp, folder, signature } =
+        await sigRes.json();
+
+      // 2) Upload directly to Cloudinary. `auto` handles image + video.
+      const form = new FormData();
+      form.append("file", file);
+      form.append("api_key", apiKey);
+      form.append("timestamp", String(timestamp));
+      form.append("folder", folder);
+      form.append("signature", signature);
+
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+        { method: "POST", body: form },
+      );
+      if (!res.ok) {
+        onError?.("invalid");
+        return;
+      }
+      const data = await res.json();
       onUploaded({
-        url: blob.url,
-        resourceType: isVideo ? "video" : "image",
-        bytes: file.size,
+        url: data.secure_url,
+        resourceType: data.resource_type === "video" ? "video" : "image",
+        bytes: typeof data.bytes === "number" ? data.bytes : file.size,
       });
     } catch (err) {
       console.error("Upload failed:", err);
