@@ -4,11 +4,23 @@ import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
 import { conversationPair, serializeDM, type DMView } from "@/lib/social";
-import { isUserBlocked, requireUser } from "@/server/auth";
+import { getCurrentUser, isUserBlocked, requireUser } from "@/server/auth";
 import { prisma } from "@/server/db";
 import { userChannel } from "@/server/notifications";
 import { pusherServer } from "@/server/pusher";
 import { rateLimit } from "@/server/rate-limit";
+import { getUnreadDmConversationIds } from "@/server/social";
+
+/**
+ * Conversation ids with unread incoming DMs for the current user. Fetched by
+ * the Messages badge after paint so the query stays off the layout's critical
+ * render path.
+ */
+export async function getUnreadDmIds(): Promise<string[]> {
+  const user = await getCurrentUser();
+  if (!user) return [];
+  return getUnreadDmConversationIds(user.id);
+}
 
 const MAX_LENGTH = 2000;
 

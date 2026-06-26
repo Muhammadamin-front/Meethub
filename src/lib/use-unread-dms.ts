@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { getPusherClient } from "@/lib/pusher-client";
+import { getUnreadDmIds } from "@/server/actions/dm";
 
 /**
  * Browser event a chat thread fires when it reads a conversation, so the
@@ -25,11 +26,20 @@ export function dispatchDmRead(conversationId: string) {
  * We only ever bind/unbind our own handler on the shared user channel — never
  * unsubscribe it (chat + notifications share it).
  */
-export function useUnreadDms(
-  userId: string | undefined,
-  initialIds: string[],
-) {
-  const [ids, setIds] = useState(() => new Set(initialIds));
+export function useUnreadDms(userId: string | undefined) {
+  const [ids, setIds] = useState<Set<string>>(() => new Set());
+
+  // Initial unread set is fetched after paint (off the layout's render path).
+  useEffect(() => {
+    if (!userId) return;
+    let cancelled = false;
+    getUnreadDmIds().then((list) => {
+      if (!cancelled) setIds(new Set(list));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
 
   useEffect(() => {
     if (!userId) return;

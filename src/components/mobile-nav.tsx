@@ -21,18 +21,12 @@ import { useUnreadDms } from "@/lib/use-unread-dms";
 const itemClass =
   "rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted";
 
-export function MobileNav({
-  userId,
-  initialUnreadIds = [],
-}: {
-  userId?: string;
-  initialUnreadIds?: string[];
-}) {
+export function MobileNav({ userId }: { userId?: string }) {
   const t = useTranslations("Nav");
   const { isSignedIn } = useUser();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
-  const unread = useUnreadDms(userId, initialUnreadIds);
+  const unread = useUnreadDms(userId);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

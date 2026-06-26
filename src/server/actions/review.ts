@@ -4,9 +4,21 @@ import { revalidatePath } from "next/cache";
 import { getLocale } from "next-intl/server";
 
 import { EventStatus, RegistrationStatus } from "@/generated/prisma/client";
-import { isUserBlocked, requireUser } from "@/server/auth";
+import { getCurrentUser, isUserBlocked, requireUser } from "@/server/auth";
 import { prisma } from "@/server/db";
 import { rateLimit } from "@/server/rate-limit";
+import { getPendingReview } from "@/server/reviews";
+
+/**
+ * Pending "rate the event" prompt for the current user (null if none). Called
+ * from the client after paint so the relation-heavy query never blocks the home
+ * page's server render.
+ */
+export async function fetchPendingReview() {
+  const user = await getCurrentUser();
+  if (!user) return null;
+  return getPendingReview(user.id);
+}
 
 export type ReviewResult = {
   error?: "notAllowed" | "notFinished" | "invalid" | "blocked" | "rateLimited";

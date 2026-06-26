@@ -13,7 +13,10 @@ import {
 import { Link } from "@/i18n/navigation";
 import { getPusherClient } from "@/lib/pusher-client";
 import { cn } from "@/lib/utils";
-import { markAllNotificationsRead } from "@/server/actions/notifications";
+import {
+  getNotifications,
+  markAllNotificationsRead,
+} from "@/server/actions/notifications";
 import type { NotificationView } from "@/server/notifications";
 
 type T = ReturnType<typeof useTranslations<"Notifications">>;
@@ -47,19 +50,25 @@ function notificationHref(n: NotificationView): string | null {
   }
 }
 
-export function NotificationMenu({
-  userId,
-  items,
-  unread,
-}: {
-  userId: string;
-  items: NotificationView[];
-  unread: number;
-}) {
+export function NotificationMenu({ userId }: { userId: string }) {
   const t = useTranslations("Notifications");
-  const [list, setList] = useState(items);
-  const [count, setCount] = useState(unread);
+  const [list, setList] = useState<NotificationView[]>([]);
+  const [count, setCount] = useState(0);
   const [, startTransition] = useTransition();
+
+  // Load initial notifications after paint (keeps these queries off the
+  // server-rendered layout's critical path). Live updates arrive via Pusher.
+  useEffect(() => {
+    let cancelled = false;
+    getNotifications().then(({ items, unread }) => {
+      if (cancelled) return;
+      setList(items);
+      setCount(unread);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const pusher = getPusherClient();

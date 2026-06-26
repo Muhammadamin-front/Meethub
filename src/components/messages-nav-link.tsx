@@ -8,15 +8,9 @@ import { cn } from "@/lib/utils";
 import { useUnreadDms } from "@/lib/use-unread-dms";
 
 /** Desktop Messages nav link with a live red unread-DM badge. */
-export function MessagesNavLink({
-  userId,
-  initialUnreadIds,
-}: {
-  userId: string;
-  initialUnreadIds: string[];
-}) {
+export function MessagesNavLink({ userId }: { userId: string }) {
   const t = useTranslations("Nav");
-  const count = useUnreadDms(userId, initialUnreadIds);
+  const count = useUnreadDms(userId);
 
   return (
     <Link

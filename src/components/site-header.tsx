@@ -1,11 +1,10 @@
-import { Show } from "@clerk/nextjs";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { Logo } from "@/components/logo";
 import { MessagesNavLink } from "@/components/messages-nav-link";
 import { MobileNav } from "@/components/mobile-nav";
-import { NotificationBell } from "@/components/notification-bell";
+import { NotificationMenu } from "@/components/notification-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { UserMenu } from "@/components/user-menu";
@@ -13,7 +12,6 @@ import { UserRole } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
 import { NAV_LINKS } from "@/lib/constants";
 import { getCurrentUser } from "@/server/auth";
-import { getUnreadDmConversationIds } from "@/server/social";
 
 /**
  * Top navigation bar. Auth state comes from Clerk: signed-in users see a
@@ -27,7 +25,6 @@ export async function SiteHeader() {
   const locale = await getLocale();
   const user = await getCurrentUser();
   const isAdmin = user?.role === UserRole.ADMIN;
-  const unreadDms = user ? await getUnreadDmConversationIds(user.id) : [];
 
   return (
     <header className="bg-background/80 sticky top-0 z-40 w-full border-b backdrop-blur">
@@ -57,7 +54,7 @@ export async function SiteHeader() {
               >
                 {t("people")}
               </Link>
-              <MessagesNavLink userId={user.id} initialUnreadIds={unreadDms} />
+              <MessagesNavLink userId={user.id} />
             </>
           )}
         </nav>
@@ -66,9 +63,9 @@ export async function SiteHeader() {
           <LocaleSwitcher />
           <ThemeToggle />
 
-          <Show when="signed-in">
+          {user && (
             <div className="ml-1 flex items-center gap-1">
-              <NotificationBell />
+              <NotificationMenu userId={user.id} />
               <UserMenu
                 dashboardLabel={t("dashboard")}
                 dashboardHref={`/${locale}/dashboard`}
@@ -76,9 +73,9 @@ export async function SiteHeader() {
                 adminHref={isAdmin ? `/${locale}/admin` : undefined}
               />
             </div>
-          </Show>
+          )}
 
-          <Show when="signed-out">
+          {!user && (
             <div className="ml-1 hidden items-center gap-2 md:flex">
               <Link
                 href="/sign-in"
@@ -90,12 +87,9 @@ export async function SiteHeader() {
                 {t("getStarted")}
               </Link>
             </div>
-          </Show>
+          )}
 
-          <MobileNav
-            userId={user?.id}
-            initialUnreadIds={unreadDms}
-          />
+          <MobileNav userId={user?.id} />
         </div>
       </div>
     </header>

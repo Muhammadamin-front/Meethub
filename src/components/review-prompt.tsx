@@ -7,7 +7,7 @@ import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { submitReview } from "@/server/actions/review";
+import { fetchPendingReview, submitReview } from "@/server/actions/review";
 
 const STORAGE_KEY = "meethub:review-prompted";
 
@@ -38,12 +38,11 @@ function markPrompted(id: string) {
  * event to review (or null); we additionally gate on localStorage so it never
  * pops up twice even if the user dismisses without reviewing.
  */
-export function ReviewPrompt({
-  pending,
-}: {
-  pending: { id: string; title: string } | null;
-}) {
+export function ReviewPrompt() {
   const t = useTranslations("Reviews");
+  const [pending, setPending] = useState<{ id: string; title: string } | null>(
+    null,
+  );
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -52,14 +51,20 @@ export function ReviewPrompt({
   const [done, setDone] = useState(false);
   const [pendingSubmit, startTransition] = useTransition();
 
+  // Fetch the pending review lazily (after paint) so it never blocks the home
+  // page's server render. Only opens once per event (localStorage-gated).
   useEffect(() => {
-    if (!pending || alreadyPrompted(pending.id)) return;
-    // Defer the open out of the effect body; count it as shown immediately so
-    // it never appears a second time.
-    markPrompted(pending.id);
-    const raf = requestAnimationFrame(() => setOpen(true));
-    return () => cancelAnimationFrame(raf);
-  }, [pending]);
+    let cancelled = false;
+    fetchPendingReview().then((ev) => {
+      if (cancelled || !ev || alreadyPrompted(ev.id)) return;
+      markPrompted(ev.id);
+      setPending(ev);
+      setOpen(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!open) return;
