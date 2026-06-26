@@ -478,7 +478,10 @@
       "invalid": "Please select a rating from 1 to 5.",
       "blocked": "You can't review while your account is blocked.",
       "rateLimited": "You're doing that too fast. Please wait a moment."
-    }
+    },
+    "promptTitle": "How was the event?",
+    "promptSubtitle": "Rate “{event}”",
+    "later": "Later"
   },
   "Notifications": {
     "title": "Notifications",

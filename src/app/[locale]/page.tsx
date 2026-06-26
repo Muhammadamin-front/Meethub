@@ -11,9 +11,12 @@ import { HeroSection } from "@/components/landing/hero-section";
 import { Reveal } from "@/components/landing/reveal";
 import { StatsSection } from "@/components/landing/stats-section";
 import { TestimonialsSection } from "@/components/landing/testimonials-section";
+import { ReviewPrompt } from "@/components/review-prompt";
 import { Link } from "@/i18n/navigation";
 import { getAttendeeSamples } from "@/server/attendees";
+import { getCurrentUser } from "@/server/auth";
 import { prisma } from "@/server/db";
+import { getPendingReview } from "@/server/reviews";
 
 const getLandingData = unstable_cache(
   async () => {
@@ -70,8 +73,14 @@ export default async function HomePage({
 
   const faqItems = tl.raw("faq") as FAQItem[];
 
+  // One-time "rate the event you attended" prompt for signed-in users.
+  const user = await getCurrentUser();
+  const pendingReview = user ? await getPendingReview(user.id) : null;
+
   return (
     <div className="flex flex-1 flex-col">
+      <ReviewPrompt pending={pendingReview} />
+
       {/* 1 — Hero */}
       <HeroSection />
 

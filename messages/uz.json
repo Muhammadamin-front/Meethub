@@ -478,7 +478,10 @@
       "invalid": "Iltimos, 1 dan 5 gacha baho tanlang.",
       "blocked": "Hisobingiz bloklangan ekan, sharh yoza olmaysiz.",
       "rateLimited": "Juda tez harakat qilyapsiz. Biroz kuting."
-    }
+    },
+    "promptTitle": "Tadbir qanday o‘tdi?",
+    "promptSubtitle": "“{event}” tadbirini baholang",
+    "later": "Keyinroq"
   },
   "Notifications": {
     "title": "Bildirishnomalar",
