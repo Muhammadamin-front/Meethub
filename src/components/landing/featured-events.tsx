@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { AttendeeAvatars } from "@/components/attendee-avatars";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { coverSrc } from "@/lib/upload";
 import { cn } from "@/lib/utils";
 import type { AttendeePreview } from "@/server/attendees";
 
@@ -76,7 +77,7 @@ export async function FeaturedEvents({ events }: { events: EventCard[] }) {
             const finished =
               event.status === "FINISHED" ||
               new Date(event.endsAt) < new Date();
-            const cover = event.coverUrl || "/assets/event-bg.png";
+            const cover = coverSrc(event.coverUrl);
             const card = (
               <div
                 className={cn(

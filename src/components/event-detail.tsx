@@ -48,16 +48,20 @@ export async function EventDetail({
   setRequestLocale(locale);
   const t = await getTranslations("Event");
 
-  const event = await prisma.event.findUnique({
-    where: { id },
-    include: {
-      organization: { select: { id: true, name: true, ownerUserId: true } },
-    },
-  });
+  // Event + viewer are independent — fetch together.
+  const [event, user] = await Promise.all([
+    prisma.event.findUnique({
+      where: { id },
+      include: {
+        organization: { select: { id: true, name: true, ownerUserId: true } },
+      },
+    }),
+    getCurrentUser(),
+  ]);
   if (!event) notFound();
 
-  const user = await getCurrentUser();
-  const [used, attendeeSample] = await Promise.all([
+  // The rest only need event.id (+ user.id) — fetch them all in one round-trip.
+  const [used, attendeeSample, myReg, media] = await Promise.all([
     prisma.registration.count({
       where: { eventId: id, status: { in: ACTIVE } },
     }),
@@ -67,6 +71,17 @@ export async function EventDetail({
       orderBy: { joinedAt: "asc" },
       take: 8,
     }),
+    user
+      ? prisma.registration.findUnique({
+          where: { eventId_userId: { eventId: id, userId: user.id } },
+        })
+      : Promise.resolve(null),
+    prisma.eventMedia.findMany({
+      where: { eventId: id },
+      orderBy: { createdAt: "desc" },
+      take: 60,
+      select: { id: true, url: true, type: true },
+    }),
   ]);
   const left = Math.max(0, event.capacity - used);
 
@@ -75,24 +90,12 @@ export async function EventDetail({
     (user.role === UserRole.ADMIN ||
       event.organization.ownerUserId === user.id);
 
-  const myReg = user
-    ? await prisma.registration.findUnique({
-        where: { eventId_userId: { eventId: id, userId: user.id } },
-      })
-    : null;
   const joined = !!myReg && ACTIVE.includes(myReg.status);
 
   // Reviews open once the event has ended; participants can rate it.
   const finished =
     event.status === EventStatus.FINISHED || event.endsAt < new Date();
   const canReview = finished && joined && !canManage;
-
-  const media = await prisma.eventMedia.findMany({
-    where: { eventId: id },
-    orderBy: { createdAt: "desc" },
-    take: 60,
-    select: { id: true, url: true, type: true },
-  });
 
   return (
     <>

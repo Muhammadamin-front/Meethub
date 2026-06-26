@@ -23,16 +23,26 @@ export function cloudName() {
 }
 
 /**
- * Whether the upload UI should be shown. Gated on a public flag plus a real
- * cloud name so it degrades gracefully until Cloudinary is configured.
+ * Event-card cover source. Falls back to the bundled graphic, and rewrites
+ * Cloudinary URLs to auto-format/auto-quality delivery (webp/avif + sane
+ * compression) so cards don't download full-size originals.
+ */
+export function coverSrc(url: string | null | undefined): string {
+  if (!url) return "/assets/event-bg.jpg";
+  if (url.includes("res.cloudinary.com") && url.includes("/upload/")) {
+    return url.replace("/upload/", "/upload/f_auto,q_auto/");
+  }
+  return url;
+}
+
+/**
+ * Whether the upload UI should be shown. Gated only on the public flag — the
+ * client doesn't need the cloud name (the signing route returns it). If the
+ * server keys are missing, clicking surfaces a "notConfigured" error instead of
+ * a silently disabled button.
  */
 export function isUploadEnabled() {
-  const name = cloudName();
-  return (
-    process.env.NEXT_PUBLIC_UPLOADS_ENABLED === "true" &&
-    !!name &&
-    !/^your-cloud/i.test(name)
-  );
+  return process.env.NEXT_PUBLIC_UPLOADS_ENABLED === "true";
 }
 
 /**

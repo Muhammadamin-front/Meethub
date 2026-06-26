@@ -6,6 +6,7 @@ import { AttendeeAvatars } from "@/components/attendee-avatars";
 import { EventsFilter } from "@/components/events-filter";
 import { EventStatus } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
+import { coverSrc } from "@/lib/upload";
 import { cn } from "@/lib/utils";
 import { getAttendeeSamples } from "@/server/attendees";
 import { prisma } from "@/server/db";
@@ -126,8 +127,8 @@ export default async function EventsPage({
             const left = Math.max(0, event.capacity - total);
             const going = attendees.get(event.id) ?? [];
             const finished = isFinished(event);
-            // The event's own cover photo, falling back to the green graphic.
-            const cover = event.coverUrl || "/assets/event-bg.png";
+            // The event's own cover photo (auto-optimized), or the green graphic.
+            const cover = coverSrc(event.coverUrl);
             const card = (
               <div
                 className={cn(
@@ -140,6 +141,7 @@ export default async function EventsPage({
                 <img
                   src={cover}
                   alt=""
+                  loading="lazy"
                   className="absolute inset-0 size-full object-cover object-center"
                 />
                 {/* Readability scrim — darkest at the bottom, where text sits. */}
