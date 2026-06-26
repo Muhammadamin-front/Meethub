@@ -594,6 +594,15 @@
     "stickers": "Stikerlar"
   },
   "Profile": {
+    "memberSince": "{date} dan beri a‘zo",
+    "friendsCount": "{count} do‘st",
+    "signInToConnect": "Bog‘lanish uchun ro‘yxatdan o‘ting",
+    "xp": "XP",
+    "attended": "Tadbirlar",
+    "streak": "Eng uzun seriya",
+    "badges": "Nishonlar",
+    "attendedEvents": "Qatnashgan tadbirlar",
+    "noEvents": "Hali tadbirlarga qatnashmagan",
     "title": "Profil ma'lumotlari",
     "subtitle": "Taqdimot uchun nickname va shahringizni kiriting.",
     "nickname": "Nickname",

@@ -594,6 +594,15 @@
     "stickers": "Стикеры"
   },
   "Profile": {
+    "memberSince": "Участник с {date}",
+    "friendsCount": "{count} друзей",
+    "signInToConnect": "Зарегистрируйтесь, чтобы связаться",
+    "xp": "XP",
+    "attended": "Мероприятия",
+    "streak": "Лучшая серия",
+    "badges": "Значки",
+    "attendedEvents": "Посещённые мероприятия",
+    "noEvents": "Пока не посещал мероприятия",
     "title": "Данные профиля",
     "subtitle": "Укажите никнейм и город для отображения.",
     "nickname": "Никнейм",

@@ -594,6 +594,15 @@
     "stickers": "Stickers"
   },
   "Profile": {
+    "memberSince": "Member since {date}",
+    "friendsCount": "{count} friends",
+    "signInToConnect": "Sign up to connect",
+    "xp": "XP",
+    "attended": "Events",
+    "streak": "Best streak",
+    "badges": "Badges",
+    "attendedEvents": "Attended events",
+    "noEvents": "No attended events yet",
     "title": "Profile details",
     "subtitle": "Add a nickname and your city so others can find you.",
     "nickname": "Nickname",

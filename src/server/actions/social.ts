@@ -13,6 +13,7 @@ import { rateLimit } from "@/server/rate-limit";
 export type PersonResult = {
   id: string;
   name: string;
+  nickname?: string | null;
   imageUrl: string | null;
 };
 
@@ -26,9 +27,12 @@ export async function searchPeople(query: string): Promise<PersonResult[]> {
   return prisma.user.findMany({
     where: {
       id: { not: me.id },
-      name: { contains: q, mode: "insensitive" },
+      OR: [
+        { nickname: { contains: q, mode: "insensitive" } },
+        { name: { contains: q, mode: "insensitive" } },
+      ],
     },
-    select: { id: true, name: true, imageUrl: true },
+    select: { id: true, name: true, nickname: true, imageUrl: true },
     take: 20,
     orderBy: { name: "asc" },
   });

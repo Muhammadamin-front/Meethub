@@ -22,9 +22,12 @@ import { getCurrentUser } from "@/server/auth";
  */
 export async function SiteHeader() {
   const t = await getTranslations("Nav");
+  const tp = await getTranslations("Profile");
   const locale = await getLocale();
   const user = await getCurrentUser();
   const isAdmin = user?.role === UserRole.ADMIN;
+  // Nudge the user to fill in their app profile (nickname + city).
+  const profileIncomplete = !!user && (!user.nickname || !user.city);
 
   return (
     <header className="bg-background/80 sticky top-0 z-40 w-full border-b backdrop-blur">
@@ -67,10 +70,13 @@ export async function SiteHeader() {
             <div className="ml-1 flex items-center gap-1">
               <NotificationMenu userId={user.id} />
               <UserMenu
+                profileLabel={tp("menuItem")}
+                profileHref={`/${locale}/profile`}
                 dashboardLabel={t("dashboard")}
                 dashboardHref={`/${locale}/dashboard`}
                 adminLabel={t("admin")}
                 adminHref={isAdmin ? `/${locale}/admin` : undefined}
+                profileIncomplete={profileIncomplete}
               />
             </div>
           )}

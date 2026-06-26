@@ -95,16 +95,17 @@ export async function EventDetail({
   const attended = myReg?.status === RegistrationStatus.ATTENDED;
 
   // Reviews open once the event has ended; participants can rate it.
-  const now = Date.now();
+  const now = new Date();
   const finished =
-    event.status === EventStatus.FINISHED || event.endsAt.getTime() < now;
+    event.status === EventStatus.FINISHED || event.endsAt < now;
   const canReview = finished && joined && !canManage;
 
   // Self check-in: joined, not yet attended, the event has coordinates, and
   // it's live (from 1h before start until the end).
+  const nowMs = now.getTime();
   const live =
-    now >= event.startsAt.getTime() - 60 * 60 * 1000 &&
-    now <= event.endsAt.getTime();
+    nowMs >= event.startsAt.getTime() - 60 * 60 * 1000 &&
+    nowMs <= event.endsAt.getTime();
   const canCheckIn =
     joined &&
     !canManage &&

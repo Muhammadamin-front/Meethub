@@ -22,6 +22,12 @@ export function displayName(name: string) {
   return pretty || "there";
 }
 
+/** Prefer the user's chosen nickname; otherwise fall back to {@link displayName}. */
+export function userLabel(u: { nickname?: string | null; name: string }) {
+  const nick = u.nickname?.trim();
+  return nick && nick.length > 0 ? nick : displayName(u.name);
+}
+
 /** Format a Date for a `datetime-local` input value (local time, minutes). */
 export function toDateTimeLocalValue(date: Date) {
   const pad = (n: number) => String(n).padStart(2, "0");
