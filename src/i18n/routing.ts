@@ -7,6 +7,9 @@ import { defineRouting } from "next-intl/routing";
 export const routing = defineRouting({
   locales: ["uz", "ru", "en"],
   defaultLocale: "uz",
+  // Always default to Uzbek instead of guessing from the browser's
+  // Accept-Language, so `/` redirects to `/uz` for everyone.
+  localeDetection: false,
 });
 
 export type Locale = (typeof routing.locales)[number];
