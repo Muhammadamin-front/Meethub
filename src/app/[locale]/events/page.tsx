@@ -131,7 +131,7 @@ export default async function EventsPage({
             const card = (
               <div
                 className={cn(
-                  "event-card-border relative flex h-full min-h-80 flex-col overflow-hidden rounded-3xl border border-white/15 shadow-sm",
+                  "event-card-border relative flex h-full min-h-80 flex-col overflow-hidden rounded-3xl border border-white/15 bg-linear-to-br from-emerald-700 to-emerald-950 shadow-sm",
                   finished && "opacity-75 grayscale-35",
                 )}
               >

@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { OrgStatus } from "@/generated/prisma/client";
-import { Link } from "@/i18n/navigation";
 import { getOwnedOrganization, requireUser } from "@/server/auth";
 
 const STATUS_KEY = {
@@ -44,9 +43,10 @@ export default async function OrganizationApplyPage({
           </CardHeader>
           {org.status === OrgStatus.VERIFIED && (
             <CardContent>
-              <Link href="/events/new" className={buttonVariants()}>
+              {/* Full nav: bypass the `(.)events/new` modal interceptor. */}
+              <a href={`/${locale}/events/new`} className={buttonVariants()}>
                 {t("status.createEvent")}
-              </Link>
+              </a>
             </CardContent>
           )}
         </Card>

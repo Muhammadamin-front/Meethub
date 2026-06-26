@@ -12,6 +12,7 @@ import {
   setRequestLocale,
 } from "next-intl/server";
 
+import { AppSplash } from "@/components/app-splash";
 import { BlockedBanner } from "@/components/blocked-banner";
 import { PwaRegister } from "@/components/pwa-register";
 import { SiteFooter } from "@/components/site-footer";
@@ -102,6 +103,7 @@ export default async function LocaleLayout({
         className={`${fontSans.variable} ${fontMono.variable}`}
       >
         <body className="bg-background text-foreground flex min-h-dvh flex-col antialiased">
+          <AppSplash />
           {/* Site-wide theme background (fixed, optimized via next/image). */}
           <div aria-hidden className="fixed inset-0 -z-10">
             <Image

@@ -1,6 +1,6 @@
 /* MeetHub service worker — PWA installability + offline support.
  * Bump CACHE_VERSION whenever this file changes to evict old caches. */
-const CACHE_VERSION = "meethub-v2";
+const CACHE_VERSION = "meethub-v3";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
 const OFFLINE_URL = "/offline.html";
@@ -58,8 +58,10 @@ self.addEventListener("fetch", (event) => {
         (cached) =>
           cached ||
           fetch(request).then((res) => {
-            const copy = res.clone();
-            caches.open(STATIC_CACHE).then((c) => c.put(request, copy));
+            if (res.ok) {
+              const copy = res.clone();
+              caches.open(STATIC_CACHE).then((c) => c.put(request, copy));
+            }
             return res;
           }),
       ),
@@ -67,28 +69,31 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Images (optimized loader, static assets, icons): cache-first with a capped
-  // cache so previously seen event photos still render offline.
+  // Images (optimized loader, static assets, icons): stale-while-revalidate —
+  // serve the cached copy instantly, but always refetch in the background so a
+  // changed/previously-failed image (e.g. a 404 cached before the asset
+  // existed) self-heals on the next load. Only OK responses are cached.
   const isImage =
     url.pathname.startsWith("/_next/image") ||
     url.pathname.startsWith("/assets/") ||
     /\.(png|jpe?g|webp|avif|gif|svg)$/.test(url.pathname);
   if (isImage) {
     event.respondWith(
-      caches.match(request).then(
-        (cached) =>
-          cached ||
-          fetch(request)
-            .then((res) => {
+      caches.match(request).then((cached) => {
+        const network = fetch(request)
+          .then((res) => {
+            if (res.ok) {
               const copy = res.clone();
               caches.open(IMAGE_CACHE).then((c) => {
                 c.put(request, copy);
                 trimCache(IMAGE_CACHE, 60);
               });
-              return res;
-            })
-            .catch(() => cached),
-      ),
+            }
+            return res;
+          })
+          .catch(() => cached);
+        return cached || network;
+      }),
     );
     return;
   }
@@ -99,8 +104,10 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(request)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(STATIC_CACHE).then((c) => c.put(request, copy));
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(STATIC_CACHE).then((c) => c.put(request, copy));
+          }
           return res;
         })
         .catch(async () => {

@@ -1,9 +1,7 @@
-import { Building2, CalendarDays, MapPin, Users } from "lucide-react";
+import { CalendarDays, ChevronRight, Clock, MapPin } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { AttendeeAvatars } from "@/components/attendee-avatars";
-import { EventCountdown } from "@/components/event-countdown";
-import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -31,6 +29,13 @@ function formatShortDate(d: Date | string) {
     day: "numeric",
     month: "short",
     year: "numeric",
+  });
+}
+
+function formatTime(d: Date | string) {
+  return new Date(d).toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }
 
@@ -71,90 +76,77 @@ export async function FeaturedEvents({ events }: { events: EventCard[] }) {
             const finished =
               event.status === "FINISHED" ||
               new Date(event.endsAt) < new Date();
+            const cover = event.coverUrl || "/assets/event-bg.png";
             const card = (
               <div
                 className={cn(
-                  "glass overflow-hidden rounded-2xl transition-all duration-300",
-                  finished
-                    ? "opacity-75"
-                    : "group-hover:shadow-primary/10 group-hover:-translate-y-1 group-hover:shadow-xl",
+                  "event-card-border relative flex h-full min-h-80 flex-col overflow-hidden rounded-3xl border border-white/15 bg-linear-to-br from-emerald-700 to-emerald-950 shadow-sm",
+                  finished && "opacity-75 grayscale-35",
                 )}
               >
-                {/* Cover image or gradient */}
-                <div className="relative h-44 overflow-hidden">
-                  {event.coverUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={event.coverUrl}
-                      alt={event.title}
-                      className={cn(
-                        "h-full w-full object-cover transition-transform duration-500",
-                        finished ? "grayscale" : "group-hover:scale-105",
-                      )}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="from-primary/30 h-full w-full bg-linear-to-br to-blue-500/30" />
-                  )}
-                  <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
-                  <Badge className="bg-primary text-primary-foreground absolute top-3 left-3 border-0">
-                    {event.category}
-                  </Badge>
-                  {finished && (
-                    <Badge className="absolute top-3 right-3 border-0 bg-zinc-900/80 text-white">
-                      {t("status.finished")}
-                    </Badge>
-                  )}
-                  {!finished && (
-                    <EventCountdown
-                      startsAt={event.startsAt}
-                      endsAt={event.endsAt}
-                      className="absolute bottom-3 left-3"
-                    />
-                  )}
-                </div>
+                {/* Cover image (event photo or the green fallback graphic). */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={cover}
+                  alt=""
+                  className="absolute inset-0 size-full object-cover object-center"
+                  loading="lazy"
+                />
+                {/* Readability scrim — darkest at the bottom, where text sits. */}
+                <div
+                  aria-hidden
+                  className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/5"
+                />
 
-                {/* Content */}
-                <div className="p-5">
-                  <h3 className="line-clamp-2 text-base leading-snug font-semibold">
+                <div className="relative z-10 flex flex-1 flex-col p-5 text-white">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="inline-flex rounded-full bg-black/40 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                      {event.category}
+                    </span>
+                    {finished && (
+                      <span className="rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm">
+                        {t("status.finished")}
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="mt-auto line-clamp-2 text-xl font-bold">
                     {event.title}
                   </h3>
-                  <p className="text-muted-foreground mt-1.5 flex items-center gap-1.5 text-sm">
-                    <Building2 className="size-3.5 shrink-0" />
-                    {event.organization.name}
-                  </p>
 
-                  <div className="text-muted-foreground mt-3 flex items-center justify-between text-xs">
-                    <span className="flex items-center gap-1">
-                      <CalendarDays className="size-3.5" />
+                  <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-medium text-white/90">
+                    <span className="flex items-center gap-1.5">
+                      <CalendarDays className="size-4 shrink-0" aria-hidden />
                       {formatShortDate(event.startsAt)}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <MapPin className="size-3.5" />
-                      {event.location}
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="size-4 shrink-0" aria-hidden />
+                      {formatTime(event.startsAt)}
+                    </span>
+                    <span className="flex min-w-0 items-center gap-1.5">
+                      <MapPin className="size-4 shrink-0" aria-hidden />
+                      <span className="truncate">{event.location}</span>
                     </span>
                   </div>
 
-                  <div className="border-border/50 mt-3 flex items-center justify-between border-t pt-3">
-                    <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                      <Users className="size-3.5" />
-                      {finished
-                        ? t("status.finished")
-                        : spots > 0
-                          ? t("spotsLeft", { count: spots })
-                          : t("full")}
-                    </span>
+                  <div className="mt-4 flex items-center justify-between gap-3">
                     {total > 0 ? (
                       <AttendeeAvatars
                         people={event.attendees ?? []}
                         total={total}
                         size="size-6"
                       />
-                    ) : !finished ? (
-                      <span className="text-primary text-xs font-medium">
-                        {t("join")} →
+                    ) : (
+                      <span className="text-xs font-medium text-white/70">
+                        {spots > 0 ? t("spotsLeft", { count: spots }) : t("full")}
                       </span>
-                    ) : null}
+                    )}
+                    {!finished && (
+                      <span className="inline-flex items-center gap-1 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-emerald-900 shadow-sm transition-colors group-hover:bg-emerald-50">
+                        {t("join")}
+                        <ChevronRight className="size-4" aria-hidden />
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>

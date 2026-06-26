@@ -140,9 +140,14 @@ export default async function DashboardPage({
             </p>
           </div>
           {org?.status === OrgStatus.VERIFIED ? (
-            <Link href="/events/new" className={buttonVariants({ size: "sm" })}>
+            // Full navigation (plain <a>): the `(.)events/new` modal interceptor
+            // breaks soft-nav to the create form, so we bypass it.
+            <a
+              href={`/${locale}/events/new`}
+              className={buttonVariants({ size: "sm" })}
+            >
               {t("Dashboard.createEvent")}
-            </Link>
+            </a>
           ) : !org ? (
             <Link
               href="/organizations/apply"
