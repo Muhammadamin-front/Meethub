@@ -173,7 +173,7 @@ export async function EventDetail({
       <div className="mt-8">
         {canManage ? (
           <EventManageActions eventId={event.id} status={event.status} />
-        ) : event.status === EventStatus.PUBLISHED ? (
+        ) : event.status === EventStatus.PUBLISHED && !finished ? (
           user ? (
             <EventJoinButton
               eventId={event.id}

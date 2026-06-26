@@ -165,7 +165,16 @@ export default async function DashboardPage({
         )}
         {org && ownedEvents.length > 0 && (
           <div className="mt-6 space-y-3">
-            {ownedEvents.map((e) => (
+            {ownedEvents.map((e) => {
+              // A published event whose end time has passed reads as finished
+              // even before the daily cron flips its stored status.
+              const ended =
+                e.status === EventStatus.FINISHED || e.endsAt < new Date();
+              const statusKey =
+                ended && e.status === EventStatus.PUBLISHED
+                  ? STATUS_KEY[EventStatus.FINISHED]
+                  : STATUS_KEY[e.status];
+              return (
               <Card key={e.id}>
                 <CardHeader>
                   <div className="flex items-center justify-between gap-2">
@@ -176,7 +185,7 @@ export default async function DashboardPage({
                       {e.title}
                     </Link>
                     <Badge variant="secondary">
-                      {t(`Event.status.${STATUS_KEY[e.status]}`)}
+                      {t(`Event.status.${statusKey}`)}
                     </Badge>
                   </div>
                   <p className="text-muted-foreground text-sm">
@@ -184,7 +193,8 @@ export default async function DashboardPage({
                   </p>
                 </CardHeader>
               </Card>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>

@@ -180,6 +180,10 @@ export async function joinEvent(eventId: string): Promise<JoinResult> {
     if (!event || event.status !== EventStatus.PUBLISHED) {
       return { error: "unavailable" };
     }
+    // Time matters: you can't join an event that has already ended.
+    if (event.endsAt < new Date()) {
+      return { error: "unavailable" };
+    }
     if (event.organization.ownerUserId === user.id) {
       return { error: "owner" };
     }

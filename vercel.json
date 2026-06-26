@@ -6,6 +6,10 @@
     {
       "path": "/api/cron/auto-block",
       "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/finish-events",
+      "schedule": "0 2 * * *"
     }
   ]
 }
