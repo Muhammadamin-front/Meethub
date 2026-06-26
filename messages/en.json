@@ -348,7 +348,25 @@
       "submit": "Create event",
       "submitting": "Creating…",
       "save": "Save changes",
-      "saving": "Saving…"
+      "saving": "Saving…",
+      "city": "City",
+      "cityPlaceholder": "Select a city",
+      "cityError": "Please select a city."
+    },
+    "checkIn": {
+      "button": "I'm here — check in",
+      "locating": "Getting your location…",
+      "done": "You're checked in ✅",
+      "error": {
+        "notJoined": "Join the event first.",
+        "notLive": "It's not check-in time (the event hasn't started or has ended).",
+        "noLocation": "This event has no map location set.",
+        "tooFar": "You're too far from the venue. Move closer.",
+        "blocked": "Your account is blocked.",
+        "rateLimited": "Too fast. Please wait a moment.",
+        "geoUnavailable": "Your browser doesn't support geolocation.",
+        "geoDenied": "Location access was denied. Enable it in settings."
+      }
     }
   },
   "Dashboard": {
@@ -576,14 +594,20 @@
     "stickers": "Stickers"
   },
   "Profile": {
-    "memberSince": "Member since {date}",
-    "friendsCount": "{count} friends",
-    "signInToConnect": "Sign up to connect",
-    "xp": "XP",
-    "attended": "Events",
-    "streak": "Best streak",
-    "badges": "Badges",
-    "attendedEvents": "Attended events",
-    "noEvents": "No attended events yet"
+    "title": "Profile details",
+    "subtitle": "Add a nickname and your city so others can find you.",
+    "nickname": "Nickname",
+    "nicknamePlaceholder": "e.g. aziz_dev",
+    "city": "City",
+    "cityPlaceholder": "Select a city",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved ✅",
+    "menuItem": "Complete profile",
+    "error": {
+      "invalidNickname": "Nickname must be 2–30 characters.",
+      "invalidCity": "Please select a city from the list.",
+      "rateLimited": "Too fast. Please wait a moment."
+    }
   }
 }

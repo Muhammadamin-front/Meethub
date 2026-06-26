@@ -54,9 +54,7 @@ export default async function EventsPage({
       where: {
         ...baseWhere,
         ...(category ? { category } : {}),
-        ...(near
-          ? { location: { contains: near, mode: "insensitive" as const } }
-          : {}),
+        ...(near ? { city: near } : {}),
         ...(q
           ? {
               OR: [

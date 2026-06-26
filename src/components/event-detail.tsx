@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AttendeeAvatars } from "@/components/attendee-avatars";
 import { EventCountdown } from "@/components/event-countdown";
 import { EventGallery } from "@/components/event-gallery";
+import { CheckInButton } from "@/components/check-in-button";
 import { EventJoinButton } from "@/components/event-join-button";
 import { EventManageActions } from "@/components/event-manage-actions";
 import { EventReviews } from "@/components/event-reviews";
@@ -91,11 +92,26 @@ export async function EventDetail({
       event.organization.ownerUserId === user.id);
 
   const joined = !!myReg && ACTIVE.includes(myReg.status);
+  const attended = myReg?.status === RegistrationStatus.ATTENDED;
 
   // Reviews open once the event has ended; participants can rate it.
+  const now = Date.now();
   const finished =
-    event.status === EventStatus.FINISHED || event.endsAt < new Date();
+    event.status === EventStatus.FINISHED || event.endsAt.getTime() < now;
   const canReview = finished && joined && !canManage;
+
+  // Self check-in: joined, not yet attended, the event has coordinates, and
+  // it's live (from 1h before start until the end).
+  const live =
+    now >= event.startsAt.getTime() - 60 * 60 * 1000 &&
+    now <= event.endsAt.getTime();
+  const canCheckIn =
+    joined &&
+    !canManage &&
+    !attended &&
+    live &&
+    event.latitude != null &&
+    event.longitude != null;
 
   return (
     <>
@@ -191,6 +207,16 @@ export async function EventDetail({
         ) : null}
         {joined && !canManage && (
           <p className="text-muted-foreground mt-2 text-sm">{t("joined")}</p>
+        )}
+        {canCheckIn && (
+          <div className="mt-4">
+            <CheckInButton eventId={event.id} />
+          </div>
+        )}
+        {attended && !canManage && (
+          <p className="mt-2 text-sm font-medium text-emerald-600 dark:text-emerald-400">
+            {t("checkIn.done")}
+          </p>
         )}
       </div>
 

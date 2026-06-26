@@ -88,6 +88,10 @@ model User {
   id           String    @id @default(cuid())
   clerkId      String    @unique
   name         String
+  // App-specific profile fields the user fills in after sign-up (Clerk owns
+  // name/email/photo). Used for display + the "complete your profile" prompt.
+  nickname     String?
+  city         String?
   email        String?   @unique
   phone        String?   @unique
   imageUrl     String?
@@ -140,6 +144,9 @@ model Event {
   description    String
   coverUrl       String?
   location       String
+  // Structured city (from the fixed UZ list) so the events filter can match
+  // exactly — the free-text `location` address is unreliable to filter on.
+  city           String?
   // Optional map coordinates (picked from the Leaflet/OpenStreetMap picker).
   latitude       Float?
   longitude      Float?
@@ -159,6 +166,7 @@ model Event {
 
   @@index([status, startsAt])
   @@index([organizationId])
+  @@index([city])
 }
 
 model Registration {

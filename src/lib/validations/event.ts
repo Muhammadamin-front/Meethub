@@ -17,6 +17,7 @@ export const eventSchema = z
     title: z.string().trim().min(3).max(120),
     description: z.string().trim().min(10).max(5000),
     location: z.string().trim().min(2).max(200),
+    city: z.string().trim().max(50).optional(),
     category: z.string().trim().min(2).max(50),
     theme: z
       .enum(["LIGHT_MINIMAL", "DARK_MODERN", "GRADIENT", "NEO_BRUTAL", "GLASS"])

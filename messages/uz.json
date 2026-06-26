@@ -348,7 +348,25 @@
       "submit": "Tadbir yaratish",
       "submitting": "Yaratilmoqda…",
       "save": "O‘zgarishlarni saqlash",
-      "saving": "Saqlanmoqda…"
+      "saving": "Saqlanmoqda…",
+      "city": "Shahar",
+      "cityPlaceholder": "Shaharni tanlang",
+      "cityError": "Shaharni tanlang."
+    },
+    "checkIn": {
+      "button": "Bu yerdaman — belgilash",
+      "locating": "Joylashuv aniqlanmoqda…",
+      "done": "Davomatingiz qayd etildi ✅",
+      "error": {
+        "notJoined": "Avval tadbirga qo‘shiling.",
+        "notLive": "Hozir belgilash vaqti emas (tadbir hali boshlanmagan yoki tugagan).",
+        "noLocation": "Bu tadbirning xaritadagi joyi belgilanmagan.",
+        "tooFar": "Siz tadbir joyidan uzoqdasiz. Yaqinroq boring.",
+        "blocked": "Hisobingiz bloklangan.",
+        "rateLimited": "Juda tez. Biroz kuting.",
+        "geoUnavailable": "Brauzeringiz joylashuvni qo‘llab-quvvatlamaydi.",
+        "geoDenied": "Joylashuvga ruxsat berilmadi. Sozlamalardan yoqing."
+      }
     }
   },
   "Dashboard": {
@@ -576,14 +594,20 @@
     "stickers": "Stikerlar"
   },
   "Profile": {
-    "memberSince": "{date} dan beri a‘zo",
-    "friendsCount": "{count} do‘st",
-    "signInToConnect": "Bog‘lanish uchun ro‘yxatdan o‘ting",
-    "xp": "XP",
-    "attended": "Tadbirlar",
-    "streak": "Eng uzun seriya",
-    "badges": "Nishonlar",
-    "attendedEvents": "Qatnashgan tadbirlar",
-    "noEvents": "Hali tadbirlarga qatnashmagan"
+    "title": "Profil ma'lumotlari",
+    "subtitle": "Taqdimot uchun nickname va shahringizni kiriting.",
+    "nickname": "Nickname",
+    "nicknamePlaceholder": "Masalan: aziz_dev",
+    "city": "Shahar",
+    "cityPlaceholder": "Shaharni tanlang",
+    "save": "Saqlash",
+    "saving": "Saqlanmoqda…",
+    "saved": "Saqlandi ✅",
+    "menuItem": "Profilni to‘ldirish",
+    "error": {
+      "invalidNickname": "Nickname 2–30 ta belgidan iborat bo‘lsin.",
+      "invalidCity": "Iltimos, ro‘yxatdan shahar tanlang.",
+      "rateLimited": "Juda tez. Biroz kuting."
+    }
   }
 }

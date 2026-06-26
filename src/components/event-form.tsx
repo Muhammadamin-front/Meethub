@@ -10,7 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { EVENT_CATEGORIES, type EventThemeId } from "@/lib/constants";
+import {
+  EVENT_CATEGORIES,
+  type EventThemeId,
+  UZ_CITIES,
+} from "@/lib/constants";
 import type { EventFormState } from "@/server/actions/event";
 
 type Action = (
@@ -22,6 +26,7 @@ type Defaults = {
   title?: string;
   description?: string;
   location?: string;
+  city?: string;
   latitude?: number | null;
   longitude?: number | null;
   category?: string;
@@ -103,6 +108,24 @@ export function EventForm({
             {EVENT_CATEGORIES.map((c) => (
               <option key={c} value={c}>
                 {c}
+              </option>
+            ))}
+          </select>
+        </Field>
+
+        <Field label={t("city")} error={err?.city && t("cityError")}>
+          <select
+            name="city"
+            required
+            defaultValue={defaults?.city ?? ""}
+            className="border-input bg-background ring-offset-background focus-visible:ring-ring h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <option value="" disabled>
+              {t("cityPlaceholder")}
+            </option>
+            {UZ_CITIES.map((c) => (
+              <option key={c.name} value={c.name}>
+                {c.name}
               </option>
             ))}
           </select>

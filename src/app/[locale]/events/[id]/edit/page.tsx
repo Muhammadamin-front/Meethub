@@ -40,6 +40,7 @@ export default async function EditEventPage({
             title: event.title,
             description: event.description,
             location: event.location,
+            city: event.city ?? "",
             latitude: event.latitude,
             longitude: event.longitude,
             category: event.category,
