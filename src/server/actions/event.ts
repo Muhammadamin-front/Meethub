@@ -79,7 +79,7 @@ export async function createEvent(
   // "Publish now" is checked by default in the form; uncheck to save a draft.
   const publish = formData.get("publish") === "on";
 
-  const event = await prisma.event.create({
+  await prisma.event.create({
     data: {
       organizationId: organization.id,
       title: d.title,
@@ -97,7 +97,9 @@ export async function createEvent(
   });
 
   revalidatePath(`/${locale}/events`);
-  redirect(`/${locale}/events/${event.id}`);
+  // Go to the events list (not /events/[id], which the modal interceptor would
+  // catch as a soft-nav and leave the form stuck open behind it).
+  redirect(`/${locale}/events`);
 }
 
 export async function updateEvent(
@@ -130,7 +132,11 @@ export async function updateEvent(
     },
   });
 
-  redirect(`/${locale}/events/${eventId}`);
+  revalidatePath(`/${locale}/events`);
+  revalidatePath(`/${locale}/events/${eventId}`);
+  // Back to the list — redirecting to /events/[id] would be intercepted into a
+  // modal over the edit page, trapping the user in an edit/modal loop.
+  redirect(`/${locale}/events`);
 }
 
 export async function publishEvent(eventId: string) {
