@@ -105,7 +105,7 @@ export default async function LocaleLayout({
         suppressHydrationWarning
         className={`${fontSans.variable} ${fontMono.variable}`}
       >
-        <body className="bg-background text-foreground flex min-h-dvh flex-col pb-16 antialiased md:pb-0">
+        <body className="bg-background text-foreground flex min-h-dvh flex-col pb-24 antialiased md:pb-0">
           <AppSplash />
           {/* Site-wide theme background (fixed, optimized via next/image). */}
           <div aria-hidden className="fixed inset-0 -z-10">

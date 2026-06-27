@@ -16,10 +16,12 @@ import {
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { NAV_LINKS } from "@/lib/constants";
-import { useUnreadDms } from "@/lib/use-unread-dms";
 
 const itemClass =
   "rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted";
+
+// Links already reachable from the bottom tab bar — don't repeat them here.
+const IN_BOTTOM_BAR = new Set(["/events", "/messages", "/dashboard"]);
 
 export function MobileNav() {
   const t = useTranslations("Nav");
@@ -27,7 +29,8 @@ export function MobileNav() {
   const isSignedIn = !!userId;
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
-  const unread = useUnreadDms(userId ?? undefined);
+
+  const links = NAV_LINKS.filter((l) => !IN_BOTTOM_BAR.has(l.href));
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -37,22 +40,19 @@ export function MobileNav() {
           <Button
             variant="ghost"
             size="icon"
-            className="relative md:hidden"
+            className="md:hidden"
             aria-label={t("openMenu")}
           />
         }
       >
         <Menu className="size-5" aria-hidden />
-        {unread > 0 && (
-          <span className="bg-destructive absolute top-1 right-1 size-2 rounded-full" />
-        )}
       </SheetTrigger>
       <SheetContent side="right" className="w-72">
         <SheetHeader>
           <SheetTitle>{t("menu")}</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-1 px-2 pb-4">
-          {NAV_LINKS.map((link) => (
+          {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -70,21 +70,6 @@ export function MobileNav() {
               </Link>
               <Link href="/people" onClick={close} className={itemClass}>
                 {t("people")}
-              </Link>
-              <Link
-                href="/messages"
-                onClick={close}
-                className={cn(itemClass, "flex items-center justify-between")}
-              >
-                {t("messages")}
-                {unread > 0 && (
-                  <span className="bg-destructive flex size-5 items-center justify-center rounded-full text-[11px] font-medium text-white">
-                    {unread > 9 ? "9+" : unread}
-                  </span>
-                )}
-              </Link>
-              <Link href="/dashboard" onClick={close} className={itemClass}>
-                {t("dashboard")}
               </Link>
             </>
           )}
