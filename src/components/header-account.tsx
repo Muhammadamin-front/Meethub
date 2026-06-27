@@ -1,14 +1,22 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 
 import { useHeaderAuth } from "@/components/header-auth";
-import { NotificationMenu } from "@/components/notification-menu";
 import { buttonVariants } from "@/components/ui/button";
-import { UserMenu } from "@/components/user-menu";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+
+// Loaded only for signed-in users — keeps the heavy Clerk UI bundle and Pusher
+// off the (signed-out) landing/common bundle.
+const NotificationMenu = dynamic(() =>
+  import("@/components/notification-menu").then((m) => m.NotificationMenu),
+);
+const UserMenu = dynamic(() =>
+  import("@/components/user-menu").then((m) => m.UserMenu),
+);
 
 /** Right-hand header cluster (notifications + avatar, or sign in/up). */
 export function HeaderAccount() {
