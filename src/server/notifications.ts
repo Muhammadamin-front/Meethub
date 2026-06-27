@@ -13,7 +13,8 @@ export type NotificationView = {
     | "ORG_REJECTED"
     | "BLOCKED"
     | "FRIEND_REQUEST"
-    | "FRIEND_ACCEPTED";
+    | "FRIEND_ACCEPTED"
+    | "EVENT_REMINDER";
   data: Record<string, string>;
   isRead: boolean;
   createdAt: string;

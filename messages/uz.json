@@ -510,7 +510,8 @@
       "ORG_REJECTED": "“{org}” tashkilotingiz tasdiqlanmadi.",
       "BLOCKED": "Hisobingiz bloklandi. {reason}",
       "FRIEND_REQUEST": "{user} sizga do‘stlik so‘rovi yubordi.",
-      "FRIEND_ACCEPTED": "{user} do‘stlik so‘rovingizni qabul qildi."
+      "FRIEND_ACCEPTED": "{user} do‘stlik so‘rovingizni qabul qildi.",
+      "EVENT_REMINDER": "“{event}” tadbiri tez orada boshlanadi. Tayyormisiz?"
     }
   },
   "Media": {

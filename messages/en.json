@@ -510,7 +510,8 @@
       "ORG_REJECTED": "Your organization “{org}” was not approved.",
       "BLOCKED": "Your account has been blocked. {reason}",
       "FRIEND_REQUEST": "{user} sent you a friend request.",
-      "FRIEND_ACCEPTED": "{user} accepted your friend request."
+      "FRIEND_ACCEPTED": "{user} accepted your friend request.",
+      "EVENT_REMINDER": "“{event}” is starting soon. Ready?"
     }
   },
   "Media": {

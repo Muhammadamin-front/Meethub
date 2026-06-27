@@ -35,6 +35,8 @@ function renderText(t: T, n: NotificationView) {
       return t("types.FRIEND_REQUEST", { user: n.data.user ?? "" });
     case "FRIEND_ACCEPTED":
       return t("types.FRIEND_ACCEPTED", { user: n.data.user ?? "" });
+    case "EVENT_REMINDER":
+      return t("types.EVENT_REMINDER", { event: n.data.event ?? "" });
   }
 }
 
@@ -45,6 +47,8 @@ function notificationHref(n: NotificationView): string | null {
       return "/people";
     case "FRIEND_ACCEPTED":
       return n.data.userId ? `/u/${n.data.userId}` : "/people";
+    case "EVENT_REMINDER":
+      return n.data.eventId ? `/events/${n.data.eventId}` : "/events";
     default:
       return null;
   }
