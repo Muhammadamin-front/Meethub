@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
-import { preconnect } from "react-dom";
 import { ClerkProvider } from "@clerk/nextjs";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import {
@@ -91,11 +90,9 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  // Open connections to the critical third-parties early (saves ~LCP). Clerk's
-  // frontend API + avatar CDN, and Cloudinary for event covers.
-  preconnect("https://clerk.meethub.uz", { crossOrigin: "anonymous" });
-  preconnect("https://img.clerk.com", { crossOrigin: "anonymous" });
-  preconnect("https://res.cloudinary.com", { crossOrigin: "anonymous" });
+  // (Clerk already injects its own preconnect hints for clerk.meethub.uz /
+  // img.clerk.com, so we don't add duplicates — extra/unused preconnects only
+  // waste connections and trip Lighthouse's ">4 preconnects" warning.)
 
   // Enable static rendering for this request's locale.
   setRequestLocale(locale);
