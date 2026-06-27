@@ -10,6 +10,9 @@ import {
   setRequestLocale,
 } from "next-intl/server";
 
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
+import { Analytics } from "@/components/analytics";
 import { AppSplash } from "@/components/app-splash";
 import { BlockedBanner } from "@/components/blocked-banner";
 import { BottomNav } from "@/components/bottom-nav";
@@ -141,6 +144,8 @@ export default async function LocaleLayout({
               </HeaderAuthProvider>
             </ThemeProvider>
             <PwaRegister />
+            <Analytics />
+            <SpeedInsights />
           </NextIntlClientProvider>
         </body>
       </html>
