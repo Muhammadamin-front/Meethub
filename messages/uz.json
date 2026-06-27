@@ -638,5 +638,12 @@
     "empty": "Hali hech kimni kuzatmaysiz",
     "emptyDesc": "Tashkilotlarni kuzating — ularning yangi tadbirlari shu yerda chiqadi.",
     "discover": "Tashkilotlarni topish"
+  },
+  "Pwa": {
+    "title": "MeetHub'ni o‘rnating",
+    "body": "Tezroq kirish uchun ilovani bosh ekraningizga qo‘shing.",
+    "iosBody": "Safari'da: pastdagi Ulashish tugmasi → «Bosh ekranga qo‘shish».",
+    "install": "O‘rnatish",
+    "later": "Keyinroq"
   }
 }

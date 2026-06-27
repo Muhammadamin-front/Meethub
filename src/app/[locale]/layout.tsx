@@ -18,6 +18,7 @@ import { AppSplash } from "@/components/app-splash";
 import { BlockedBanner } from "@/components/blocked-banner";
 import { BottomNav } from "@/components/bottom-nav";
 import { HeaderAuthProvider } from "@/components/header-auth";
+import { InstallPrompt } from "@/components/install-prompt";
 import { PwaRegister } from "@/components/pwa-register";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -148,6 +149,7 @@ export default async function LocaleLayout({
                 <SiteFooter />
                 {modal}
                 <BottomNav />
+                <InstallPrompt />
               </HeaderAuthProvider>
             </ThemeProvider>
             <PwaRegister />

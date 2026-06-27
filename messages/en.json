@@ -638,5 +638,12 @@
     "empty": "You're not following anyone yet",
     "emptyDesc": "Follow organizations and their new events will show up here.",
     "discover": "Discover organizations"
+  },
+  "Pwa": {
+    "title": "Install MeetHub",
+    "body": "Add the app to your home screen for faster access.",
+    "iosBody": "In Safari: tap Share → “Add to Home Screen”.",
+    "install": "Install",
+    "later": "Later"
   }
 }
