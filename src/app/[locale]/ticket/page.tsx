@@ -6,6 +6,7 @@ import { TicketCard } from "@/components/landing/ticket-card";
 import { buttonVariants } from "@/components/ui/button";
 import { EventStatus, RegistrationStatus } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
+import { EVENT_TZ } from "@/lib/utils";
 import { getCurrentUser } from "@/server/auth";
 import { prisma } from "@/server/db";
 
@@ -86,6 +87,7 @@ export default async function TicketPage({
                 year: "numeric",
                 hour: "2-digit",
                 minute: "2-digit",
+                timeZone: EVENT_TZ,
               })}
             />
           ))}

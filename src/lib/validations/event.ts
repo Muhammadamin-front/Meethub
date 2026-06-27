@@ -1,5 +1,22 @@
 import { z } from "zod";
 
+import { parseEventDateTime } from "@/lib/utils";
+
+// A `datetime-local` form value parsed as Asia/Tashkent (the zone all event
+// times are kept in). Invalid input surfaces as a field error.
+const eventDateTime = z
+  .string()
+  .trim()
+  .min(1)
+  .transform((value, ctx) => {
+    const date = parseEventDateTime(value);
+    if (Number.isNaN(date.getTime())) {
+      ctx.addIssue({ code: "custom", message: "Invalid date/time" });
+      return z.NEVER;
+    }
+    return date;
+  });
+
 // Only allow http(s) image URLs. `z.string().url()` alone also accepts schemes
 // like `javascript:` / `data:`; restricting the protocol is defense-in-depth
 // against someone storing a hostile URL that later gets reflected somewhere.
@@ -22,8 +39,8 @@ export const eventSchema = z
     theme: z
       .enum(["LIGHT_MINIMAL", "DARK_MODERN", "GRADIENT", "NEO_BRUTAL", "GLASS"])
       .default("LIGHT_MINIMAL"),
-    startsAt: z.coerce.date(),
-    endsAt: z.coerce.date(),
+    startsAt: eventDateTime,
+    endsAt: eventDateTime,
     capacity: z.coerce.number().int().min(1).max(100000),
     coverUrl: z.union([httpUrl, z.literal("")]).optional(),
     registrationUrl: z.union([httpUrl, z.literal("")]).optional(),

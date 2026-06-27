@@ -6,7 +6,7 @@ import { EventStatus } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
 import { coverGradient } from "@/lib/cover";
 import { coverSrc } from "@/lib/upload";
-import { cn } from "@/lib/utils";
+import { cn, EVENT_TZ } from "@/lib/utils";
 import type { AttendeePreview } from "@/server/attendees";
 
 export type EventCardData = {
@@ -47,10 +47,12 @@ export async function EventCard({
     day: "numeric",
     month: "short",
     year: "numeric",
+    timeZone: EVENT_TZ,
   });
   const timeFmt = new Intl.DateTimeFormat(locale, {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: EVENT_TZ,
   });
 
   const card = (

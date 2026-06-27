@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
 import { APP_NAME } from "@/lib/constants";
+import { EVENT_TZ } from "@/lib/utils";
 import { prisma } from "@/server/db";
 
 export const size = { width: 1200, height: 630 };
@@ -55,6 +56,7 @@ export default async function Image({
         month: "long",
         hour: "2-digit",
         minute: "2-digit",
+        timeZone: EVENT_TZ,
       }).format(event.startsAt)
     : "";
 

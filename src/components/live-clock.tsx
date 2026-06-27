@@ -26,15 +26,19 @@ export function LiveClock({ className }: { className?: string }) {
     return <span className={className}>&nbsp;</span>;
   }
 
-  const date = now.toLocaleDateString(locale, {
+  // Uzbek (uz) has no month names in many runtimes' CLDR data, so it falls back
+  // to root ("M06"). Use en-GB for uz to show real month names; ru/en are fine.
+  const dateLocale = locale === "uz" ? "en-GB" : locale;
+  const date = now.toLocaleDateString(dateLocale, {
     weekday: "long",
     day: "numeric",
     month: "long",
   });
-  const time = now.toLocaleTimeString(locale, {
+  const time = now.toLocaleTimeString(dateLocale, {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
+    hourCycle: "h23",
   });
 
   return (

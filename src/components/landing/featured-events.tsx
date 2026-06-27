@@ -6,7 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { coverGradient } from "@/lib/cover";
 import { coverSrc } from "@/lib/upload";
-import { cn } from "@/lib/utils";
+import { cn, EVENT_TZ } from "@/lib/utils";
 import type { AttendeePreview } from "@/server/attendees";
 
 import { Reveal } from "./reveal";
@@ -31,6 +31,7 @@ function formatShortDate(d: Date | string) {
     day: "numeric",
     month: "short",
     year: "numeric",
+    timeZone: EVENT_TZ,
   });
 }
 
@@ -38,6 +39,7 @@ function formatTime(d: Date | string) {
   return new Date(d).toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: EVENT_TZ,
   });
 }
 
