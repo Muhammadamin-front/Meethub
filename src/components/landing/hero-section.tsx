@@ -1,4 +1,3 @@
-import { Show } from "@clerk/nextjs";
 import { ArrowRight, CalendarCheck, MapPin, Users } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -80,13 +79,12 @@ export async function HeroSection() {
 
       {/* Hero content */}
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
-        {/* Status badge */}
-        <Show when="signed-out">
-          <span className="glass animate-fade-in-up inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium">
-            <span className="bg-primary h-1.5 w-1.5 animate-pulse rounded-full" />
-            {t("badge")}
-          </span>
-        </Show>
+        {/* Status badge — always rendered (static) to keep the vertically
+            centered hero from shifting when client auth resolves. */}
+        <span className="glass animate-fade-in-up inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium">
+          <span className="bg-primary h-1.5 w-1.5 animate-pulse rounded-full" />
+          {t("badge")}
+        </span>
 
         <h1 className="animate-fade-in-up text-4xl font-semibold tracking-tight text-balance [animation-delay:.1s] sm:text-5xl lg:text-6xl">
           <span className="text-foreground">{tl("heroTitlePrefix")}</span>
@@ -108,22 +106,12 @@ export async function HeroSection() {
             {t("exploreEvents")}
             <ArrowRight className="size-4" />
           </Link>
-          <Show when="signed-out">
-            <Link
-              href="/sign-up"
-              className={buttonVariants({ variant: "outline", size: "lg" })}
-            >
-              {t("createAccount")}
-            </Link>
-          </Show>
-          <Show when="signed-in">
-            <Link
-              href="/dashboard"
-              className={buttonVariants({ variant: "outline", size: "lg" })}
-            >
-              {t("goToDashboard")}
-            </Link>
-          </Show>
+          <Link
+            href="/sign-up"
+            className={buttonVariants({ variant: "outline", size: "lg" })}
+          >
+            {t("createAccount")}
+          </Link>
         </div>
 
         {/* Floating location + live local-time pills */}
