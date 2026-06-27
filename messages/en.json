@@ -21,7 +21,11 @@
     "leaderboard": "Leaderboard",
     "ticket": "Ticket",
     "people": "People",
-    "messages": "Messages"
+    "messages": "Messages",
+    "create": "Create event",
+    "createShort": "Create",
+    "home": "Home",
+    "account": "Account"
   },
   "Home": {
     "badge": "Now in early development",
@@ -214,7 +218,11 @@
   },
   "Footer": {
     "rights": "© {year} {app}. All rights reserved.",
-    "builtWith": "Built with Next.js, Tailwind & shadcn/ui."
+    "builtWith": "Built with Next.js, Tailwind & shadcn/ui.",
+    "tagline": "The home for events in Uzbekistan.",
+    "explore": "Explore",
+    "community": "Community",
+    "social": "Social"
   },
   "Org": {
     "title": "Organizations",

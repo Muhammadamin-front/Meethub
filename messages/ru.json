@@ -21,7 +21,11 @@
     "leaderboard": "Рейтинг",
     "ticket": "Билет",
     "people": "Люди",
-    "messages": "Сообщения"
+    "messages": "Сообщения",
+    "create": "Создать событие",
+    "createShort": "Создать",
+    "home": "Главная",
+    "account": "Аккаунт"
   },
   "Home": {
     "badge": "Сейчас в ранней разработке",
@@ -214,7 +218,11 @@
   },
   "Footer": {
     "rights": "© {year} {app}. Все права защищены.",
-    "builtWith": "Сделано с Next.js, Tailwind и shadcn/ui."
+    "builtWith": "Сделано с Next.js, Tailwind и shadcn/ui.",
+    "tagline": "Платформа мероприятий №1 в Узбекистане.",
+    "explore": "Обзор",
+    "community": "Сообщество",
+    "social": "Соцсети"
   },
   "Org": {
     "title": "Организации",

@@ -21,7 +21,11 @@
     "leaderboard": "Reyting",
     "ticket": "Chipta",
     "people": "Odamlar",
-    "messages": "Xabarlar"
+    "messages": "Xabarlar",
+    "create": "Tadbir yaratish",
+    "createShort": "Yaratish",
+    "home": "Bosh sahifa",
+    "account": "Hisob"
   },
   "Home": {
     "badge": "Hozir dastlabki ishlab chiqishda",
@@ -214,7 +218,11 @@
   },
   "Footer": {
     "rights": "© {year} {app}. Barcha huquqlar himoyalangan.",
-    "builtWith": "Next.js, Tailwind va shadcn/ui yordamida qurilgan."
+    "builtWith": "Next.js, Tailwind va shadcn/ui yordamida qurilgan.",
+    "tagline": "O‘zbekistondagi tadbirlar uchun yagona platforma.",
+    "explore": "Kashf etish",
+    "community": "Hamjamiyat",
+    "social": "Ijtimoiy tarmoqlar"
   },
   "Org": {
     "title": "Tashkilotlar",

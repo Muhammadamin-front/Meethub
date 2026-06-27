@@ -3,7 +3,9 @@ import { unstable_cache } from "next/cache";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { AttendeeAvatars } from "@/components/attendee-avatars";
+import { EmptyState } from "@/components/empty-state";
 import { EventsFilter } from "@/components/events-filter";
+import { buttonVariants } from "@/components/ui/button";
 import { EventStatus } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
 import { coverSrc } from "@/lib/upload";
@@ -40,6 +42,7 @@ export default async function EventsPage({
   const near = typeof sp.near === "string" ? sp.near : "";
   setRequestLocale(locale);
   const t = await getTranslations("Event");
+  const tNav = await getTranslations("Nav");
 
   // Show published + finished events; finished ones are rendered dimmed and
   // sorted to the end so users can still see past meetups.
@@ -115,9 +118,21 @@ export default async function EventsPage({
       />
 
       {events.length === 0 ? (
-        <p className="text-muted-foreground mt-12">
-          {filtering ? t("noResults") : t("empty")}
-        </p>
+        <EmptyState
+          icon={CalendarDays}
+          title={filtering ? t("noResults") : t("empty")}
+          className="mt-10"
+          action={
+            !filtering ? (
+              <a
+                href={`/${locale}/events/new`}
+                className={buttonVariants()}
+              >
+                {tNav("create")}
+              </a>
+            ) : undefined
+          }
+        />
       ) : (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {events.map((event) => {

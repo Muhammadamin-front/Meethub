@@ -12,6 +12,7 @@ import {
 
 import { AppSplash } from "@/components/app-splash";
 import { BlockedBanner } from "@/components/blocked-banner";
+import { BottomNav } from "@/components/bottom-nav";
 import { HeaderAuthProvider } from "@/components/header-auth";
 import { PwaRegister } from "@/components/pwa-register";
 import { SiteFooter } from "@/components/site-footer";
@@ -101,7 +102,7 @@ export default async function LocaleLayout({
         suppressHydrationWarning
         className={`${fontSans.variable} ${fontMono.variable}`}
       >
-        <body className="bg-background text-foreground flex min-h-dvh flex-col antialiased">
+        <body className="bg-background text-foreground flex min-h-dvh flex-col pb-16 antialiased md:pb-0">
           <AppSplash />
           {/* Site-wide theme background (fixed, optimized via next/image). */}
           <div aria-hidden className="fixed inset-0 -z-10">
@@ -136,6 +137,7 @@ export default async function LocaleLayout({
                 <main className="flex flex-1 flex-col">{children}</main>
                 <SiteFooter />
                 {modal}
+                <BottomNav />
               </HeaderAuthProvider>
             </ThemeProvider>
             <PwaRegister />
