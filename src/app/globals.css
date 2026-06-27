@@ -127,6 +127,16 @@
   html {
     @apply font-sans;
   }
+  /* Stop any decorative/absolutely-positioned element (hero glow orbs,
+     gradients) from widening the mobile layout viewport — which would make
+     every w-full element resolve against the wider width and render shifted
+     right of the visual viewport. `clip` (not `hidden`) avoids creating a
+     scroll container, so the sticky header keeps working. */
+  html,
+  body {
+    overflow-x: clip;
+    max-width: 100%;
+  }
 }
 
 /* Infinite horizontal marquee (event-types showcase on the landing page). */
