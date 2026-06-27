@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { AttendeeAvatars } from "@/components/attendee-avatars";
 import { EventStatus } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
+import { coverGradient } from "@/lib/cover";
 import { coverSrc } from "@/lib/upload";
 import { cn } from "@/lib/utils";
 import type { AttendeePreview } from "@/server/attendees";
@@ -41,7 +42,7 @@ export async function EventCard({
   const finished =
     event.status === EventStatus.FINISHED || event.endsAt < now;
   const left = Math.max(0, event.capacity - total);
-  const cover = coverSrc(event.coverUrl);
+  const hasPhoto = !!event.coverUrl;
   const dateFmt = new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "short",
@@ -55,21 +56,40 @@ export async function EventCard({
   const card = (
     <div
       className={cn(
-        "event-card-border relative flex h-full min-h-80 flex-col overflow-hidden rounded-3xl border border-white/15 bg-linear-to-br from-emerald-700 to-emerald-950 shadow-sm",
+        "event-card-border relative flex h-full min-h-80 flex-col overflow-hidden rounded-3xl border border-white/15 shadow-sm",
         finished && "opacity-75 grayscale-35",
       )}
+      style={hasPhoto ? undefined : { backgroundImage: coverGradient(event.id) }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={cover}
-        alt=""
-        loading="lazy"
-        className="absolute inset-0 size-full object-cover object-center"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/5"
-      />
+      {hasPhoto ? (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={coverSrc(event.coverUrl)}
+            alt=""
+            loading="lazy"
+            className="absolute inset-0 size-full object-cover object-center"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/5"
+          />
+        </>
+      ) : (
+        <>
+          {/* Oversized category initial as a subtle watermark. */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -top-8 -right-2 text-[140px] leading-none font-black text-white/10 select-none"
+          >
+            {event.category.charAt(0).toUpperCase()}
+          </span>
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-linear-to-t from-black/55 via-transparent to-transparent"
+          />
+        </>
+      )}
 
       <div className="relative z-10 flex flex-1 flex-col p-5 text-white">
         <div className="flex items-start justify-between gap-2">
