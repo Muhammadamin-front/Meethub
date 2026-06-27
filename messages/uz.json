@@ -363,7 +363,11 @@
       "saving": "Saqlanmoqda…",
       "city": "Shahar",
       "cityPlaceholder": "Shaharni tanlang",
-      "cityError": "Shaharni tanlang."
+      "cityError": "Shaharni tanlang.",
+      "registrationUrl": "Tashqi ro'yxatdan o'tish havolasi (ixtiyoriy)",
+      "registrationUrlPlaceholder": "https://...",
+      "registrationUrlError": "To'g'ri URL kiriting yoki bo'sh qoldiring.",
+      "registrationUrlHint": "Agar ro'yxatdan o'tish boshqa saytda bo'lsa, havolani kiriting. Foydalanuvchilar MeetHub orqali emas, tashqi saytda ro'yxatdan o'tadilar."
     },
     "checkIn": {
       "button": "Bu yerdaman — belgilash",
@@ -379,7 +383,8 @@
         "geoUnavailable": "Brauzeringiz joylashuvni qo‘llab-quvvatlamaydi.",
         "geoDenied": "Joylashuvga ruxsat berilmadi. Sozlamalardan yoqing."
       }
-    }
+    },
+    "registerExternal": "Ro'yxatdan o'tish →"
   },
   "Dashboard": {
     "yourEventsTitle": "Sizning tadbirlaringiz",

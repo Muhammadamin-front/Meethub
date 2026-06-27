@@ -26,7 +26,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "db:unseed": "npx tsx prisma/unseed.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

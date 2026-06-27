@@ -26,6 +26,7 @@ export const eventSchema = z
     endsAt: z.coerce.date(),
     capacity: z.coerce.number().int().min(1).max(100000),
     coverUrl: z.union([httpUrl, z.literal("")]).optional(),
+    registrationUrl: z.union([httpUrl, z.literal("")]).optional(),
     // Optional map coordinates from the location picker. Empty string -> null.
     latitude: z
       .union([z.coerce.number().min(-90).max(90), z.literal("")])

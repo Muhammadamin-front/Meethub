@@ -158,7 +158,8 @@ model Event {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   title          String
   description    String
-  coverUrl       String?
+  coverUrl        String?
+  registrationUrl String?
   location       String
   // Structured city (from the fixed UZ list) so the events filter can match
   // exactly — the free-text `location` address is unreliable to filter on.

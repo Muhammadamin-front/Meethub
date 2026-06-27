@@ -49,6 +49,7 @@ export default async function EditEventPage({
             endsAt: toDateTimeLocalValue(event.endsAt),
             capacity: event.capacity,
             coverUrl: event.coverUrl ?? "",
+            registrationUrl: event.registrationUrl ?? "",
           }}
         />
       </div>

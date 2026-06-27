@@ -35,6 +35,7 @@ type Defaults = {
   endsAt?: string;
   capacity?: number | string;
   coverUrl?: string;
+  registrationUrl?: string;
 };
 
 export function EventForm({
@@ -213,6 +214,19 @@ export function EventForm({
           </p>
         )}
       </div>
+
+      <Field
+        label={t("registrationUrl")}
+        error={err?.registrationUrl && t("registrationUrlError")}
+      >
+        <Input
+          type="url"
+          name="registrationUrl"
+          defaultValue={defaults?.registrationUrl ?? ""}
+          placeholder={t("registrationUrlPlaceholder")}
+        />
+        <p className="text-muted-foreground text-xs">{t("registrationUrlHint")}</p>
+      </Field>
 
       {mode === "create" && (
         <label className="flex items-center gap-2 text-sm">

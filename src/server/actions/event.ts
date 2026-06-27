@@ -75,6 +75,7 @@ function parse(formData: FormData) {
     endsAt: formData.get("endsAt"),
     capacity: formData.get("capacity"),
     coverUrl: formData.get("coverUrl") ?? "",
+    registrationUrl: formData.get("registrationUrl") ?? "",
     latitude: formData.get("latitude") ?? "",
     longitude: formData.get("longitude") ?? "",
   });
@@ -126,6 +127,7 @@ export async function createEvent(
       capacity: d.capacity,
       theme: d.theme,
       coverUrl: d.coverUrl || null,
+      registrationUrl: d.registrationUrl || null,
       ...coords(d),
       status: publish ? EventStatus.PUBLISHED : EventStatus.DRAFT,
     },
@@ -164,6 +166,7 @@ export async function updateEvent(
       capacity: d.capacity,
       theme: d.theme,
       coverUrl: d.coverUrl || null,
+      registrationUrl: d.registrationUrl || null,
       ...coords(d),
     },
   });

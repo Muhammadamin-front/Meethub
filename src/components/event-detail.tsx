@@ -204,6 +204,15 @@ export async function EventDetail({
       <div className="mt-8">
         {canManage ? (
           <EventManageActions eventId={event.id} status={event.status} />
+        ) : event.registrationUrl ? (
+          <a
+            href={event.registrationUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ size: "lg" })}
+          >
+            {t("registerExternal")}
+          </a>
         ) : event.status === EventStatus.PUBLISHED && !finished ? (
           user ? (
             <EventJoinButton
@@ -217,7 +226,7 @@ export async function EventDetail({
             </Link>
           )
         ) : null}
-        {joined && !canManage && (
+        {joined && !canManage && !event.registrationUrl && (
           <p className="text-muted-foreground mt-2 text-sm">{t("joined")}</p>
         )}
         {canCheckIn && (

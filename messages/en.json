@@ -363,7 +363,11 @@
       "saving": "Saving…",
       "city": "City",
       "cityPlaceholder": "Select a city",
-      "cityError": "Please select a city."
+      "cityError": "Please select a city.",
+      "registrationUrl": "External registration link (optional)",
+      "registrationUrlPlaceholder": "https://...",
+      "registrationUrlError": "Enter a valid URL or leave blank.",
+      "registrationUrlHint": "If registration happens on another site, add the link. Attendees will be directed there instead of joining through MeetHub."
     },
     "checkIn": {
       "button": "I'm here — check in",
@@ -379,7 +383,8 @@
         "geoUnavailable": "Your browser doesn't support geolocation.",
         "geoDenied": "Location access was denied. Enable it in settings."
       }
-    }
+    },
+    "registerExternal": "Register →"
   },
   "Dashboard": {
     "yourEventsTitle": "Your events",
