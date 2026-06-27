@@ -71,7 +71,7 @@ export async function FeaturedEvents({ events }: { events: EventCard[] }) {
           </div>
         </Reveal>
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {events.map((event, i) => {
             const total = event.attendeeTotal ?? 0;
             const spots = event.capacity - total;

@@ -60,7 +60,7 @@ export async function TestimonialsSection() {
         </div>
       </Reveal>
 
-      <div className="grid gap-5 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
         {TESTIMONIALS.map((item, i) => (
           <Reveal key={item.name} delay={i as 0 | 1 | 2}>
             <div className="glass flex h-full flex-col gap-4 rounded-2xl p-6">
