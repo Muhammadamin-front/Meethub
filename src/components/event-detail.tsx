@@ -7,6 +7,7 @@ import { EventCountdown } from "@/components/event-countdown";
 import { EventGallery } from "@/components/event-gallery";
 import { CheckInButton } from "@/components/check-in-button";
 import { EventJoinButton } from "@/components/event-join-button";
+import { FollowButton } from "@/components/follow-button";
 import { EventManageActions } from "@/components/event-manage-actions";
 import { EventReviews } from "@/components/event-reviews";
 import { LocationView } from "@/components/location-view";
@@ -22,6 +23,7 @@ import { Link } from "@/i18n/navigation";
 import { formatEventRange, mapsUrl } from "@/lib/utils";
 import { getCurrentUser } from "@/server/auth";
 import { prisma } from "@/server/db";
+import { isFollowing } from "@/server/follow";
 
 const ACTIVE: RegistrationStatus[] = [
   RegistrationStatus.JOINED,
@@ -62,7 +64,7 @@ export async function EventDetail({
   if (!event) notFound();
 
   // The rest only need event.id (+ user.id) — fetch them all in one round-trip.
-  const [used, attendeeSample, myReg, media] = await Promise.all([
+  const [used, attendeeSample, myReg, media, following] = await Promise.all([
     prisma.registration.count({
       where: { eventId: id, status: { in: ACTIVE } },
     }),
@@ -83,6 +85,7 @@ export async function EventDetail({
       take: 60,
       select: { id: true, url: true, type: true },
     }),
+    isFollowing(user?.id ?? null, event.organization.id),
   ]);
   const left = Math.max(0, event.capacity - used);
 
@@ -133,10 +136,18 @@ export async function EventDetail({
           </Badge>
         )}
       </div>
-      <p className="mt-1 flex items-center gap-1.5 text-sm">
-        <Building2 className="text-primary size-4" aria-hidden />
-        <span className="font-medium">{event.organization.name}</span>
-      </p>
+      <div className="mt-1 flex flex-wrap items-center gap-3">
+        <p className="flex items-center gap-1.5 text-sm">
+          <Building2 className="text-primary size-4" aria-hidden />
+          <span className="font-medium">{event.organization.name}</span>
+        </p>
+        {user && !canManage && (
+          <FollowButton
+            organizationId={event.organization.id}
+            initialFollowing={following}
+          />
+        )}
+      </div>
 
       <dl className="mt-6 grid gap-4 sm:grid-cols-2">
         <Info label={t("when")}>

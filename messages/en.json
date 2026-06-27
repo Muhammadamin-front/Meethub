@@ -25,7 +25,8 @@
     "create": "Create event",
     "createShort": "Create",
     "home": "Home",
-    "account": "Account"
+    "account": "Account",
+    "feed": "Feed"
   },
   "Home": {
     "badge": "Now in early development",
@@ -249,7 +250,10 @@
       "rejectedTitle": "Application not approved",
       "rejectedBody": "“{name}” was not approved. Contact support if you think this is a mistake.",
       "createEvent": "Create an event"
-    }
+    },
+    "follow": "Follow",
+    "following": "Following",
+    "followers": "{count} followers"
   },
   "Admin": {
     "title": "Admin",
@@ -627,5 +631,12 @@
       "invalidCity": "Please select a city from the list.",
       "rateLimited": "Too fast. Please wait a moment."
     }
+  },
+  "Feed": {
+    "title": "Your feed",
+    "subtitle": "Upcoming events from organizations you follow.",
+    "empty": "You're not following anyone yet",
+    "emptyDesc": "Follow organizations and their new events will show up here.",
+    "discover": "Discover organizations"
   }
 }

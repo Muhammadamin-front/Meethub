@@ -65,6 +65,9 @@ export function MobileNav() {
 
           {isSignedIn && (
             <>
+              <Link href="/feed" onClick={close} className={itemClass}>
+                {t("feed")}
+              </Link>
               <Link href="/people" onClick={close} className={itemClass}>
                 {t("people")}
               </Link>

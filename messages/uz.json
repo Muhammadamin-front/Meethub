@@ -25,7 +25,8 @@
     "create": "Tadbir yaratish",
     "createShort": "Yaratish",
     "home": "Bosh sahifa",
-    "account": "Hisob"
+    "account": "Hisob",
+    "feed": "Lenta"
   },
   "Home": {
     "badge": "Hozir dastlabki ishlab chiqishda",
@@ -249,7 +250,10 @@
       "rejectedTitle": "Ariza tasdiqlanmadi",
       "rejectedBody": "“{name}” tasdiqlanmadi. Bu xato deb hisoblasangiz, qo‘llab-quvvatlash xizmatiga murojaat qiling.",
       "createEvent": "Tadbir yaratish"
-    }
+    },
+    "follow": "Kuzatish",
+    "following": "Kuzatilyapti",
+    "followers": "{count} kuzatuvchi"
   },
   "Admin": {
     "title": "Administrator",
@@ -627,5 +631,12 @@
       "invalidCity": "Iltimos, ro‘yxatdan shahar tanlang.",
       "rateLimited": "Juda tez. Biroz kuting."
     }
+  },
+  "Feed": {
+    "title": "Lentangiz",
+    "subtitle": "Siz kuzatayotgan tashkilotlarning yaqin tadbirlari.",
+    "empty": "Hali hech kimni kuzatmaysiz",
+    "emptyDesc": "Tashkilotlarni kuzating — ularning yangi tadbirlari shu yerda chiqadi.",
+    "discover": "Tashkilotlarni topish"
   }
 }

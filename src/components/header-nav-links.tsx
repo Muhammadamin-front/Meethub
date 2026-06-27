@@ -17,6 +17,12 @@ export function HeaderNavLinks() {
   return (
     <>
       <Link
+        href="/feed"
+        className={buttonVariants({ variant: "ghost", size: "sm" })}
+      >
+        {t("feed")}
+      </Link>
+      <Link
         href="/people"
         className={buttonVariants({ variant: "ghost", size: "sm" })}
       >

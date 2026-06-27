@@ -117,6 +117,7 @@ model User {
   conversationsA         Conversation[]  @relation("ConvUserA")
   conversationsB         Conversation[]  @relation("ConvUserB")
   directMessages         DirectMessage[] @relation("DMSender")
+  follows                Follow[]
 
   @@index([role])
 }
@@ -130,10 +131,25 @@ model Organization {
   ownerUserId String    @unique
   owner       User      @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
   events      Event[]
+  followers   Follow[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@index([status])
+}
+
+// A user following an organization (for the "Following" feed + new-event pings).
+model Follow {
+  id             String       @id @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+  @@index([userId])
 }
 
 model Event {
