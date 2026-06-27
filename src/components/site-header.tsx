@@ -1,33 +1,26 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
+import { HeaderAccount } from "@/components/header-account";
+import { HeaderNavLinks } from "@/components/header-nav-links";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { Logo } from "@/components/logo";
-import { MessagesNavLink } from "@/components/messages-nav-link";
 import { MobileNav } from "@/components/mobile-nav";
-import { NotificationMenu } from "@/components/notification-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
-import { UserMenu } from "@/components/user-menu";
-import { UserRole } from "@/generated/prisma/client";
 import { Link } from "@/i18n/navigation";
 import { NAV_LINKS } from "@/lib/constants";
-import { getCurrentUser } from "@/server/auth";
 
 /**
- * Top navigation bar. Auth state comes from Clerk: signed-in users see a
- * UserButton; signed-out users see sign in / get started.
+ * Top navigation bar. This is a *static* server component — it never calls
+ * Clerk `auth()`, so the public pages under the shared layout can be statically
+ * rendered. Auth-dependent bits (signed-in links, notifications, avatar) are
+ * client components that read state via the HeaderAuth context.
  *
  * Links use `buttonVariants` (not `<Button render=…>`) so they stay real
  * anchors with proper link semantics while looking like buttons.
  */
 export async function SiteHeader() {
   const t = await getTranslations("Nav");
-  const tp = await getTranslations("Profile");
-  const locale = await getLocale();
-  const user = await getCurrentUser();
-  const isAdmin = user?.role === UserRole.ADMIN;
-  // Nudge the user to fill in their app profile (nickname + city).
-  const profileIncomplete = !!user && (!user.nickname || !user.city);
 
   return (
     <header className="bg-background/80 sticky top-0 z-40 w-full border-b backdrop-blur">
@@ -49,53 +42,14 @@ export async function SiteHeader() {
               {t(link.key)}
             </Link>
           ))}
-          {user && (
-            <>
-              <Link
-                href="/people"
-                className={buttonVariants({ variant: "ghost", size: "sm" })}
-              >
-                {t("people")}
-              </Link>
-              <MessagesNavLink userId={user.id} />
-            </>
-          )}
+          <HeaderNavLinks />
         </nav>
 
         <div className="flex items-center gap-1">
           <LocaleSwitcher />
           <ThemeToggle />
-
-          {user && (
-            <div className="ml-1 flex items-center gap-1">
-              <NotificationMenu userId={user.id} />
-              <UserMenu
-                profileLabel={tp("menuItem")}
-                profileHref={`/${locale}/profile`}
-                dashboardLabel={t("dashboard")}
-                dashboardHref={`/${locale}/dashboard`}
-                adminLabel={t("admin")}
-                adminHref={isAdmin ? `/${locale}/admin` : undefined}
-                profileIncomplete={profileIncomplete}
-              />
-            </div>
-          )}
-
-          {!user && (
-            <div className="ml-1 hidden items-center gap-2 md:flex">
-              <Link
-                href="/sign-in"
-                className={buttonVariants({ variant: "ghost", size: "sm" })}
-              >
-                {t("signIn")}
-              </Link>
-              <Link href="/sign-up" className={buttonVariants({ size: "sm" })}>
-                {t("getStarted")}
-              </Link>
-            </div>
-          )}
-
-          <MobileNav userId={user?.id} />
+          <HeaderAccount />
+          <MobileNav />
         </div>
       </div>
     </header>

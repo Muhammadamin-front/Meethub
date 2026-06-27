@@ -1,13 +1,17 @@
-import { getTranslations } from "next-intl/server";
+"use client";
 
-import { getCurrentUser, isUserBlocked } from "@/server/auth";
+import { useTranslations } from "next-intl";
 
-/** Shows a site-wide banner while the current user is blocked. */
-export async function BlockedBanner() {
-  const user = await getCurrentUser();
-  if (!user || !isUserBlocked(user)) return null;
+import { useHeaderAuth } from "@/components/header-auth";
 
-  const t = await getTranslations("Blocked");
+/** Site-wide banner shown while the current user is blocked (client-driven so
+ * it doesn't force the layout to render dynamically). */
+export function BlockedBanner() {
+  const { blocked, loaded } = useHeaderAuth();
+  const t = useTranslations("Blocked");
+
+  if (!loaded || !blocked) return null;
+
   return (
     <div className="border-destructive/30 bg-destructive/10 border-b">
       <div className="text-destructive mx-auto max-w-6xl px-4 py-2 text-sm sm:px-6">

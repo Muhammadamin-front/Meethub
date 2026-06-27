@@ -1,10 +1,10 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { useHeaderAuth } from "@/components/header-auth";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
@@ -21,12 +21,13 @@ import { useUnreadDms } from "@/lib/use-unread-dms";
 const itemClass =
   "rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted";
 
-export function MobileNav({ userId }: { userId?: string }) {
+export function MobileNav() {
   const t = useTranslations("Nav");
-  const { isSignedIn } = useUser();
+  const { userId } = useHeaderAuth();
+  const isSignedIn = !!userId;
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
-  const unread = useUnreadDms(userId);
+  const unread = useUnreadDms(userId ?? undefined);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

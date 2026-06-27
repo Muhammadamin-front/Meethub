@@ -12,6 +12,7 @@ import {
 
 import { AppSplash } from "@/components/app-splash";
 import { BlockedBanner } from "@/components/blocked-banner";
+import { HeaderAuthProvider } from "@/components/header-auth";
 import { PwaRegister } from "@/components/pwa-register";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -129,11 +130,13 @@ export default async function LocaleLayout({
               enableSystem={false}
               disableTransitionOnChange
             >
-              <SiteHeader />
-              <BlockedBanner />
-              <main className="flex flex-1 flex-col">{children}</main>
-              <SiteFooter />
-              {modal}
+              <HeaderAuthProvider>
+                <SiteHeader />
+                <BlockedBanner />
+                <main className="flex flex-1 flex-col">{children}</main>
+                <SiteFooter />
+                {modal}
+              </HeaderAuthProvider>
             </ThemeProvider>
             <PwaRegister />
           </NextIntlClientProvider>
